@@ -33,4 +33,4 @@ N/A
 
 ## Board Snapshot
 
-![Board snapshot](./weekly-checkins/screenshots/checkin-board-02.png)
+![Board snapshot](./screenshots/checkin-board-02.png)
