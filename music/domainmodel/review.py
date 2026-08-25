@@ -1,7 +1,3 @@
-from music.domainmodel.track import Track
-from music.domainmodel.user import User
-
-
 class Review:
 # TODO: Complete the implementation of the Review class.
 
@@ -13,7 +9,6 @@ class Review:
         self.__review_text = review_text
         self.__date_submitted = date_submitted
 
-
     @property
     def review_id(self) -> int:
         return self.__review_id
@@ -21,12 +16,6 @@ class Review:
     @property
     def rating(self) -> int:
         return self.__rating
-
-    @name.setter
-    def name(self, name: str):
-        if type(name) is not str or name.strip() == '':
-            raise ValueError('Review name should be a non-empty string.')
-        self.__name = name.strip()
 
     def __repr__(self) -> str:
         return f'<Review {self.track.title}, review id = {self.review_id}>'
