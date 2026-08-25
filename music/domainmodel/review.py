@@ -17,6 +17,22 @@ class Review:
     def rating(self) -> int:
         return self.__rating
 
+    @property
+    def track(self) -> Track:
+        return self.__track
+
+    @property
+    def review_text(self) -> String:
+        return self.__review_text
+
+    @property
+    def user(self) -> User:
+        return self.__user
+
+    @property
+    def date_submitted(self) -> int:
+        return self.__date_submitted
+
     def __repr__(self) -> str:
         return f'<Review {self.track.title}, review id = {self.review_id}>'
 
