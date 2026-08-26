@@ -22,7 +22,7 @@ class Review:
             raise ValueError('Review date_submitted should be an int!')
         self.__date_submitted = date_submitted
 
-        self.__user: Album = None
+        self.__user: User = None
 
     @property
     def review_id(self) -> int:
