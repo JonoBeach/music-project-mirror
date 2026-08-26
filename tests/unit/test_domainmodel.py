@@ -219,6 +219,14 @@ class TestReview:
         with pytest.raises(ValueError):
             Review(3, user1, 300, 'a', 'test', 12122026)
 
+        # test invalid rating raises error
+        with pytest.raises(ValueError):
+            Review(3, user1, 300, 6, 'test', 12122026)
+
+        # test invalid rating raises error
+        with pytest.raises(ValueError):
+            Review(3, user1, 300, -1, 'test', 12122026)
+
         # message content is a required field -> invalid type raises
         with pytest.raises(ValueError):
             Review(3, user1, 300, 5, 1, 12122026)
