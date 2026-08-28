@@ -1,17 +1,16 @@
-from music.domainmodel.user import User
 from music.domainmodel.track import Track
 
 class Favourite:
     # TODO: Complete the implementation of the Favourite class.
-    def __init__(self, id: int, user: User, track: Track):
+    def __init__(self, id: int, user_id: int, track: Track):
 
         if type(id) is not int:
             raise ValueError("Favourite ID should be an integer.")
         self.__id = id
 
-        if not isinstance(user, User):
-            raise ValueError("user must be a User instance.")
-        self.__user = user
+        if type(user_id) is not int:
+            raise ValueError("User ID should be an integer.")
+        self.__user_id = user_id
 
         if not isinstance(track, Track):
             raise ValueError("track must be a Track instance.")
@@ -22,15 +21,15 @@ class Favourite:
         return self.__id
 
     @property
-    def user(self) -> User:
-        return self.__user
+    def user_id(self) -> int:
+        return self.__user_id
 
     @property
     def track(self) -> Track:
         return self.__track
 
     def __repr__(self) -> str:
-        return f'<Favourite {self.id}, user = {self.user.user_name}, track = {self.track.title}>'
+        return f'<Favourite {self.id}, user_id = {self.user_id}, track = {self.track.title}>'
 
     def __eq__(self, value: object, /) -> bool:
         if not isinstance(value, self.__class__):

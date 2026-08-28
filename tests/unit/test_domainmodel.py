@@ -538,13 +538,13 @@ class TestFavourites:
         track1 = Track(1, 'Track 1')
         track2 = Track(2, 'Track 2')
 
-        favourite1 = Favourite(1, user1, track1)
-        favourite2 = Favourite(2, user1, track2)
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
 
         assert favourite1.id == 1
         assert favourite2.id == 2
-        assert favourite1.user == user1
-        assert favourite2.user == user1
+        assert favourite1.user_id == user1.user_id
+        assert favourite2.user_id == user1.user_id
         assert favourite1.track == track1
         assert favourite2.track == track2
 
@@ -553,8 +553,8 @@ class TestFavourites:
         track1 = Track(1, 'Track 1')
         track2 = Track(2, 'Track 2')
 
-        favourite1 = Favourite(1, user1, track1)
-        favourite2 = Favourite(2, user1, track2)
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
 
         user1.add_favourite(favourite1)
         assert len(user1.favourites) == 1
@@ -577,70 +577,21 @@ class TestFavourites:
     def test_favourites_equality(self):
         user1 = User(1, 'user1', 'password1')
         track1 = Track(1, 'Track 1')
-        favourite1 = Favourite(1, user1, track1)
-        favourite2 = Favourite(2, user1, track2)
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
 
-        assert favourite1.user == favourite2.user
+        assert favourite1.user_id == favourite2.user_id
         assert favourite1.track != favourite2.track
 
-        favourite3 = Favourite(3, user1, track1)
+        favourite3 = Favourite(3, user1.user_id, track1)
         assert favourite3 == favourite1
 
     def test_favourites_sorting(self):
         user1 = User(1, 'user1', 'password1')
         track1 = Track(1, 'Track 1')
         track2 = Track(2, 'Track 2')
-        favourite1 = Favourite(1, user1, track1)
-        favourite2 = Favourite(2, user1, track2)
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
 
         favourites_list = [favourite2, favourite1]
         assert favourites_list == sorted(favourites_list)
-
-    #
-    #     user1.add_favourite(track1)
-    #     user1.add_favourite(track2)
-    #
-    #     assert len(user1.favourites) == 2
-    #     assert track1 in user1.favourites
-    #     assert track2 in user1.favourites
-    #
-    #     # Test adding the same track again does not duplicate
-    #     user1.add_favourite(track1)
-    #     assert len(user1.favourites) == 2
-    #
-    #     # Test removing a favourite
-    #     user1.remove_favourite(track1)
-    #     assert len(user1.favourites) == 1
-    #     assert track1 not in user1.favourites
-    #
-    #     # Test removing a non-favourite does nothing
-    #     user1.remove_favourite(track1)
-    #     assert len(user1.favourites) == 1
-    #
-    # def test_favourites_equality(self):
-    #     user1 = User(1, 'user1', 'password1')
-    #     user2 = User(2, 'user2', 'password2')
-    #
-    #     user1.add_favourite(Track(1, 'Track 1'))
-    #     user2.add_favourite(Track(1, 'Track 1'))
-    #
-    #     assert user1.favourites == user2.favourites
-    #
-    # def test_favourites_sorting(self):
-    #     user1 = User(1, 'user1', 'password1')
-    #     track1 = Track(2, 'Track 2')
-    #     track2 = Track(1, 'Track 1')
-    #
-    #     assert track2 > track1
-    #     assert track1 < track2
-    #
-    #     favourites_list = [track2, track1]
-    #     assert sorted(favourites_list) == [track1, track2]
-    #
-    # def test_remove_favourite(self):
-    #     user1 = User(1, 'user1', 'password1')
-    #     track1 = Track(1, 'Track 1')
-    #     user1.add_favourite(track1)
-    #     assert track1 in user1.favourites
-    #     user1.remove_favourite(track1)
-    #     assert track1 not in user1.favourites
