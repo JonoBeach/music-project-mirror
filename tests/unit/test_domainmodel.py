@@ -232,38 +232,31 @@ class TestReview:
         with pytest.raises(ValueError):
             Review(3, user1.user_id, track1, 5, 1, 'test')
 
-    def test_setters(self):
+    def test_equality(self):
         user1 = User(1, 'name', 'password1')
         track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, track1, 5, 'test', 12122026)
-        review1.user = user1
-
-        assert review1.user == user1
-        assert str(review1) == '<name: Review Chill with me, review id = 1>'
-
-    def test_equality(self):
-        track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, track1, 5, 'test', 12122026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
 
         track2 = Track(2232, 'test2')
-        review2 = Review(2, track2, 2, 'test2', 12122027)
+        review2 = Review(2, user1.user_id, track2, 2, 'test2', 12122027)
 
         track3 = Track(2233, 'test3')
-        review3 = Review(3, track3, 3, 'test3', 12122028)
+        review3 = Review(3, user1.user_id, track3, 3, 'test3', 12122028)
 
         assert review1 == review1
         assert review1 != review2
         assert review2 != review3
 
     def test_sorting(self):
+        user1 = User(1, 'name', 'password1')
         track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, track1, 5, 'test', 12122026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
 
         track2 = Track(2232, 'test2')
-        review2 = Review(2, track2, 2, 'test2', 12122027)
+        review2 = Review(2, user1.user_id, track2, 2, 'test2', 12122027)
 
         track3 = Track(2233, 'test3')
-        review3 = Review(3, track3, 3, 'test3', 12122028)
+        review3 = Review(3, user1.user_id, track3, 3, 'test3', 12122028)
 
         assert review1 < review2
         assert review2 < review3
@@ -273,14 +266,15 @@ class TestReview:
         assert sorted(review_list) == [review1, review2, review3]
 
     def test_set(self):
+        user1 = User(1, 'name', 'password1')
         track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, track1, 5, 'test', 12122026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
 
         track2 = Track(2232, 'test2')
-        review2 = Review(2, track2, 2, 'test2', 12122027)
+        review2 = Review(2, user1.user_id, track2, 2, 'test2', 12122027)
 
         track3 = Track(2233, 'test3')
-        review3 = Review(3, track3, 3, 'test3', 12122028)
+        review3 = Review(3, user1.user_id, track3, 3, 'test3', 12122028)
 
         review_set = set()
         review_set.add(review1)
