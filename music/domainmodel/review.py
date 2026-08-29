@@ -1,7 +1,6 @@
 from music.domainmodel.track import Track
 
 class Review:
-# TODO: Complete the implementation of the Review class.
 
     def __init__(self, review_id: int, user_id: int, track: Track, rating: int, review_text: str, date_submitted: int):
         if type(review_id) is not int or review_id < 0:
