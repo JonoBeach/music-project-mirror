@@ -1,3 +1,4 @@
+from music.domainmodel import user
 import pytest
 import os
 
@@ -193,71 +194,69 @@ class TestReview:
         user2 = User(7232, 'test', 'test282')
         track1 = Track(2231, 'Chill with me')
         track2 = Track(2232, 'Other Track')
-        review1 = Review(1, user1, track1, 5, 'test', 12122026)
-        review2 = Review(2, user2, track2, 1, 'bigger review text', 2592026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
+        review2 = Review(2, user2.user_id, track2, 1, 'bigger review text', 2592026)
 
-        assert str(review1) == '<Review Chill with me, review id = 1>'
-        assert str(review2) == '<Review Other Track, review id = 2>'
-
-        # Test invalid id raises error
-        with pytest.raises(ValueError):
-            Review('abc', user1, track1, 5, 'test', 12122026)
+        assert str(review1) == '<By: 7231, Review Chill with me, review id = 1>'
+        assert str(review2) == '<By: 7232, Review Other Track, review id = 2>'
 
         # Test invalid id raises error
         with pytest.raises(ValueError):
-            Review(-30, user1, track1, 5, 'test', 12122026)
+            Review('abc', user1.user_id, track1, 5, 'test', 12122026)
 
-        # user is a required field -> invalid type raises
+        # Test invalid id raises error
         with pytest.raises(ValueError):
-            Review(3, 300, track1, 5, 'test', 12122026)
+            Review(-30, user1.user_id, track1, 5, 'test', 12122026)
 
         # track is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 5, 'test', 12122026)
+            Review(3, user1.user_id, 300, 5, 'test', 12122026)
 
         # rating is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 'a', 'test', 12122026)
+            Review(3, user1.user_id, track1, 'a', 'test', 12122026)
+
+        # test invalid rating raises error
+        with pytest.raises(ValueError):
+            Review(3, user1.user_id, track1, 6, 'test', 12122026)
+
+        # test invalid rating raises error
+        with pytest.raises(ValueError):
+            Review(3, user1.user_id, track1, -1, 'test', 12122026)
 
         # message content is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 5, 1, 12122026)
+            Review(3, user1.user_id, track1, 5, 1, 12122026)
 
         # date field is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 5, 1, 'test')
-
-    # test setters, if review class gets setters
+            Review(3, user1.user_id, track1, 5, 1, 'test')
 
     def test_equality(self):
-        user1 = User(7232, 'test1', 'test111')
+        user1 = User(1, 'name', 'password1')
         track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, user1, track1, 5, 'test', 12122026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
 
-        user2 = User(7233, 'test2', 'test222')
         track2 = Track(2232, 'test2')
-        review2 = Review(2, user2, track2, 2, 'test2', 12122027)
+        review2 = Review(2, user1.user_id, track2, 2, 'test2', 12122027)
 
-        user3 = User(7234, 'test3', 'test333')
         track3 = Track(2233, 'test3')
-        review3 = Review(3, user3, track3, 3, 'test3', 12122028)
+        review3 = Review(3, user1.user_id, track3, 3, 'test3', 12122028)
 
         assert review1 == review1
         assert review1 != review2
         assert review2 != review3
 
     def test_sorting(self):
-        user1 = User(7232, 'test1', 'test111')
+        user1 = User(1, 'name', 'password1')
         track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, user1, track1, 5, 'test', 12122026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
 
-        user2 = User(7233, 'test2', 'test222')
         track2 = Track(2232, 'test2')
-        review2 = Review(2, user2, track2, 2, 'test2', 12122027)
+        review2 = Review(2, user1.user_id, track2, 2, 'test2', 12122027)
 
-        user3 = User(7234, 'test3', 'test333')
         track3 = Track(2233, 'test3')
-        review3 = Review(3, user3, track3, 3, 'test3', 12122028)
+        review3 = Review(3, user1.user_id, track3, 3, 'test3', 12122028)
 
         assert review1 < review2
         assert review2 < review3
@@ -267,17 +266,15 @@ class TestReview:
         assert sorted(review_list) == [review1, review2, review3]
 
     def test_set(self):
-        user1 = User(7232, 'test1', 'test111')
+        user1 = User(1, 'name', 'password1')
         track1 = Track(2231, 'Chill with me')
-        review1 = Review(1, user1, track1, 5, 'test', 12122026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
 
-        user2 = User(7233, 'test2', 'test222')
         track2 = Track(2232, 'test2')
-        review2 = Review(2, user2, track2, 2, 'test2', 12122027)
+        review2 = Review(2, user1.user_id, track2, 2, 'test2', 12122027)
 
-        user3 = User(7234, 'test3', 'test333')
         track3 = Track(2233, 'test3')
-        review3 = Review(3, user3, track3, 3, 'test3', 12122028)
+        review3 = Review(3, user1.user_id, track3, 3, 'test3', 12122028)
 
         review_set = set()
         review_set.add(review1)
