@@ -53,7 +53,7 @@ class Review:
         return self.__date_submitted
 
     def __repr__(self) -> str:
-        return f'<By: {self.user_id}: Review {self.track.title}, review id = {self.review_id}>'
+        return f'<By: {self.user_id}, Review {self.track.title}, review id = {self.review_id}>'
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, self.__class__):

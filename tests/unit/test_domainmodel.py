@@ -1,3 +1,4 @@
+from music.domainmodel import user
 import pytest
 import os
 
@@ -189,45 +190,47 @@ class TestGenre:
 class TestReview:
 
     def test_construction(self):
+        user1 = User(7231, 'amotys', 'amotys277')
+        user2 = User(7232, 'test', 'test282')
         track1 = Track(2231, 'Chill with me')
         track2 = Track(2232, 'Other Track')
-        review1 = Review(1, track1, 5, 'test', 12122026)
-        review2 = Review(2, track2, 1, 'bigger review text', 2592026)
+        review1 = Review(1, user1.user_id, track1, 5, 'test', 12122026)
+        review2 = Review(2, user2.user_id, track2, 1, 'bigger review text', 2592026)
 
-        assert str(review1) == '<Review Chill with me, review id = 1>'
-        assert str(review2) == '<Review Other Track, review id = 2>'
-
-        # Test invalid id raises error
-        with pytest.raises(ValueError):
-            Review('abc', track1, 5, 'test', 12122026)
+        assert str(review1) == '<By: 7231, Review Chill with me, review id = 1>'
+        assert str(review2) == '<By: 7232, Review Other Track, review id = 2>'
 
         # Test invalid id raises error
         with pytest.raises(ValueError):
-            Review(-30, track1, 5, 'test', 12122026)
+            Review('abc', user1.user_id, track1, 5, 'test', 12122026)
+
+        # Test invalid id raises error
+        with pytest.raises(ValueError):
+            Review(-30, user1.user_id, track1, 5, 'test', 12122026)
 
         # track is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 5, 'test', 12122026)
+            Review(3, user1.user_id, 300, 5, 'test', 12122026)
 
         # rating is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 'a', 'test', 12122026)
+            Review(3, user1.user_id, track1, 'a', 'test', 12122026)
 
         # test invalid rating raises error
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 6, 'test', 12122026)
+            Review(3, user1.user_id, track1, 6, 'test', 12122026)
 
         # test invalid rating raises error
         with pytest.raises(ValueError):
-            Review(3, user1, 300, -1, 'test', 12122026)
+            Review(3, user1.user_id, track1, -1, 'test', 12122026)
 
         # message content is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 5, 1, 12122026)
+            Review(3, user1.user_id, track1, 5, 1, 12122026)
 
         # date field is a required field -> invalid type raises
         with pytest.raises(ValueError):
-            Review(3, user1, 300, 5, 1, 'test')
+            Review(3, user1.user_id, track1, 5, 1, 'test')
 
     def test_setters(self):
         user1 = User(1, 'name', 'password1')
