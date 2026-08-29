@@ -345,6 +345,13 @@ class TestTrack:
         assert len(track_set) == 0
 
 
+class TestAlbum:
+
+    def test_construction(self):
+
+        pass
+
+
 class TestUser:
 
     def test_construction(self):

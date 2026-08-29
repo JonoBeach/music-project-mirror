@@ -1,5 +1,3 @@
-from multiprocessing import Value
-
 from music.domainmodel.artist import Artist
 from music.domainmodel.track import Track
 
@@ -7,7 +5,7 @@ class Album:
 # TODO: Complete the implementation of the Album class.
 
 #   album_info? album_image?
-    def __init__(self, album_id: int, album_title: str, release_year: int, artist: Artist | None):
+    def __init__(self, album_id: int, album_title: str):
         if type(album_id) is not int or album_id < 0:
             raise ValueError("Album ID should be a non negative integer.")
         self.__album_id = album_id
@@ -16,14 +14,8 @@ class Album:
             raise ValueError("Album title should be a non-empty string.")
         self.__title = album_title.strip()
 
-        if type(release_year) is not int or release_year <= 0 or release_year > 2026:
-            raise ValueError("Alnum release year should be a non negative integer and no more than 2026.")
-        self.__release_year = release_year
-
-        if type(artist) is not Artist | None:
-            raise ValueError("artist must be an Artist instance or None.")
-        self.__artist = artist
-
+        self.__release_year: int | None = None
+        self.__artist: Artist | None = None
         self.__tracks: list[Track] = []
         self.__album_url: str | None = None
 
@@ -42,8 +34,14 @@ class Album:
         self.__title = new_title.strip()
 
     @property
-    def release_year(self) -> int:
+    def release_year(self) -> int | None:
         return self.__release_year
+
+    @release_year.setter
+    def release_year(self, year):
+        if year is not None and (not isinstance(year, int) or year < 0):
+                raise ValueError("Album release year should be a non-negative integer.")
+        self.__release_year = year
 
     @property
     def artist(self) -> Artist | None:
@@ -51,12 +49,9 @@ class Album:
 
     @artist.setter
     def artist(self, new_artist: Artist | None):
-        if new_artist is None:
-            self.__artist = None
-        elif isinstance(new_artist, Artist):
-            self.__artist = new_artist
-        else:
+        if new_artist is not None and not isinstance(new_artist, Artist):
             raise ValueError("artist must be an Artist instance or None.")
+        self.__artist = new_artist
 
     @property
     def album_url(self) -> str | None:
