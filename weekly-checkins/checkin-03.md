@@ -35,4 +35,4 @@ Everyone has worked on the assignment this week
 |Unit tests not working|Joshua|Aug.28| [#9](https://github.com/UoA-CS-Project-CS235-S2-2026/music-webapp-14.-fhos131-jbea602-jlo401-znin774/issues/9) |Done|
 
 ## Board Snapshot
-![Board snapshot](weekly-checkins/screenshots/checkin-board-03.png)
+![Board snapshot](./screenshots/checkin-board-03.png)
