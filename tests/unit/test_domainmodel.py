@@ -570,13 +570,14 @@ class TestFavourites:
 
         user1.remove_favourite(favourite1)
         assert len(user1.favourites) == 1
-        assert favourite1 not in favourite1
+        assert favourite1 not in user1.favourites
 
         user1.remove_favourite(favourite2)
 
     def test_favourites_equality(self):
         user1 = User(1, 'user1', 'password1')
         track1 = Track(1, 'Track 1')
+        track2 = Track(2, 'Track 2')
         favourite1 = Favourite(1, user1.user_id, track1)
         favourite2 = Favourite(2, user1.user_id, track2)
 
