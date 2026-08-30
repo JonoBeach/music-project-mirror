@@ -3,6 +3,7 @@ import pytest
 import os
 
 from music.domainmodel.artist import Artist
+from music.domainmodel.favourite import Favourite
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
 from music.domainmodel.review import Review
@@ -630,3 +631,70 @@ class TestCSVDataReader:
 
         sorted_genre_sample = str(sorted_genres[:3])
         assert sorted_genre_sample == '[<Genre Avant-Garde, genre id = 1>, <Genre International, genre id = 2>, <Genre Blues, genre id = 3>]'
+
+#TODO: fix so favourites classes are passed, not tracks
+class TestFavourites:
+    def test_construction(self):
+        user1 = User(1, 'user1', 'password1')
+
+        track1 = Track(1, 'Track 1')
+        track2 = Track(2, 'Track 2')
+
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
+
+        assert favourite1.id == 1
+        assert favourite2.id == 2
+        assert favourite1.user_id == user1.user_id
+        assert favourite2.user_id == user1.user_id
+        assert favourite1.track == track1
+        assert favourite2.track == track2
+
+    def test_add_remove_favourites(self):
+        user1 = User(1, 'user1', 'password1')
+        track1 = Track(1, 'Track 1')
+        track2 = Track(2, 'Track 2')
+
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
+
+        user1.add_favourite(favourite1)
+        assert len(user1.favourites) == 1
+        assert favourite1 in user1.favourites
+
+        # check that duplicates are not added
+        user1.add_favourite(favourite1)
+        assert len(user1.favourites) == 1
+
+        user1.add_favourite(favourite2)
+        assert len(user1.favourites) == 2
+        assert favourite2 in user1.favourites
+
+        user1.remove_favourite(favourite1)
+        assert len(user1.favourites) == 1
+        assert favourite1 not in user1.favourites
+
+        user1.remove_favourite(favourite2)
+
+    def test_favourites_equality(self):
+        user1 = User(1, 'user1', 'password1')
+        track1 = Track(1, 'Track 1')
+        track2 = Track(2, 'Track 2')
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
+
+        assert favourite1.user_id == favourite2.user_id
+        assert favourite1.track != favourite2.track
+
+        favourite3 = Favourite(3, user1.user_id, track1)
+        assert favourite3 == favourite1
+
+    def test_favourites_sorting(self):
+        user1 = User(1, 'user1', 'password1')
+        track1 = Track(1, 'Track 1')
+        track2 = Track(2, 'Track 2')
+        favourite1 = Favourite(1, user1.user_id, track1)
+        favourite2 = Favourite(2, user1.user_id, track2)
+
+        favourites_list = [favourite2, favourite1]
+        assert favourites_list == sorted(favourites_list)
