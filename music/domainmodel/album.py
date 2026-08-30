@@ -18,6 +18,7 @@ class Album:
         self.__artist: Artist | None = None
         self.__tracks: list[Track] = []
         self.__album_url: str | None = None
+        self.__album_info: str | None = None
 
     @property
     def album_id(self) -> int:
@@ -65,6 +66,19 @@ class Album:
             self.__album_url = new_url.strip()
         else:
             raise ValueError("album_url must be a non-empty string or None.")
+
+    @property
+    def album_info(self) -> str | None:
+        return self.__album_info
+
+    @album_info.setter
+    def album_info(self, info: str | None):
+        if info is None:
+            self.__album_info = None
+        elif type(info) is str and info.strip() != '':
+            self.album_info = info.strip()
+        else:
+            raise ValueError("album info must be a non-empty string or None.")
 
     @property
     def tracks(self) -> list[Track]:
