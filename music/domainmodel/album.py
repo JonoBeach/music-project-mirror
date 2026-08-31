@@ -1,11 +1,8 @@
 from music.domainmodel.artist import Artist
-from music.domainmodel.track import Track
 
 class Album:
-# TODO: Complete the implementation of the Album class.
-
-#   album_info? album_image?
     def __init__(self, album_id: int, album_title: str):
+        from music.domainmodel.track import Track
         if type(album_id) is not int or album_id < 0:
             raise ValueError("Album ID should be a non negative integer.")
         self.__album_id = album_id
@@ -81,15 +78,17 @@ class Album:
             raise ValueError("album info must be a non-empty string or None.")
 
     @property
-    def tracks(self) -> list[Track]:
+    def tracks(self):
         return self.__tracks
 
-    def add_track(self, new_track: Track):
+    def add_track(self, new_track):
+        from music.domainmodel.track import Track
         if not isinstance(new_track, Track) or new_track in self.__tracks:
             return
         self.__tracks.append(new_track)
 
-    def remove_track(self, track: Track):
+    def remove_track(self, track):
+        from music.domainmodel.track import Track
         if not isinstance(track, Track) or track not in self.__tracks:
             return
         self.__tracks.remove(track)

@@ -1,8 +1,7 @@
-from music.domainmodel import user
+#from music.domainmodel import user
 import pytest
 import os
 
-from music.domainmodel import album
 from music.domainmodel.artist import Artist
 from music.domainmodel.favourite import Favourite
 from music.domainmodel.track import Track
