@@ -462,7 +462,48 @@ class TestAlbum:
         assert album1.total_tracks == 1
 
     def test_equality(self):
+        album1 = Album(1, 'location')
+        album2 = Album(2, 'Afterglow')
+        album3 = Album(3, 'Pathway')
 
+        assert album1 == album1
+        assert album2 == album2
+        assert album1 != album3
+        assert album2 != album1
+
+        assert album2 != 2
+        assert album3 != 'Pathway'
+
+    def test_sorting(self):
+        album1 = Album(1, 'location')
+        album2 = Album(2, 'Afterglow')
+        album3 = Album(3, 'Pathway')
+
+        assert album1 < album2
+        assert album2 < album3
+        assert album3 > album1
+
+        album_list = [album2, album1, album3, album1]
+        assert sorted(album_list) == [album1, album1, album2, album3]
+
+    def test_set(self):
+        album1 = Album(1, 'location')
+        album2 = Album(2, 'Afterglow')
+        album3 = Album(3, 'Pathway')
+
+        album_set = set()
+        album_set.add(album1)
+        album_set.add(album2)
+        album_set.add(album3)
+
+        assert len(album_set) == 3
+
+        album_set.discard(album1)
+        assert sorted(album_set) == [album2, album3]
+
+        album_set.discard(album2)
+        album_set.discard(album3)
+        assert len(album_set) == 0
 
 
 
