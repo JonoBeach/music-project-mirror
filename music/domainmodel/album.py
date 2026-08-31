@@ -73,7 +73,7 @@ class Album:
         if info is None:
             self.__album_info = None
         elif type(info) is str and info.strip() != '':
-            self.album_info = info.strip()
+            self.__album_info = info.strip()
         else:
             raise ValueError("album info must be a non-empty string or None.")
 

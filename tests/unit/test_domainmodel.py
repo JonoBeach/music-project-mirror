@@ -480,11 +480,11 @@ class TestAlbum:
 
         #title with trailing spaces
         album1.title = '  CEREMONY!  '
-        assert album1.title == '  CEREMONY!  '
+        assert album1.title == 'CEREMONY!'
 
         #test album url
         album1.album_url = ' https://spotify/CEREMONY/Teenager Forever '
-        assert album1.album_url == ' https://spotify/CEREMONY/Teenager Forever '
+        assert album1.album_url == 'https://spotify/CEREMONY/Teenager Forever'
 
         #test album url is optional
         album1.album_url = None
@@ -492,7 +492,7 @@ class TestAlbum:
 
         # test album info
         album1.album_info = ' this is an album that .. asdadffnasnchfla '
-        assert album1.album_info == ' this is an album that .. asdadffnasnchfla '
+        assert album1.album_info == 'this is an album that .. asdadffnasnchfla'
 
         #test album info optional
         album1.album_info = None
