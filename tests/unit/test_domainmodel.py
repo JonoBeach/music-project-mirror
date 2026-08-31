@@ -1,6 +1,7 @@
 import pytest
 import os
 
+from music.domainmodel import album
 from music.domainmodel.artist import Artist
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
@@ -348,8 +349,121 @@ class TestTrack:
 class TestAlbum:
 
     def test_construction(self):
+        album1 = Album(1, 'Hear you')
+        album2 = Album(2, '834.194')
+        album3 = Album(3, 'location')
 
-        pass
+        assert str(album1) == '<Album Hear you, Album id = 1>'
+        assert str(album2) == '<Album 834.194, Album id = 2>'
+        assert str(album3) == '<Album location, Album id = 3>'
+
+        with pytest.raises(ValueError):
+            Album(None, 'Sympa')
+
+        with pytest.raises(ValueError):
+            Album(-1, 'Sympa')
+
+        with pytest.raises(ValueError):
+            Album(4, 7)
+
+        with pytest.raises(ValueError):
+            Album(4, ' ')
+
+    def test_attributes(self):
+        album1 = Album(1, 'location')
+
+        #test title setter
+        album1.title = 'CEREMONY'
+        assert album1.title == 'CEREMONY'
+
+        #title with trailing spaces
+        album1.title = '  CEREMONY!  '
+        assert album1.title == '  CEREMONY!  '
+
+        #test album url
+        album1.album_url = ' https://spotify/CEREMONY/Teenager Forever '
+        assert album1.album_url == ' https://spotify/CEREMONY/Teenager Forever '
+
+        #test album url is optional
+        album1.album_url = None
+        assert album1.album_url == None
+
+        # test album info
+        album1.album_info = ' this is an album that .. asdadffnasnchfla '
+        assert album1.album_info == ' this is an album that .. asdadffnasnchfla '
+
+        #test album info optional
+        album1.album_info = None
+        assert album1.album_info == None
+
+        # test artist
+        artist = Artist(12, 'King gnu')
+        album1.artist = artist
+        assert album1.artist == artist
+
+        # test artist is optional
+        album1.artist = None
+        assert album1.artist == None
+
+        # test release_year
+        album1.release_year = 2020
+        assert album1.release_year == 2020
+
+        # test release_year is optional
+        album1.release_year = None
+        assert album1.release_year == None
+
+    def test_attributes_fail(self):
+        album1 = Album(1, 'location')
+        album2 = Album(2, 'Pathway')
+
+        with pytest.raises(ValueError):
+            album1.title = 234
+        assert album1.title == 'location'
+
+        with pytest.raises(ValueError):
+            album1.album_url = 123
+        assert album1.album_url is None
+
+        with pytest.raises(ValueError):
+            album1.album_info = 123
+        assert album1.album_info is None
+
+        with pytest.raises(ValueError):
+            album1.title = ' '
+        assert album1.title == 'location'
+
+        with pytest.raises(ValueError):
+            album1.release_year = '2020'
+        with pytest.raises(ValueError):
+            album2.release_year = -2020
+        assert album1.release_year is None
+        assert album2.release_year is None
+
+        with pytest.raises(ValueError):
+            album1.artist = 123
+        with pytest.raises(ValueError):
+            album2.artist = ' invalid artist '
+        assert album1.artist is None
+        assert album2.artist is None
+
+    def test_tracks_methods(self):
+        album1 = Album(1, 'location')
+        track1 = Track(1, 'Law of Attraction')
+        track2 = Track(2, 'SPIRAL')
+
+        album1.add_track(track1)
+        album1.add_track(track2)
+        assert album1.tracks == [track1, track2]
+        assert album1.total_tracks == 2
+
+        album1.remove_track(track1)
+        assert album1.tracks == [track2]
+        assert album1.total_tracks == 1
+
+    def test_equality(self):
+
+
 
 
 class TestUser:
