@@ -27,18 +27,36 @@ class CSVDataReader:
         track_data = dict()
         album_data = dict()
 
+        int_keys = [
+            "track_id", "album_id", "artist_id", "license_parent_id",
+            "track_bit_rate", "track_comments", "track_disc_number",
+            "track_duration", "track_favorites", "track_instrumental",
+            "track_interest", "track_listens", "track_number",
+            "album_comments", "album_year_released", "album_favorites",
+            "album_listens", "album_tracks"
+        ]
         with open(self.__tracks_file, "r", encoding="ISO-8859-1") as f:
             data = csv.DictReader(f)
             for track in data:
-                # replace empty strings with None
-                track = {key: val.strip() or None for key, val in track.items()}
+                # replace empty strings with None, numbers with int
+                track = {
+                    key: None if val.strip() == ""
+                    else int(float(val)) if key in int_keys
+                    else val
+                    for key, val in track.items()
+                }
                 track_data[int(track["track_id"])] = track
 
         with open(self.__albums_file, "r", encoding="ISO-8859-1") as f:
             data = csv.DictReader(f)
             for album in data:
-                # replace empty strings with None
-                album = {key: val.strip() or None for key, val in album.items()}
+                # replace empty strings with None, numbers with int
+                album = {
+                    key: None if val.strip() == ""
+                    else int(float(val)) if key in int_keys
+                    else val
+                    for key, val in album.items()
+                }
                 album_data[int(album["album_id"])] = album
 
 
@@ -47,28 +65,28 @@ class CSVDataReader:
             self.__tracks[track_id] = Track(track_id, track["track_title"])
 
             # fill artists
-            artist_id = int(track["artist_id"])
-            if artist_id not in self.__artists:
+            artist_id = track["artist_id"]
+            if (artist_id != None) and (artist_id not in self.__artists):
                 self.__artists[artist_id] = Artist(artist_id, track["artist_name"])
 
             # fill albums
-            album_id = int(track["album_id"])
-            if album_id not in self.__albums:
+            album_id = track["album_id"]
+            if (album_id != None) and (album_id not in self.__albums):
                 self.__albums[album_id] = Album(album_id, track["album_title"])
                 self.__albums[album_id].artist = self.__artists[artist_id]
                 self.__albums[album_id].add_track(self.__tracks[track_id])
                 self.__albums[album_id].album_url = track["album_url"]
 
-                # album is sometimes not in album_data
-                if album_id not in album_data:
-                    break
-                album = album_data[album_id]
-                if album["album_year_released"] != None:
-                    self.__albums[album_id].release_year = int(album["album_year_released"])
-                self.__albums[album_id].album_info = album["album_information"]
+                # album is sometimes not in album_data, we need to check
+                if album_id in album_data:
+                    album = album_data[album_id]
+                    self.__albums[album_id].release_year = album["album_year_released"]
+                    self.__albums[album_id].album_info = album["album_information"]
 
             # fill genres
-            track_genres = ast.literal_eval(track["track_genres"])
+            track_genres = []
+            if track["track_genres"] != None:
+                track_genres = ast.literal_eval(track["track_genres"])
             for genre in track_genres:
                 genre_id = int(genre["genre_id"])
                 if genre_id not in self.__genres:
@@ -76,11 +94,12 @@ class CSVDataReader:
                 self.__tracks[track_id].add_genre(self.__genres[genre_id])
 
             # fill tracks
-            self.__tracks[track_id].artist = self.__artists[artist_id]
-            self.__tracks[track_id].album = self.__albums[album_id]
+            if artist_id != None:
+                self.__tracks[track_id].artist = self.__artists[artist_id]
+            if album_id != None:
+                self.__tracks[track_id].album = self.__albums[album_id]
             self.__tracks[track_id].track_url = track["track_url"]
-            if track["track_duration"] != None:
-                self.__tracks[track_id].track_duration = int(track["track_duration"])
+            self.__tracks[track_id].track_duration = track["track_duration"]
 
         # convert dicts back to list
         self.__tracks = list(self.__tracks.values())
