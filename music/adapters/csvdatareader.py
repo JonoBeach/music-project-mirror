@@ -59,8 +59,16 @@ class CSVDataReader:
                 }
                 album_data[int(album["album_id"])] = album
 
+        # fill album data
+        # only albums from album_data are added
+        # albums only found in track_data aren't added
+        for album_id, album in album_data.items():
+            self.__albums[album_id] = Album(album_id, album["album_title"])
+            self.__albums[album_id].album_url = album["album_url"]
+            self.__albums[album_id].release_year = album["album_year_released"]
+            self.__albums[album_id].album_info = album["album_information"]
 
-        # fill data
+        # fill rest of the data
         for track_id, track in track_data.items():
             self.__tracks[track_id] = Track(track_id, track["track_title"])
 
@@ -71,17 +79,10 @@ class CSVDataReader:
 
             # fill albums
             album_id = track["album_id"]
-            if (album_id != None) and (album_id not in self.__albums):
-                self.__albums[album_id] = Album(album_id, track["album_title"])
-                self.__albums[album_id].artist = self.__artists[artist_id]
+            if (album_id != None) and (album_id in self.__albums):
+                if self.__albums[album_id].artist == None:
+                    self.__albums[album_id].artist = self.__artists[artist_id]
                 self.__albums[album_id].add_track(self.__tracks[track_id])
-                self.__albums[album_id].album_url = track["album_url"]
-
-                # album is sometimes not in album_data, we need to check
-                if album_id in album_data:
-                    album = album_data[album_id]
-                    self.__albums[album_id].release_year = album["album_year_released"]
-                    self.__albums[album_id].album_info = album["album_information"]
 
             # fill genres
             track_genres = []
@@ -96,7 +97,7 @@ class CSVDataReader:
             # fill tracks
             if artist_id != None:
                 self.__tracks[track_id].artist = self.__artists[artist_id]
-            if album_id != None:
+            if (album_id != None) and (album_id in self.__albums):
                 self.__tracks[track_id].album = self.__albums[album_id]
             self.__tracks[track_id].track_url = track["track_url"]
             self.__tracks[track_id].track_duration = track["track_duration"]
