@@ -455,9 +455,9 @@ class TestAlbum:
         album2 = Album(2, '834.194')
         album3 = Album(3, 'location')
 
-        assert str(album1) == '<Album Hear you, Album id = 1>'
-        assert str(album2) == '<Album 834.194, Album id = 2>'
-        assert str(album3) == '<Album location, Album id = 3>'
+        assert str(album1) == '<Album Hear you, album id = 1>'
+        assert str(album2) == '<Album 834.194, album id = 2>'
+        assert str(album3) == '<Album location, album id = 3>'
 
         with pytest.raises(ValueError):
             Album(None, 'Sympa')

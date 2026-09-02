@@ -98,7 +98,7 @@ class Album:
         return len(self.tracks)
 
     def __repr__(self):
-        return f"<Album {self.title}, Album id = {self.album_id}>"
+        return f"<Album {self.title}, album id = {self.album_id}>"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, self.__class__):
