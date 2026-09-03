@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.nav-items {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-items li {
+    margin: 10px;
+}
+
+.auth-items {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-items li {
+    margin: 10px;
+}
