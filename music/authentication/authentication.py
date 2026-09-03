@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 
 import music.authentication.services as services
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Length, ValidationError
 
 # setup blueprint
 authentication_blueprint = Blueprint('authentication_bp', __name__, url_prefix='/authentication')
@@ -13,9 +14,20 @@ authentication_blueprint = Blueprint('authentication_bp', __name__, url_prefix='
 def register():
     form = RegistrationForm()
 
+    if form.validate_on_submit():
+        try:
+            # adding user
+            return redirect(url_for('authentication_bp.login'))
+
+        # if username is already taken
+        except:
+            pass
+
+    # for GET or failed POST, return registration page
     return render_template(
         'authentication/credentials.html',
         form=form,
+        title="register",
     )
 
 #TODO: login route & form
@@ -23,21 +35,27 @@ def register():
 def login():
     form = LoginForm()
 
+    # for GET or failed POST, return login page
     return render_template(
         'authentication/credentials.html',
         form=form,
+        title="login",
     )
 
 #TODO: logout route & functionality
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('username')
+    username = StringField('username', [
+                           DataRequired(message="Please input a username!"),
+                           Length(min=4, message="Your username is too short!")])
     password = PasswordField('password')
+    confirm = PasswordField('confirm')
     submit = SubmitField('register')
 
 
 class LoginForm(FlaskForm):
     username = StringField('username')
     password = PasswordField('password')
+    confirm = None
     submit = SubmitField('login')
