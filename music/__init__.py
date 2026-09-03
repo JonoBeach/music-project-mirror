@@ -18,6 +18,7 @@ def create_some_track():
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object('config.Config')
 
     @app.route('/')
     def home():
