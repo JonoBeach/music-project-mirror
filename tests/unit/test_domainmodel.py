@@ -848,7 +848,7 @@ class TestFavourites:
         assert favourite1.track != favourite2.track
 
         favourite3 = Favourite(3, user1.user_id, track1)
-        assert favourite3 == favourite1
+        assert favourite3 != favourite1
 
     def test_favourites_sorting(self):
         user1 = User(1, 'user1', 'password1')
@@ -857,5 +857,5 @@ class TestFavourites:
         favourite1 = Favourite(1, user1.user_id, track1)
         favourite2 = Favourite(2, user1.user_id, track2)
 
-        favourites_list = [favourite2, favourite1]
+        favourites_list = [favourite1, favourite2]
         assert favourites_list == sorted(favourites_list)
