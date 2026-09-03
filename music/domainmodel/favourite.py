@@ -34,12 +34,12 @@ class Favourite:
     def __eq__(self, value: object, /) -> bool:
         if not isinstance(value, self.__class__):
             return False
-        return self.id == value.id
+        return self.user_id == value.user_id
 
     def __lt__(self, value):
         if not isinstance(value, self.__class__):
             return True
-        return self.id < value.id
+        return self.user_id < value.user_id
 
     def __hash__(self) -> int:
         return hash(self.id)
