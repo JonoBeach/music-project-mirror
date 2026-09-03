@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, session
 
 import music.authentication.services as services
 
@@ -16,7 +16,7 @@ def register():
 
     if form.validate_on_submit():
         try:
-            # adding user
+            #TODO: adding user
             return redirect(url_for('authentication_bp.login'))
 
         # if username is already taken
@@ -35,6 +35,17 @@ def register():
 def login():
     form = LoginForm()
 
+    if form.validate_on_submit():
+        # username and password have passed validation checking
+        try:
+            #TODO: get user details
+            #TODO: authenticate user
+            #TODO: create user session
+            return redirect(url_for('home_bp.home')) #TODO: home bp not implemented yet
+
+        except:
+            pass
+
     # for GET or failed POST, return login page
     return render_template(
         'authentication/credentials.html',
@@ -43,6 +54,10 @@ def login():
     )
 
 #TODO: logout route & functionality
+@authentication_blueprint.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home_bp.home'))
 
 
 class RegistrationForm(FlaskForm):
