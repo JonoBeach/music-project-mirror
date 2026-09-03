@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-import covid.authentication.services as services
+import music.authentication.services as services
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
