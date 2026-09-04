@@ -4,7 +4,7 @@ from typing import override
 from music.adapters.csvdatareader import CSVDataReader
 from music.domainmodel.favourite import Favourite
 from music.domainmodel.user import User
-from music.templates.repository import AbstractRepository
+from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 
 class MemoryRepository(AbstractRepository):

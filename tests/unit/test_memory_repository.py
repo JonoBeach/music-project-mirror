@@ -2,7 +2,7 @@ import pytest
 from music.domainmodel import user
 from music.domainmodel.favourite import Favourite
 from music.domainmodel.user import User
-from music.templates.memory_repository import MemoryRepository
+from music.adapters.memory_repository import MemoryRepository
 from music.domainmodel.track import Track
 
 @pytest.fixture
