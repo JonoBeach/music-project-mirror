@@ -1,6 +1,9 @@
 import pytest
 from music.domainmodel import user
+from music.domainmodel.album import Album
+from music.domainmodel.artist import Artist
 from music.domainmodel.favourite import Favourite
+from music.domainmodel.genre import Genre
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
 from music.domainmodel.track import Track
@@ -61,3 +64,23 @@ def test_review_function(repo:MemoryRepository):
     assert repo.get_review_by_date(track) == [review1, review3]
     assert repo.get_review_by_rating(track) == [review3, review1]
     assert len(user2.reviews) == 0
+
+def test_sort_by_title(repo:MemoryRepository):
+    list = repo.sort_by_track_title()
+    title_list = [track.title for track in list]
+    assert title_list == sorted(title_list)
+
+def test_search_method(repo:MemoryRepository):
+    track1 = Track(1, "Song Silly")
+    repo.add_track(track1)
+    assert track1 == repo.search_by_title("Song Silly")
+    assert repo.search_by_title("dahgdhagd") == None
+    genre = Genre(9999, "wild genre")
+    track1.add_genre(genre)
+    assert repo.search_by_genre(genre) == [track1]
+    artist = Artist(9999, "toe")
+    track1.artist = artist
+    assert repo.search_by_artist(artist) == [track1]
+    album = Album(9999, "Hear You")
+    track1.album = album
+    assert repo.search_by_album(album) == [track1]

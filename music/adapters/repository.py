@@ -62,29 +62,28 @@ class AbstractRepository(abc.ABC):
     def get_review_by_rating(self, track: Track) -> list:
         #return reviews list sorted by their rating.(high to low)
         raise NotImplementedError
-'''
+
     @abc.abstractmethod
-    def alpha_sort_track(self, track: Track) -> list:
+    def sort_by_track_title(self) -> list:
         #return alphabetically sorted track list
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_titile(self, title: str) -> Track | None:
+    def search_by_title(self, title: str) -> Track | None:
         #return track that have same title or None
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_genre(self, genre: Genre) -> list | None:
+    def search_by_genre(self, genre: Genre) -> list:
         #return a list of track that have same genre or None
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_artist(self, artist: Artist) -> list | None:
+    def search_by_artist(self, artist: Artist) -> list:
         #return a list of track that have same artist or None
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_album(self, album: Album) -> list | None:
+    def search_by_album(self, album: Album) -> list:
         #return a list of track that have same album name or None
         raise NotImplementedError
-'''

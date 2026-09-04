@@ -2,6 +2,7 @@ import os
 from typing import override
 
 from music.adapters.csvdatareader import CSVDataReader
+from music.domainmodel import track
 from music.domainmodel.favourite import Favourite
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
@@ -73,22 +74,28 @@ class MemoryRepository(AbstractRepository):
 
     @override
     def get_review_by_date(self, track: Track) -> list:
-        list = track.reviews
-        for i in range(len(list)):
-            for j in range(0, len(list) - i - 1):
-                if list[j].date_submitted > list[j + 1].date_submitted:
-                    temp = list[j]
-                    list[j] = list[j + 1]
-                    list[j + 1] = temp
-        return list
+        return sorted(track.reviews, key=lambda review: review.date_submitted)
 
     @override
     def get_review_by_rating(self, track: Track) -> list:
-        list = track.reviews
-        for i in range(len(list)):
-            for j in range(0, len(list) - i - 1):
-                if list[j].rating < list[j + 1].rating:
-                    temp = list[j]
-                    list[j] = list[j + 1]
-                    list[j + 1] = temp
-        return list
+        return sorted(track.reviews, key=lambda review: review.rating, reverse=True)
+
+    @override
+    def sort_by_track_title(self) -> list:
+        return sorted(self.__tracks, key=lambda track: track.title)
+
+    @override
+    def search_by_title(self, title: str) -> Track | None:
+        return next((track for track in self.__tracks if track.title == title), None)
+
+    @override
+    def search_by_genre(self, genre: Genre) -> list:
+        return [track for track in self.__tracks if genre in track.genres]
+
+    @override
+    def search_by_artist(self, artist: Artist) -> list:
+        return [track for track in self.__tracks if track.artist == artist]
+
+    @override
+    def search_by_album(self, album: Album) -> list:
+        return [track for track in self.__tracks if track.album == album]
