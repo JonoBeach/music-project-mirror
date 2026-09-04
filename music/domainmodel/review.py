@@ -16,7 +16,7 @@ class Review:
         self.__track = track
 
         if type(rating) is not int or rating < 0 or rating > 5:
-            raise ValueError('Review ID should be an integer between 0-5 inclusive.')
+            raise ValueError('Review rating should be an integer between 0-5 inclusive.')
         self.__rating = rating
 
         if type(review_text) is not str:
