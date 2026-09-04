@@ -19,6 +19,7 @@ class Track:
         # duration in seconds
         self.__track_duration: int | None = None
         self.__genres: list = []
+        self.__reviews: list = []
 
     @property
     def track_id(self) -> int:
@@ -89,6 +90,22 @@ class Track:
     @property
     def genres(self) -> list:
         return self.__genres
+
+    @property
+    def reviews(self) -> list:
+        return self.__reviews
+
+    def add_review(self, new_review):
+        from music.domainmodel.review import Review
+        if not isinstance(new_review, Review) or new_review in self.__reviews:
+            return
+        self.__reviews.append(new_review)
+
+    def remove_review(self, review):
+        from music.domainmodel.review import Review
+        if not isinstance(review, Review) or review not in self.__reviews:
+            return
+        self.__reviews.remove(review)
 
     def add_genre(self, new_genre):
         if not isinstance(new_genre, Genre) or new_genre in self.__genres:

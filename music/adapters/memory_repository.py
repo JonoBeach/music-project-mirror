@@ -17,7 +17,7 @@ class MemoryRepository(AbstractRepository):
         self.load_from_csv()
 
     def load_from_csv(self):
-        data = os.path.join(os.path.dirname(__file__), '..', 'adapters', 'data')
+        data = os.path.join(os.path.dirname(__file__),'data')
         album_file = os.path.join(data, "raw_albums_excerpt.csv")
         track_file = os.path.join(data, "raw_tracks_excerpt.csv")
 

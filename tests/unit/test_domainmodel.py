@@ -403,6 +403,21 @@ class TestTrack:
         track1.add_genre('32')
         assert track1.genres == [genre1, genre2]
 
+    def test_review_method(self):
+        track1 = Track(1, 'Shivers')
+        review1 = Review(1, 1, track1, 5, "review_text", 5)
+        review2 = Review(2, 2, track1, 5, "second review!", 4)
+
+        track1.add_review(review1)
+        track1.add_review(review2)
+        assert track1.reviews == [review1, review2]
+
+        track1.add_review('67')
+        assert track1.reviews == [review1, review2]
+
+        track1.remove_review(review2)
+        assert track1.reviews == [review1]
+
     def test_equality(self):
         track1 = Track(1, 'Shivers')
         track2 = Track(2, 'Heat Waves')
