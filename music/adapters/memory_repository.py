@@ -3,6 +3,7 @@ from typing import override
 
 from music.adapters.csvdatareader import CSVDataReader
 from music.domainmodel.favourite import Favourite
+from music.domainmodel.review import Review
 from music.domainmodel.user import User
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
@@ -47,8 +48,47 @@ class MemoryRepository(AbstractRepository):
 
     @override
     def add_favourite(self, user: User, favourite: Favourite) -> None:
+        for favou in self.get_user_favourite(user):
+            if favou.track == favourite.track:
+                return
         user.add_favourite(favourite)
 
     @override
     def remove_favourite(self, user: User, favourite: Favourite) -> None:
         user.remove_favourite(favourite)
+
+    @override
+    def get_user_favourite(self, user: User) -> list:
+        return user.favourites
+
+    @override
+    def add_review(self, user: User, review: Review, track: Track) -> None:
+        user.add_review(review)
+        track.add_review(review)
+
+    @override
+    def remove_review(self, user: User, review: Review, track: Track) -> None:
+        user.remove_review(review)
+        track.remove_review(review)
+
+    @override
+    def get_review_by_date(self, track: Track) -> list:
+        list = track.reviews
+        for i in range(len(list)):
+            for j in range(0, len(list) - i - 1):
+                if list[j].date_submitted > list[j + 1].date_submitted:
+                    temp = list[j]
+                    list[j] = list[j + 1]
+                    list[j + 1] = temp
+        return list
+
+    @override
+    def get_review_by_rating(self, track: Track) -> list:
+        list = track.reviews
+        for i in range(len(list)):
+            for j in range(0, len(list) - i - 1):
+                if list[j].rating < list[j + 1].rating:
+                    temp = list[j]
+                    list[j] = list[j + 1]
+                    list[j + 1] = temp
+        return list

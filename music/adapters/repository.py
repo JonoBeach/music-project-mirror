@@ -39,22 +39,32 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_user_favourite(self, user: User) -> list:
+        #return a list of favourite that belong to the user
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def add_review(self, user: User, review: Review, track: Track) -> None:
         #user add a review to a track
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_review_by_date(self) -> list:
+    def remove_review(self, user: User, review: Review, track: Track) -> None:
+        #delete a review
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_review_by_date(self, track: Track) -> list:
         #return reviews list sorted by date.(most recently)
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_review_by_rating(self) -> list:
+    def get_review_by_rating(self, track: Track) -> list:
         #return reviews list sorted by their rating.(high to low)
         raise NotImplementedError
-
+'''
     @abc.abstractmethod
-    def alpha_sort_track(self) -> list:
+    def alpha_sort_track(self, track: Track) -> list:
         #return alphabetically sorted track list
         raise NotImplementedError
 
@@ -77,3 +87,4 @@ class AbstractRepository(abc.ABC):
     def search_by_album(self, album: Album) -> list | None:
         #return a list of track that have same album name or None
         raise NotImplementedError
+'''
