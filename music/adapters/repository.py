@@ -10,6 +10,7 @@ from music.domainmodel.user import User
 #This interface should define the necessary methods for fetching, storing, and
 #manipulating data about tracks.
 
+repo_instance = None
 
 class AbstractRepository(abc.ABC):
     @abc.abstractmethod
