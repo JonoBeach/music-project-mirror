@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session
 
 from password_validator import PasswordValidator
 
+import music.adapters.repository as repository
 import music.authentication.services as services
 
 from flask_wtf import FlaskForm
@@ -18,14 +19,13 @@ def register():
 
     if form.validate_on_submit():
         try:
-            #TODO: adding user, requires data repository
-            #services.add_user(form.username.data, form.password.data, repo.repo_instance)
+            services.add_user(form.username.data, form.password.data, repository.repo_instance)
 
             # success in registration
             return redirect(url_for('authentication_bp.login'))
 
         # if username is already taken
-        except:
+        except services.UsernameAlreadyTakenException:
             username_error_message = 'This username has already been taken, please choose another'
 
     # for GET or failed POST, return registration page
@@ -34,6 +34,7 @@ def register():
         form=form,
         title="register",
         username_error_message=username_error_message,
+        handler_url=url_for('authentication_bp.register'),
     )
 
 @authentication_blueprint.route('/login', methods=['GET', 'POST'])
@@ -45,16 +46,12 @@ def login():
         # username and password have passed validation checking
         # lookup user and authenticate them
         try:
-            #TODO: ----------- Need to implement the auth service layer for these things --------------
-            #TODO: get user details
-            #user = services.get_user(form.username.data, repo.repo_instance)
+            user = services.get_user(form.username.data, repository.repo_instance)
 
-            #TODO: authenticate user
-            #services.authenticate_user(user['username'], form.password.data, repo.repo_instance)
+            services.authenticate_user(user['username'], form.password.data, repository.repo_instance)
 
-            #TODO: create user session
-            #session.clear()
-            #session['username'] = user['username']
+            session.clear()
+            session['username'] = user['username']
 
             return redirect(url_for('home_bp.home'))
 
@@ -70,6 +67,7 @@ def login():
         'authentication/credentials.html',
         form=form,
         title="login",
+        handler_url=url_for('authentication_bp.login'),
     )
 
 @authentication_blueprint.route('/logout')
