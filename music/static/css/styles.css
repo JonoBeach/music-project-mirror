@@ -1,11 +1,48 @@
-body {
-    margin: 0;
+/* global */
+:root {
+    --surface: hsl(42 67% 96.7%);
+    --surface-container: hsl(42 67% 90%);
+    --on-surface: hsl(22 67% 10%);
+    --on-surface-container: hsl(22 67% 21%);
+    --on-surface-container-active: hsl(0 67% 48%);
 }
 
+body {
+    margin: 0;
+    background-color: var(--surface);
+    color: var(--on-surface);
+}
+
+
+/* home page */
+.content {
+    padding: 2.5rem;
+}
+
+
+/* navbar */
 .nav {
     display: flex;
-    justify-content: space-evenly;
+    align-items: center;
+    justify-content: space-around;
+
+    font-size: 1.5rem;
+    background-color: var(--surface-container);
 }
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+
+.nav-logo {
+    font-size: 3rem;
+    margin: 0.5rem;
+    color: var(--on-surface-container);
+}
+
 
 .nav-items {
     display: flex;
@@ -18,13 +55,96 @@ body {
     margin: 10px;
 }
 
-.auth-items {
+.nav-items li a {
+    text-decoration: none;
+    color: var(--on-surface-container);
+}
+
+.nav-items li a:active {
+    color: var(--on-surface-container-active);
+}
+
+.nav-items li a:focus {
+    color: var(--on-surface-container-active);
+}
+
+.nav-items li a:hover {
+    color: var(--on-surface-container-active);
+}
+
+
+.nav-search {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: var(--surface);
+    border: 0.1rem solid var(--on-surface-container);
+    border-radius: 0.67rem;
+}
+
+.nav-search input {
+    border: none;
+    background: transparent;
+    height: 2rem;
+
+    color: var(--on-surface-container);
+}
+
+.nav-search:focus-within {
+    border: 0.1rem solid var(--on-surface-container-active);
+}
+
+.nav-search input:focus {
+    outline: none;
+    .nav-search {
+        border: 0.1rem solid #FF0000;
+    }
+}
+
+.nav-search button {
+    border: none;
+    background: transparent;
+    height: 2rem;
+
+    color: var(--on-surface-container);
+}
+
+.nav-search button:active {
+    color: var(--on-surface-container-active);
+}
+
+.nav-search button:focus {
+    color: var(--on-surface-container-active);
+}
+
+.nav-search button:hover {
+    color: var(--on-surface-container-active);
+}
+
+
+.nav-auth-items {
     display: flex;
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.auth-items li {
+.nav-auth-items li {
     margin: 10px;
+}
+
+.nav-auth-items li a {
+    text-decoration: none;
+    color: var(--on-surface-container);
+}
+
+.nav-auth-items li a:active {
+    color: var(--on-surface-container-active);
+}
+
+.nav-auth-items li a:focus {
+    color: var(--on-surface-container-active);
+}
+
+.nav-auth-items li a:hover {
+    color: var(--on-surface-container-active);
 }
