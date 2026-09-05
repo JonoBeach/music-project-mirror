@@ -74,7 +74,7 @@ def test_search_method(repo:MemoryRepository):
     track1 = Track(1, "Song Silly")
     repo.add_track(track1)
     assert track1 == repo.search_by_title("Song Silly")
-    assert repo.search_by_title("dahgdhagd") == None
+    assert repo.search_by_title("dahgdhagd") is None
     genre = Genre(9999, "wild genre")
     track1.add_genre(genre)
     assert repo.search_by_genre(genre) == [track1]

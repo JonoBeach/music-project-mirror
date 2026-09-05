@@ -3,7 +3,10 @@ from typing import override
 
 from music.adapters.csvdatareader import CSVDataReader
 from music.domainmodel import track
+from music.domainmodel.album import Album
+from music.domainmodel.artist import Artist
 from music.domainmodel.favourite import Favourite
+from music.domainmodel.genre import Genre
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
 from music.adapters.repository import AbstractRepository
