@@ -88,3 +88,8 @@ class AbstractRepository(abc.ABC):
     def search_by_album(self, album: Album) -> list:
         #return a list of track that have same album name or None
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_user_list(self) -> list:
+        # returns the full list of user objects, for registering new users to get an ID
+        raise NotImplementedError

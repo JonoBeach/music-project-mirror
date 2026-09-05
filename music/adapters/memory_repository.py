@@ -102,3 +102,7 @@ class MemoryRepository(AbstractRepository):
     @override
     def search_by_album(self, album: Album) -> list:
         return [track for track in self.__tracks if track.album == album]
+
+    @override
+    def get_user_list(self) -> list:
+        return self.__users

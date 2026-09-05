@@ -22,9 +22,10 @@ def add_user(username: str, password: str, repository: AbstractRepository):
         raise UsernameAlreadyTakenException
 
     # encrypt password into hash
-    password_hash = hash_password(password)
+    password_hash = generate_password_hash(password)
 
-    user = User(username, password_hash)
+    id = len(repository.get_user_list())
+    user = User(id, username, password)
     repository.add_user(user)
 
 
