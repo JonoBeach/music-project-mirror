@@ -23,13 +23,19 @@ class AuthenticationManager:
         self.__client = client
 
     def login(self, username='test', password='Test1234', confirm='Test1234'):
+        # need to register a user to login properly
+        self.__client.post(
+            '/authentication/register',
+            data={'username': 'test', 'password': 'Test1234', 'confirm': 'Test1234'}
+        )
+
         return self.__client.post(
-            'authentication/login',
+            '/authentication/login',
             data={'username': username, 'password': password, 'confirm': confirm}
         )
 
     def logout(self):
-        return self.__client.get('/auth/logout')
+        return self.__client.get('/authentication/logout')
 
 
 @pytest.fixture
@@ -78,6 +84,8 @@ def test_login(client, authentication):
 
     # checking that successful login redirects to home page
     response = authentication.login()
+    print(response.data)
+    assert response.status_code == 302
     assert response.headers['Location'] == '/'
 
     # check that logging in creates a session for the user

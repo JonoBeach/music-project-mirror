@@ -25,7 +25,7 @@ def add_user(username: str, password: str, repository: AbstractRepository):
     password_hash = generate_password_hash(password)
 
     id = len(repository.get_user_list())
-    user = User(id, username, password)
+    user = User(id, username, password_hash)
     repository.add_user(user)
 
 
