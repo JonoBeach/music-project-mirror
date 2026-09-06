@@ -41,6 +41,7 @@ def register():
 def login():
     form = LoginForm()
     username_error_message = None
+    password_username_mismatch = None
 
     if form.validate_on_submit():
         # username and password have passed validation checking
@@ -58,8 +59,8 @@ def login():
         except services.UnknownUserException:
             username_error_message = 'There is no account associated with this username'
 
-        except services.UsernameTooShortException:
-            username_error_message = 'The username needs to be at least 4 characters'
+        except services.AuthenticationException:
+            password_username_mismatch = 'Your username or password is incorrect, please try again'
 
 
     # for GET or failed POST, return login page
@@ -67,6 +68,8 @@ def login():
         'authentication/credentials.html',
         form=form,
         title="login",
+        username_error_message=username_error_message,
+        password_username_mismatch=password_username_mismatch,
         handler_url=url_for('authentication_bp.login'),
     )
 
