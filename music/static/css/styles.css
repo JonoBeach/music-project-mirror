@@ -24,6 +24,41 @@ body {
     text-align: center;
 }
 
+/* authentication page */
+.auth {
+  padding: 2.5rem;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+
+  text-align: center;
+  border-radius: 0.67rem;
+  border: 0.1rem solid var(--on-surface-container);
+
+
+  background-color: var(--surface-container);
+
+  input[type=text],
+  input[type=password],
+  input[type=submit] {
+    font-size: 1.5rem;
+    flex-wrap: nowrap;
+    background-color: var(--surface);
+    border: 0.1rem solid var(--on-surface-container);
+    border-radius: 0.67rem;
+  }
+
+  input[type=submit] {
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  input[type=text]:focus,
+  input[type=password]:focus {
+    border: 0.1rem solid var(--on-surface-container-active);
+  }
+}
+
+
 
 /* navbar */
 .nav {
@@ -63,6 +98,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 .nav-items li {
     margin: 10px;
 }

@@ -32,7 +32,7 @@ def register():
     return render_template(
         'authentication/credentials.html',
         form=form,
-        title="register",
+        title="Register",
         username_error_message=username_error_message,
         handler_url=url_for('authentication_bp.register'),
     )
@@ -67,7 +67,7 @@ def login():
     return render_template(
         'authentication/credentials.html',
         form=form,
-        title="login",
+        title="Login",
         username_error_message=username_error_message,
         password_username_mismatch=password_username_mismatch,
         handler_url=url_for('authentication_bp.login'),
@@ -112,7 +112,7 @@ class RegistrationForm(FlaskForm):
         EqualTo('confirm', message='Your password confirmation did not match!')])
     confirm = PasswordField('confirm', [
         DataRequired(message='Please enter your password again'), ])
-    submit = SubmitField('register')
+    submit = SubmitField('Register')
 
 
 class LoginForm(FlaskForm):
@@ -121,4 +121,4 @@ class LoginForm(FlaskForm):
     password = PasswordField('password', [
         DataRequired(message='Please enter a password')])
     confirm = None
-    submit = SubmitField('login')
+    submit = SubmitField('Login')
