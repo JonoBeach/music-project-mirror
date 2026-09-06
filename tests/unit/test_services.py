@@ -33,3 +33,25 @@ def test_cannot_add_user_with_existing_name(in_memory_repository):
 
     with pytest.raises(authentication_services.UsernameAlreadyTakenException):
         authentication_services.add_user(username, password, in_memory_repository)
+
+
+def test_authentication_with_valid_credentials(in_memory_repository):
+    new_username = 'test'
+    new_password = 'Test1234'
+
+    authentication_services.add_user(new_username, new_password, in_memory_repository)
+
+    try:
+        authentication_services.authenticate_user(new_username, new_password, in_memory_repository)
+    except AuthenticationException:
+        assert False
+
+
+def test_authentication_with_invalid_credentials(in_memory_repository):
+    new_username = 'test'
+    new_password = 'Test1234'
+
+    authentication_services.add_user(new_username, new_password, in_memory_repository)
+
+    with pytest.raises(authentication_services.AuthenticationException):
+        authentication_services.authenticate_user(new_username, '00000000', in_memory_repository)
