@@ -7,7 +7,7 @@ class UnknownUserException(Exception):
     pass
 
 
-class UsernameTooShortException(Exception):
+class AuthenticationException(Exception):
     pass
 
 
@@ -25,7 +25,7 @@ def add_user(username: str, password: str, repository: AbstractRepository):
     password_hash = generate_password_hash(password)
 
     id = len(repository.get_user_list())
-    user = User(id, username, password)
+    user = User(id, username, password_hash)
     repository.add_user(user)
 
 
@@ -43,6 +43,8 @@ def authenticate_user(username: str, password: str, repository: AbstractReposito
     user = repository.get_user(username)
     if user is not None:
         authenticated = check_password_hash(user.password, password)
+    if not authenticated:
+        raise AuthenticationException
 
 
 def get_user_as_dictionary(user: User):
