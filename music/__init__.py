@@ -17,9 +17,15 @@ def create_some_track():
     return some_track
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object('config.Config')
+
+    if test_config is not None:
+        # load test config and overwrite normal config
+        app.config.from_mapping(test_config)
+        data_path = app.config['TEST_DATA_PATH']
+        app.debug = True
 
     repo.repo_instance = MemoryRepository()
 
