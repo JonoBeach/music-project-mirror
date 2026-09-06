@@ -5,29 +5,41 @@
     --on-surface: hsl(22 67% 10%);
     --on-surface-container: hsl(22 67% 21%);
     --on-surface-container-active: hsl(0 67% 48%);
+    --max-content-width: 80rem;
 }
 
 body {
     margin: 0;
     background-color: var(--surface);
     color: var(--on-surface);
+    font-size: calc(15px + 0.390625vw);
 }
 
 
 /* home page */
 .content {
     padding: 2.5rem;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    text-align: center;
 }
 
 
 /* navbar */
 .nav {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    justify-content: center;
 
-    font-size: 1.5rem;
     background-color: var(--surface-container);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    max-width: var(--max-content-width);
+    font-size: 1.5rem;
 }
 
 .nav-left {
@@ -41,6 +53,7 @@ body {
     font-size: 3rem;
     margin: 0.5rem;
     color: var(--on-surface-container);
+    white-space: nowrap;
 }
 
 
@@ -50,7 +63,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
 .nav-items li {
     margin: 10px;
 }
@@ -104,6 +116,7 @@ body {
     border: none;
     background: transparent;
     height: 2rem;
+    width: 2rem;
 
     color: var(--on-surface-container);
 }
