@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Tracks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <ul>
+        {% for track in tracks %}
+        <li>
+            <a href="{{ url_for('tracks_bp.track_detail', track_id = track.track_id) }}">
+                <div>
+                    <span> {{ track.title }} </span>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>
