@@ -100,4 +100,4 @@ def test_logout(client, authentication):
     with client:
         # checking that logging out clears user session
         authentication.logout()
-        assert 'user_id' not in session
+        assert 'username' not in session
