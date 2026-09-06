@@ -18,6 +18,25 @@ def client():
     return app.test_client()
 
 
+class AuthenticationManager:
+    def __init__(self, client):
+        self.__client = client
+
+    def login(self, username='test', password='Test1234', confirm='Test1234'):
+        return self.__client.post(
+            'authentication/login',
+            data={'username': username, 'password': password, 'confirm': confirm}
+        )
+
+    def logout(self):
+        return self.__client.get('/auth/logout')
+
+
+@pytest.fixture
+def authentication(client):
+    return AuthenticationManager(client)
+
+
 def test_register(client):
     # check that we can access the page
     response_code = client.get('/authentication/register').status_code
@@ -42,7 +61,6 @@ def test_register(client):
 ))
 def test_register_with_invalid_input(client, username, password, confirm, message):
     # checking that all the password & username requirements are met, and the messages are correct
-
     if username == 'duplicate':
         client.post('/authentication/register', data={'username': 'duplicate', 'password': 'Test1234', 'confirm': 'Test1234'})
 
@@ -51,3 +69,27 @@ def test_register_with_invalid_input(client, username, password, confirm, messag
         data={'username': username, 'password': password, 'confirm': confirm},
     )
     assert message in response.data
+
+
+def test_login(client, authentication):
+    # get login page
+    status_code = client.get('/authentication/login').status_code
+    assert status_code == 200
+
+    # checking that successful login redirects to home page
+    response = authentication.login()
+    assert response.headers['Location'] == '/'
+
+    # check that logging in creates a session for the user
+    with client:
+        client.get('/')
+        assert session['username'] == 'test'
+
+
+def test_logout(client, authentication):
+    authentication.login()
+
+    with client:
+        # checking that logging out clears user session
+        authentication.logout()
+        assert 'user_id' not in session
