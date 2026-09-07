@@ -15,12 +15,14 @@ body {
     font-size: calc(15px + 0.390625vw);
 }
 
-
-/* home page */
 .content {
     padding: 2.5rem;
     max-width: var(--max-content-width);
     margin: 0 auto;
+}
+
+/* home page */
+.content#home {
     text-align: center;
 }
 
@@ -196,6 +198,18 @@ body {
 
 .nav-auth-items li a:hover {
     color: var(--on-surface-container-active);
+}
+
+
+/* browse tracks */
+
+.content ul {
+    margin: 0;
+    padding: 0;
+}
+
+.pagination {
+    text-align: center;
 }
 
 .track_list_item {
