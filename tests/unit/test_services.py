@@ -3,7 +3,7 @@ import pytest
 from music.authentication.services import AuthenticationException
 from music.authentication import services as authentication_services
 from music.adapters.memory_repository import MemoryRepository
-
+from music.tracks.services import get_tracks_for_search, get_tracks, get_all_tracks
 
 @pytest.fixture
 def in_memory_repository():
@@ -55,3 +55,30 @@ def test_authentication_with_invalid_credentials(in_memory_repository):
 
     with pytest.raises(authentication_services.AuthenticationException):
         authentication_services.authenticate_user(new_username, '00000000', in_memory_repository)
+
+def test_get_tracks(in_memory_repository):
+    track1 = Track("Track 1", "Artist 1", "Album 1", 2020)
+    track2 = Track("Track 2", "Artist 2", "Album 2", 2021)
+
+    add_track(track1, in_memory_repository)
+    add_track(track2, in_memory_repository)
+
+    tracks = get_tracks(in_memory_repository)
+
+    assert len(tracks) == 2
+    assert track1 in tracks
+    assert track2 in tracks
+
+def test_get_all_tracks(in_memory_repository):
+    track1 = Track("Track 1", "Artist 1", "Album 1", 2020)
+    track2 = Track("Track 2", "Artist 2", "Album 2", 2021)
+
+    add_track(track1, in_memory_repository)
+    add_track(track2, in_memory_repository)
+
+    tracks = get_all_tracks(in_memory_repository)
+
+    assert len(tracks) == 2
+    assert track1 in tracks
+    assert track2 in tracks
+

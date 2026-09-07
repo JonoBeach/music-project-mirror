@@ -1,14 +1,23 @@
 from flask import Blueprint, render_template, abort, request
-from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks
+
+from music.adapters.repository import repo_instance
+from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search
 
 tracks_blueprint = Blueprint('tracks_bp', __name__)
 
 @tracks_blueprint.route('/browse_tracks')
 def browse():
     page = request.args.get('page', 1, type=int)
-    tracks, current_page, total_pages = get_tracks(page)
+    search = request.args.get('search', '', type=str).strip()
+
+    if search:
+        tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(), page, search)
+
+    else:
+        tracks, current_page, total_pages = get_tracks(page)
     return render_template('browse_tracks.html', tracks=tracks,
-        current_page=current_page, total_pages=total_pages)
+        current_page=current_page, total_pages=total_pages, search=search)
+
 
 @tracks_blueprint.route('/track/<int:track_id>')
 def track_detail(track_id: int):

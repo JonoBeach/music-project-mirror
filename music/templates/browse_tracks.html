@@ -18,13 +18,13 @@
 
     <div class="pagination">
         {% if current_page > 1 %}
-            <a href="{{ url_for('tracks_bp.browse', page=current_page-1) }}">Previous</a>
+            <a href="{{ url_for('tracks_bp.browse', page=current_page-1, search=search) }}">Previous</a>
         {% endif %}
 
         <span>Page {{ current_page }} of {{ total_pages }}</span>
 
         {% if current_page < total_pages %}
-            <a href="{{ url_for('tracks_bp.browse', page=current_page+1) }}">Next</a>
+            <a href="{{ url_for('tracks_bp.browse', page=current_page+1, search=search) }}">Next</a>
         {% endif %}
     </div>
 
