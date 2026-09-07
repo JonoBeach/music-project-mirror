@@ -107,6 +107,16 @@ class Track:
             return
         self.__reviews.remove(review)
 
+    def get_average_rating(self):
+        result = 0
+        count = 0
+        if self.reviews == []:
+            return result
+        for review in self.reviews:
+            result += review.rating
+            count += 1
+        return result / count
+
     def add_genre(self, new_genre):
         if not isinstance(new_genre, Genre) or new_genre in self.__genres:
             return
