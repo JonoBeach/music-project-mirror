@@ -29,4 +29,7 @@ def create_app(test_config=None):
         app.register_blueprint(authentication.authentication_blueprint)
         app.register_blueprint(tracks_blueprint)
 
+        from .favourites import favourites
+        app.register_blueprint(favourites.favourites_blueprint)
+
     return app
