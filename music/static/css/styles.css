@@ -161,3 +161,14 @@ body {
 .nav-auth-items li a:hover {
     color: var(--on-surface-container-active);
 }
+
+.track_list_item {
+    max-width: var(--max-content-width);
+    color: var(--on-surface-container);
+    background-color: var(--surface-container);
+    margin: 10px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    line-height: 0.5;
+    box-sizing: border-box;
+}
