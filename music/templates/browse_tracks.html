@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Tracks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <ul>
+        {% for track in tracks %}
+            {% include "track_display.html" with context %}
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="{{ url_for('tracks_bp.browse', page=current_page-1) }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ current_page }} of {{ total_pages }}</span>
+
+        {% if current_page < total_pages %}
+            <a href="{{ url_for('tracks_bp.browse', page=current_page+1) }}">Next</a>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>

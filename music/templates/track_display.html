@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Tracks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+</head>
+<body>
+    <div class="track_list_item">
+        <h3>
+            <a class="brown_link" href="{{ url_for('tracks_bp.track_detail', track_id=track.track_id) }}">
+                {{ track.title }}
+            </a>
+        </h3>
+        <p>Duration: {{track.track_duration // 60 }}:{{ "%02d" | format(track.track_duration % 60 ) }}</p>
+        <p>Artist: {{ track.artist.full_name}}</p>
+        <p>Album: {{ track.album.title }}</p>
+    </div>
+</body>
+</html>

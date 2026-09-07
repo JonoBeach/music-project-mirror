@@ -25,6 +25,8 @@ def create_app(test_config=None):
     # register blueprints
     with app.app_context():
         from .authentication import authentication
+        from .tracks import tracks_blueprint
         app.register_blueprint(authentication.authentication_blueprint)
+        app.register_blueprint(tracks_blueprint)
 
     return app
