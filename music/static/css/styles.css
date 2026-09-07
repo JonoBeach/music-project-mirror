@@ -172,3 +172,8 @@ body {
     line-height: 0.5;
     box-sizing: border-box;
 }
+
+.brown_link {
+    color: var(--on-surface-container);
+    text-decoration: none;
+}

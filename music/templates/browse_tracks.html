@@ -12,13 +12,7 @@
 
     <ul>
         {% for track in tracks %}
-        <li>
-            <a href="{{ url_for('tracks_bp.track_detail', track_id = track.track_id) }}">
-                <div>
-                    <span> {{ track.title }} </span>
-                </div>
-            </a>
-        </li>
+            {% include "track_display.html" with context %}
         {% endfor %}
     </ul>
 
