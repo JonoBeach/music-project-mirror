@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, abort, request
-from music.tracks.services import get_track_by_id, get_tracks
+from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks
 
 tracks_blueprint = Blueprint('tracks_bp', __name__)
 
@@ -15,4 +15,5 @@ def track_detail(track_id: int):
     track = get_track_by_id(track_id)
     if track is None:
         abort(404)
-    return render_template('simple_track.html', track=track)
+    reviews = get_review_by_rating(track)
+    return render_template('simple_track.html', track=track, reviews=reviews)
