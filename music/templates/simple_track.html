@@ -8,38 +8,40 @@
 </head>
 <body>
     {% include "navbar.html" %}
-    <h1>CompSci 235 2026 - MY MUSIC LIBRARY</h1>
-    <h2>Team Name here: upi1-upi2-upi3-upi4</h2>
-    <h3>{{ track.title }}</h3>
-    {% if track.artist is not none %}
-    <p>Artist: <b>{{ track.artist.full_name }}</b></p>
-    {% endif %}
-    {% if track.album is not none %}
-    <p>Album: <b>{{ track.album.title }}</b></p>
-    {% endif %}
-    <p>Genre:</p>
-    <ul>
-        {% for genre in track.genres %}
-        <li>
-            <div>
-                <span> {{ genre.name }} </span>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-    <p>Track Duration: <b>{{ track.track_duration }}</b></p>
-    <p>Track URL: {{ track.track_url }}</p>
-    <p>Average rating: <b>{{ track.get_average_rating() }}</b></p>
-    <ul>
-        {% for review in reviews %}
-        <li>
-            <div>
-                <p>Review Id: <b>{{ review.review_id }} User Id: <b>{{ review.user_id }}</b></p>
-                <p>Rating: <b>{{ review.rating }}</b> Date submitted: <b>{{ review.date_submitted }}</b></p>
-                <p>Review text: <b>{{ review.review_text }}</b></p>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="content">
+        <h1>CompSci 235 2026 - MY MUSIC LIBRARY</h1>
+        <h2>Team Name here: upi1-upi2-upi3-upi4</h2>
+        <h3>{{ track.title }}</h3>
+        {% if track.artist is not none %}
+        <p>Artist: <b>{{ track.artist.full_name }}</b></p>
+        {% endif %}
+        {% if track.album is not none %}
+        <p>Album: <b>{{ track.album.title }}</b></p>
+        {% endif %}
+        <p>Genre:</p>
+        <ul>
+            {% for genre in track.genres %}
+            <li>
+                <div>
+                    <span> {{ genre.name }} </span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <p>Track Duration: <b>{{ track.track_duration }}</b></p>
+        <p>Track URL: {{ track.track_url }}</p>
+        <p>Average rating: <b>{{ track.get_average_rating() }}</b></p>
+        <ul>
+            {% for review in reviews %}
+            <li>
+                <div>
+                    <p>Review Id: <b>{{ review.review_id }} User Id: <b>{{ review.user_id }}</b></p>
+                    <p>Rating: <b>{{ review.rating }}</b> Date submitted: <b>{{ review.date_submitted }}</b></p>
+                    <p>Review text: <b>{{ review.review_text }}</b></p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
