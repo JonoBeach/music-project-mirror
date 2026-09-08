@@ -18,15 +18,15 @@ def create_app(test_config=None):
 
     repo.repo_instance = MemoryRepository()
 
+    # register blueprints
     with app.app_context():
         from .home import home
         app.register_blueprint(home.home_bp)
 
-    # register blueprints
-    with app.app_context():
         from .authentication import authentication
-        from .tracks import tracks_blueprint
         app.register_blueprint(authentication.authentication_blueprint)
+
+        from .tracks import tracks_blueprint
         app.register_blueprint(tracks_blueprint)
 
         from .favourites import favourites

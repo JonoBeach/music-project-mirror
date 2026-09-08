@@ -19,6 +19,7 @@
             <li><a href="{{ url_for('authentication_bp.login') }}">Login</a></li>
             <li><a href="{{ url_for('authentication_bp.register') }}">Sign up</a></li>
           {% else %}
+            <li><a href="{{ url_for('favourites_bp.favourites') }}">Favourites</a></li>
             <li><a href="{{ url_for('authentication_bp.logout') }}">Log out</a></li>
           {% endif %}
         </ul>
