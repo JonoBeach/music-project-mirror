@@ -45,7 +45,46 @@ def browse():
             if favourite:
                 remove_favourite(user, favourite)
 
-    # tries getting user, but if it runs into a key error, that means that user is not logged in, so just passes
+    favourite_tracks = get_favourite_tracks()
+
+    return render_template('browse_tracks.html', tracks=tracks,
+        current_page=current_page, total_pages=total_pages, search=search, search_type=search_type, favourite_tracks=favourite_tracks)
+
+
+@tracks_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
+def track_detail(track_id: int):
+    track = get_track_by_id(track_id)
+    if track is None:
+        abort(404)
+    reviews = get_review_by_rating(track)
+
+    if request.method == 'POST':
+        try:
+            user = repository.repo_instance.get_user(session['username'])
+        except KeyError:
+            return redirect(url_for('authentication_bp.login'))
+        if user is None:
+            return redirect(url_for('authentication_bp.login'))
+
+        track_id = int(request.form.get('track_id'))
+
+        if request.form.get('action') ==  "Add to favourites":
+            track = get_track_by_id(track_id)
+            if track is not None:
+                add_favourite(user, track)
+
+        elif request.form.get('action') ==  "Remove from favourites":
+            favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
+
+            if favourite:
+                remove_favourite(user, favourite)
+
+    favourite_tracks = get_favourite_tracks()
+
+    return render_template('simple_track.html', track=track, reviews=reviews, favourite_tracks=favourite_tracks)
+
+
+def get_favourite_tracks() -> List:
     favourite_tracks = []
     try:
         user = repository.repo_instance.get_user(session['username'])
@@ -65,6 +104,7 @@ def track_detail(track_id: int):
         abort(404)
     reviews = get_review_by_rating(track, repository.repo_instance)
     return render_template('simple_track.html', track=track, reviews=reviews)
+    return favourite_tracks
 
 
 class RemoveFavouriteForm(FlaskForm):
