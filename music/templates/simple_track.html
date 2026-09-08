@@ -11,12 +11,15 @@
     <div class="content track-details">
         <div class="track-info">
             <h3>{{ track.title }}</h3>
+
             {% if track.artist is not none %}
-            <p>Artist: <b>{{ track.artist.full_name }}</b></p>
+                <p>Artist: <b>{{ track.artist.full_name }}</b></p>
             {% endif %}
+
             {% if track.album is not none %}
-            <p>Album: <b>{{ track.album.title }}</b></p>
+                <p>Album: <b>{{ track.album.title }}</b></p>
             {% endif %}
+
             <p>Genre:</p>
             <ul>
                 {% for genre in track.genres %}
@@ -27,9 +30,11 @@
                 </li>
                 {% endfor %}
             </ul>
+
             <p>Track Duration: <b>{{ track.track_duration }}</b></p>
             <p>Track URL: {{ track.track_url }}</p>
             <p>Average rating: <b>{{ track.get_average_rating() }}</b></p>
+
             <ul>
                 {% for review in reviews %}
                 <li>
@@ -41,7 +46,17 @@
                 </li>
                 {% endfor %}
             </ul>
+
+            <form method="POST">
+                <input type="hidden" name="track_id" value="{{ track.track_id }}">
+                {% if track.track_id in favourite_tracks %}
+                    <input type="submit" name="action" value="Remove from favourites">
+                {% else %}
+                    <input type="submit" name="action" value="Add to favourites">
+                {% endif %}
+            </form>
         </div>
+
         <div class="track-reviews">
             <h1>Reviews</h1>
             <ul>

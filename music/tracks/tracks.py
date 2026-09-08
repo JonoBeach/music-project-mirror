@@ -55,13 +55,46 @@ def browse():
         current_page=current_page, total_pages=total_pages, search=search, search_type=search_type, favourite_tracks=favourite_tracks)
 
 
-@tracks_blueprint.route('/track/<int:track_id>')
+@tracks_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
 def track_detail(track_id: int):
+    if request.method == 'POST':
+        # authentication
+        try:
+            user = repository.repo_instance.get_user(session['username'])
+        except KeyError:
+            return redirect(url_for('authentication_bp.login'))
+
+        track_id = int(request.form.get('track_id'))
+
+        # favourites
+        if request.form.get('action') ==  "Add to favourites":
+            track = get_track_by_id(track_id)
+            if track is not None:
+                add_favourite(user, track)
+
+        elif request.form.get('action') ==  "Remove from favourites":
+            favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
+
+            if favourite is not None:
+                remove_favourite(user, favourite)
+
+        # reviews
+        # TODO reviews
+
+    # tries getting user, but if it runs into a key error, that means that user is not logged in, so just passes
+    favourite_tracks = []
+    try:
+        user = repository.repo_instance.get_user(session['username'])
+        if user is not None:
+            favourite_tracks = [favourite.track.track_id for favourite in user.favourites]
+    except KeyError:
+        favourite_tracks = []
+
     track = get_track_by_id(track_id)
     if track is None:
         abort(404)
     reviews = get_review_by_rating(track)
-    return render_template('simple_track.html', track=track, reviews=reviews)
+    return render_template('simple_track.html', track=track, reviews=reviews, favourite_tracks=favourite_tracks)
 
 
 class RemoveFavouriteForm(FlaskForm):
