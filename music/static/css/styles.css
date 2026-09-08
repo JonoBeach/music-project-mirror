@@ -21,6 +21,20 @@ body {
     margin: 0 auto;
 }
 
+.content-split {
+    padding: 2.5rem;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.content-split > * {
+    flex-grow: 1;
+    flex-basis: 26rem;
+}
+
 /* home page */
 .content#home {
     text-align: center;
@@ -261,3 +275,6 @@ body {
     color: var(--on-surface-container);
     text-decoration: none;
 }
+
+
+/* track details */
