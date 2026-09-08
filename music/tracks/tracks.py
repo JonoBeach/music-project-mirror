@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, abort, request
 
 from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search
-from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks
 from music.favourites.services import add_favourite
 
-from music.adapters.repository import repo_instance
+import music.adapters.repository as repository
 
 from flask_wtf import FlaskForm
 from wtforms import SubmitField
@@ -26,12 +25,10 @@ def browse():
     tracks, current_page, total_pages = get_tracks(page)
 
     if request.method == 'POST':
-        track_id = request.form.get('track_id')
-        track = repo_instance.get_track(track_id)
+        track_id = int(request.form.get('track_id'))
+        track = get_track_by_id(track_id)
         if track is not None:
-            add_favourite(track, repo_instance)
-        else:
-            print(f"Track is none, track id: {track_id}")
+            add_favourite(track)
 
     return render_template('browse_tracks.html', tracks=tracks,
         current_page=current_page, total_pages=total_pages, search=search, search_type=search_type)
