@@ -22,6 +22,7 @@ def browse():
 
     else:
         tracks, current_page, total_pages = get_tracks(page)
+
     tracks, current_page, total_pages = get_tracks(page)
 
     if request.method == 'POST':
