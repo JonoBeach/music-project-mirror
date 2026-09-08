@@ -10,4 +10,6 @@ def add_favourite(track: Track):
     id = len(repository.repo_instance.get_user_favourite(user))
     favourite = Favourite(id, user.user_id, track)
     repository.repo_instance.add_favourite(user, favourite)
-    print(f"track {favourite.track} added sucessfully!")
+
+def remove_favourite(user: User, favourite: favourite):
+    repository.repo_instance.remove_favourite(user, favourite)
