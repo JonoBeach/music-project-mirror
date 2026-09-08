@@ -9,14 +9,15 @@ tracks_blueprint = Blueprint('tracks_bp', __name__)
 def browse():
     page = request.args.get('page', 1, type=int)
     search = request.args.get('search', '', type=str).strip()
+    search_type = request.args.get('search_type', '', type=str)
 
     if search:
-        tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(), page, search)
+        tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(), page, search, search_type)
 
     else:
         tracks, current_page, total_pages = get_tracks(page)
     return render_template('browse_tracks.html', tracks=tracks,
-        current_page=current_page, total_pages=total_pages, search=search)
+        current_page=current_page, total_pages=total_pages, search=search, search_type=search_type)
 
 
 @tracks_blueprint.route('/track/<int:track_id>')

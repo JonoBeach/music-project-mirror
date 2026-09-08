@@ -28,9 +28,14 @@ def get_all_tracks() -> List[Track]:
         raise RuntimeError("Repository not initialised")
     return repo_instance.sort_by_track_title()
 
-def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: str = '') -> Tuple[List[Track], int, int]:
+def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: str = '', search_type: str = '') -> Tuple[List[Track], int, int]:
     if search_term:
-        track_list = [track for track in track_list if search_term.lower() in track.title.lower()]
+        if search_type == 'title':
+            track_list = [track for track in track_list if search_term.lower() in track.title.lower()]
+        elif search_type == 'artist':
+            track_list = [track for track in track_list if track.artist and search_term.lower() in track.artist.full_name.lower()]
+        elif search_type == 'album':
+            track_list = [track for track in track_list if track.album and search_term.lower() in track.album.title.lower()]
 
     num_tracks = len(track_list)
     total_pages = math.ceil(num_tracks / TRACKS_PER_PAGE)
