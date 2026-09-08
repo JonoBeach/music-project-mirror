@@ -10,6 +10,8 @@ from music.domainmodel.track import Track
 from music.domainmodel.user import User
 from music.tracks import services as tracks_services
 from music.adapters.memory_repository import MemoryRepository
+from music.favourites import services as favourites_services
+
 
 @pytest.fixture
 def in_memory_repository():
@@ -172,7 +174,7 @@ def test_get_track_by_id_not_found(in_memory_repository):
     assert track1 is None
 
 def test_get_review_by_rating(in_memory_repository):
-    repo = MemoryRepository()
+    repo = in_memory_repository
     track1 = Track(1, "mellow")
     repo.add_track(track1)
     user = User(1, "sakana", "asdfghjk")
@@ -192,3 +194,35 @@ def test_get_review_by_rating_empty(in_memory_repository):
     in_memory_repository.add_track(track1)
     assert tracks_services.get_review_by_rating(
         track1, in_memory_repository) == []
+
+def test_add_favourite(in_memory_repository):
+    track1 = Track(1, "Ame")
+    user1 = User(1, "asd", "asdfafga")
+    in_memory_repository.add_user(user1)
+    in_memory_repository.add_track(track1)
+    favourites_services.add_favourite(user1, track1)
+    assert len(user1.favourites) == 1
+    assert user1.favourites[0].track == track1
+
+def test_add_duplicate_favourite(in_memory_repository):
+    track1 = Track(1, "Ame")
+    user1 = User(1, "asd", "asdfafga")
+    in_memory_repository.add_user(user1)
+    in_memory_repository.add_track(track1)
+    favourites_services.add_favourite(user1, track1)
+    favourites_services.add_favourite(user1, track1)
+
+    assert len(user1.favourites) == 1
+
+def test_remove_favourite(in_memory_repository):
+    track1 = Track(1, "Ame")
+    user1 = User(1, "asd", "asdfafga")
+    in_memory_repository.add_user(user1)
+    in_memory_repository.add_track(track1)
+    favourites_services.add_favourite(user1, track1)
+    assert len(user1.favourites) == 1
+
+    favou = user1.favourites[0]
+    favourites_services.remove_favourite(user1, favou)
+
+    assert len(user1.favourites) == 0
