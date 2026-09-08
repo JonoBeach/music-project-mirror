@@ -1,14 +1,12 @@
 import math
 from typing import List, Optional, Tuple
-from music.adapters import repository
+from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 
 TRACKS_PER_PAGE = 15
 
-def get_tracks(page: int = 1) -> Tuple[List[Track], int, int]:
-    if repository.repo_instance is None:
-        raise RuntimeError("Repository not initialised")
-    all_tracks = repository.repo_instance.sort_by_track_title()
+def get_tracks(repo:AbstractRepository, page: int = 1) -> Tuple[List[Track], int, int]:
+    all_tracks = repo.sort_by_track_title()
     num_tracks = len(all_tracks)
     total_pages = math.ceil(num_tracks / TRACKS_PER_PAGE)
 
@@ -23,10 +21,8 @@ def get_tracks(page: int = 1) -> Tuple[List[Track], int, int]:
 
     return tracks_on_page, page, total_pages
 
-def get_all_tracks() -> List[Track]:
-    if repository.repo_instance is None:
-        raise RuntimeError("Repository not initialised")
-    return repository.repo_instance.sort_by_track_title()
+def get_all_tracks(repo:AbstractRepository) -> List[Track]:
+    return repo.sort_by_track_title()
 
 def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: str = '', search_type: str = '') -> Tuple[List[Track], int, int]:
     if search_term:
@@ -51,12 +47,8 @@ def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: s
 
     return tracks_on_page, page, total_pages
 
-def get_track_by_id(track_id:int) -> Optional[Track]:
-    if repository.repo_instance is None:
-        raise RuntimeError("Repository not initialised")
-    return repository.repo_instance.get_track(track_id)
+def get_track_by_id(track_id:int, repo:AbstractRepository) -> Optional[Track]:
+    return repo.get_track(track_id)
 
-def get_review_by_rating(track:Track) -> list:
-    if repository.repo_instance is None:
-       raise RuntimeError("Repository not initialised")
-    return repository.repo_instance.get_review_by_rating(track)
+def get_review_by_rating(track:Track, repo:AbstractRepository) -> list:
+    return repo.get_review_by_rating(track)
