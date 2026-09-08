@@ -41,5 +41,18 @@
         </li>
         {% endfor %}
     </ul>
+    {% if track.track_id in favourite_tracks %}
+      <form method="POST">
+          <!-- hidden input to tell service what track_id is -->
+          <input type="hidden" name="track_id" value="{{ track.track_id }}">
+          <input type="submit" name="action" value="Remove from favourites">
+      </form>
+    {% else %}
+      <form method="POST">
+          <!-- hidden input to tell service what track_id is -->
+          <input type="hidden" name="track_id" value="{{ track.track_id }}">
+          <input type="submit" name="action" value="Add to favourites">
+      </form>
+    {% endif %}
 </body>
 </html>
