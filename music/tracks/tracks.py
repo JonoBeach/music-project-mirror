@@ -34,6 +34,8 @@ def browse():
 
         if request.form.get('action') ==  "Add to favourites":
             track = get_track_by_id(track_id, repository.repo_instance)
+            if user is None:
+                return redirect(url_for('authentication_bp.login'))
             if track is not None:
                 add_favourite(user, track)
 
