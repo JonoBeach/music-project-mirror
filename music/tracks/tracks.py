@@ -30,7 +30,7 @@ def browse():
         if track is not None:
             add_favourite(track, repo_instance)
         else:
-            print(f"Track is none: {track}, track id: {track_id}")
+            print(f"Track is none, track id: {track_id}")
 
     return render_template('browse_tracks.html', tracks=tracks,
         current_page=current_page, total_pages=total_pages, search=search, search_type=search_type)
