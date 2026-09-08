@@ -13,17 +13,15 @@ favourites_blueprint = Blueprint("favourites_bp", __name__)
 def favourites():
     user = repository.repo_instance.get_user(session['username'])
 
-    if request.method == 'POST':
-        user = repository.repo_instance.get_user(session['username'])
-        track_id = int(request.form.get('track_id'))
+    if user is None:
+        return redirect(url_for('home_bp.home'))
 
+    if request.method == 'POST':
+        track_id = int(request.form.get('track_id'))
         favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
 
         if favourite:
             remove_favourite(user, favourite)
-
-    if user is None:
-        return redirect(url_for('home_bp.home'))
 
     print(user.favourites)
     return render_template(

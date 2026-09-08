@@ -15,7 +15,6 @@ def browse():
     page = request.args.get('page', 1, type=int)
     search = request.args.get('search', '', type=str).strip()
     search_type = request.args.get('search_type', '', type=str)
-    favourite_tracks = []
 
     if search:
         tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(), page, search, search_type)
@@ -26,29 +25,26 @@ def browse():
     tracks, current_page, total_pages = get_tracks(page)
 
     if request.method == 'POST':
-        # tries to get user, if not logged in, redirect to login page
         try:
             user = repository.repo_instance.get_user(session['username'])
         except KeyError:
             return redirect(url_for('authentication_bp.login'))
 
+        track_id = int(request.form.get('track_id'))
 
         if request.form.get('action') ==  "Add to favourites":
-            track_id = int(request.form.get('track_id'))
             track = get_track_by_id(track_id)
             if track is not None:
-                add_favourite(track)
+                add_favourite(user, track)
 
         elif request.form.get('action') ==  "Remove from favourites":
-            user = repository.repo_instance.get_user(session['username'])
-            track_id = int(request.form.get('track_id'))
-
             favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
 
             if favourite:
                 remove_favourite(user, favourite)
 
     # tries getting user, but if it runs into a key error, that means that user is not logged in, so just passes
+    favourite_tracks = []
     try:
         user = repository.repo_instance.get_user(session['username'])
         if user is not None:
