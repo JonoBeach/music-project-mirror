@@ -226,7 +226,24 @@ body {
 }
 
 .pagination {
+    display: flex;
+    gap: 1rem;
+}
+
+.pagination-left {
+    flex-basis: 100%;
+    text-align: right;
+}
+
+.pagination-center {
+    flex-basis: 0%;
+    white-space: nowrap;
     text-align: center;
+}
+
+.pagination-right {
+    flex-basis: 100%;
+    text-align: left;
 }
 
 .track_list_item {
