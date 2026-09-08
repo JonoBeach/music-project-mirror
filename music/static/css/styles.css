@@ -21,20 +21,6 @@ body {
     margin: 0 auto;
 }
 
-.content-split {
-    padding: 2.5rem;
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.content-split > * {
-    flex-grow: 1;
-    flex-basis: 26rem;
-}
-
 /* home page */
 .content#home {
     text-align: center;
@@ -278,3 +264,24 @@ body {
 
 
 /* track details */
+
+.track-details {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1.5rem
+}
+
+.track-info {
+    background-color: var(--surface-container);
+    border-radius: 0.67rem;
+    padding: 1.5rem;
+    color: var(--on-surface-container);
+}
+
+.track-reviews {
+    background-color: var(--surface-container);
+    border-radius: 0.67rem;
+    padding: 1.5rem;
+    color: var(--on-surface-container);
+}

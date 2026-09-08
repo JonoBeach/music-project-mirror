@@ -8,8 +8,8 @@
 </head>
 <body>
     {% include "navbar.html" %}
-    <div class="content-split">
-        <div class="track-details">
+    <div class="content track-details">
+        <div class="track-info">
             <h3>{{ track.title }}</h3>
             {% if track.artist is not none %}
             <p>Artist: <b>{{ track.artist.full_name }}</b></p>
