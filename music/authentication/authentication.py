@@ -5,6 +5,8 @@ from password_validator import PasswordValidator
 import music.adapters.repository as repository
 import music.authentication.services as services
 
+from functools import wraps
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError, EqualTo
@@ -78,9 +80,13 @@ def logout():
     session.clear()
     return redirect(url_for('home_bp.home'))
 
-def login_required():
-    return redirect(url_for('authentication_bp.login'))
-
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if 'username' not in session:
+            return redirect(url_for('authentication_bp.login'))
+        return view(**kwargs)
+    return wrapped_view
 
 class PasswordValid:
     def __init__(self, message=None):
