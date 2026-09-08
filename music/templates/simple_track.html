@@ -44,6 +44,15 @@
         </div>
         <div class="track-reviews">
             <h1>Reviews</h1>
+            <ul>
+                {% for review in track.reviews %}
+                <li>
+                    <div>
+                        <span> {{ review.review_text }} </span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </body>
