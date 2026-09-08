@@ -70,23 +70,23 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_title(self, title: str) -> Track | None:
-        #return track that have same title or None
+    def search_by_title(self, title: str) -> list:
+        #return track list that partial match on same str in parameter
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_genre(self, genre: Genre) -> list:
-        #return a list of track that have same genre or None
+    def search_by_genre(self, genre: str) -> list:
+        #return a list of track that partial match same str
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_artist(self, artist: Artist) -> list:
-        #return a list of track that have same artist or None
+    def search_by_artist(self, artist: str) -> list:
+        #return a list of track that partial match same str
         raise NotImplementedError
 
     @abc.abstractmethod
-    def search_by_album(self, album: Album) -> list:
-        #return a list of track that have same album name or None
+    def search_by_album(self, album: str) -> list:
+        #return a list of track that partial match same str
         raise NotImplementedError
 
     @abc.abstractmethod
