@@ -2,6 +2,12 @@ import pytest
 
 from music.authentication.services import AuthenticationException
 from music.authentication import services as authentication_services
+from music.domainmodel import track
+from music.domainmodel.album import Album
+from music.domainmodel.artist import Artist
+from music.domainmodel.review import Review
+from music.domainmodel.track import Track
+from music.domainmodel.user import User
 from music.tracks import services as tracks_services
 from music.adapters.memory_repository import MemoryRepository
 
@@ -69,7 +75,7 @@ def test_authentication_is_case_insensitive(in_memory_repository):
         assert False
 
 def test_get_tracks_return_data(in_memory_repository):
-    tracks, page, total_pages = tracks_services.get_tracks(page=1)
+    tracks, page, total_pages = tracks_services.get_tracks(in_memory_repository, page=1)
 
     #check if page, len(tracks), total_pages correct
     assert page == 1
@@ -80,6 +86,109 @@ def test_get_tracks_return_data(in_memory_repository):
     assert titles == sorted(titles)
 
 def test_page_out_of_range(in_memory_repository):
-    tracks, page, total_pages = tracks_services.get_tracks(page=500)
-    #page should be total page
+    tracks, page, total_pages = tracks_services.get_tracks(in_memory_repository, page=500)
+    #page number too high, page should be total page
     assert page == total_pages
+    tracks, page, total_pages = tracks_services.get_tracks(in_memory_repository, page=-1)
+    #page number too low,, page should be 1
+    assert page == 1
+
+def test_get_all_tracks(in_memory_repository):
+    all_tracks = tracks_services.get_all_tracks(in_memory_repository)
+    #test if get_all_tracks gets tracks data in csv
+    assert len(all_tracks) > 100
+    titles = [t.title for t in all_tracks]
+    #test if the track list is sorted alphabetically
+    assert titles == sorted(titles)
+
+def test_search_by_title(in_memory_repository):
+    track1 = Track(1, "Aoi")
+    track2 = Track(4, "Aoi")
+    all_tracks = tracks_services.get_all_tracks(in_memory_repository)
+    all_tracks.append(track1)
+    all_tracks.append(track2)
+    tracks, page, total_pages = tracks_services.get_tracks_for_search(
+        all_tracks, page=1, search_term="Aoi", search_type="title"
+    )
+    #should return track1 and track2
+    assert len(tracks) == 2
+    assert tracks[0].title == "Aoi"
+
+def test_search_by_artist(in_memory_repository):
+    track1 = Track(1, "Aoi")
+    track2 = Track(4, "M")
+    artist1 = Artist(999, "sakanaction")
+    track1.artist, track2.artist = artist1, artist1
+    all_tracks = tracks_services.get_all_tracks(in_memory_repository)
+    all_tracks.append(track1)
+    all_tracks.append(track2)
+    tracks, page, total_pages = tracks_services.get_tracks_for_search(
+        all_tracks, page=1, search_term="sakanaction", search_type="artist"
+    )
+    #should return track1 and track2
+    assert len(tracks) == 2
+    assert tracks[1].artist == artist1
+
+def test_search_by_album(in_memory_repository):
+    track1 = Track(1, "Aoi")
+    track2 = Track(4, "M")
+    album1 = Album(999, "sakanaction")
+    track1.album, track2.album = album1, album1
+    all_tracks = tracks_services.get_all_tracks(in_memory_repository)
+    all_tracks.append(track1)
+    all_tracks.append(track2)
+    tracks, page, total_pages = tracks_services.get_tracks_for_search(
+        all_tracks, page=1, search_term="sakanaction", search_type="album"
+    )
+    #should return track1 and track2
+    assert len(tracks) == 2
+    assert tracks[0].title == "Aoi"
+
+def test_search_no_result(in_memory_repository):
+    all_tracks = tracks_services.get_all_tracks(in_memory_repository)
+    tracks, page, total_pages = tracks_services.get_tracks_for_search(
+        all_tracks, page=1, search_term="dasdasdada", search_type="title"
+    )
+    #should be empty list
+    assert tracks == []
+    assert total_pages == 0
+
+def test_search_empty_term_returns_all(in_memory_repository):
+    all_tracks = tracks_services.get_all_tracks(in_memory_repository)
+    tracks, page, total_pages = tracks_services.get_tracks_for_search(
+        all_tracks, page=1, search_term="", search_type="title"
+    )
+    #should return all tracks
+    assert len(tracks) <= tracks_services.TRACKS_PER_PAGE
+    assert total_pages == 134
+
+def test_get_track_by_id(in_memory_repository):
+    track1 = tracks_services.get_track_by_id(5, in_memory_repository)
+    assert track1 is not None
+    assert track1.track_id == 5
+
+def test_get_track_by_id_not_found(in_memory_repository):
+    track1 = tracks_services.get_track_by_id(1, in_memory_repository)
+    assert track1 is None
+
+def test_get_review_by_rating(in_memory_repository):
+    repo = MemoryRepository()
+    track1 = Track(1, "mellow")
+    repo.add_track(track1)
+    user = User(1, "sakana", "asdfghjk")
+    repo.add_user(user)
+    r1 = Review(1, 1, track1, 2, "not bad", 10)
+    r2 = Review(2, 1, track1, 5, "great", 11)
+    r3 = Review(3, 1, track1, 3, "good", 1)
+    repo.add_review(user, r1, track1)
+    repo.add_review(user, r2, track1)
+    repo.add_review(user, r3, track1)
+
+    reviews = tracks_services.get_review_by_rating(track1, in_memory_repository)
+    assert [r.rating for r in reviews] == [5, 3, 2]
+
+def test_get_review_by_rating_empty(in_memory_repository):
+    track1 = Track(1, "Ame")
+    in_memory_repository.add_track(track1)
+    assert tracks_services.get_review_by_rating(
+        track1, in_memory_repository) == []
