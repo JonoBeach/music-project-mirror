@@ -1,14 +1,14 @@
 import math
 from typing import List, Optional, Tuple
-from music.adapters.repository import repo_instance
+from music.adapters import repository
 from music.domainmodel.track import Track
 
 TRACKS_PER_PAGE = 15
 
 def get_tracks(page: int = 1) -> Tuple[List[Track], int, int]:
-    if repo_instance is None:
+    if repository.repo_instance is None:
         raise RuntimeError("Repository not initialised")
-    all_tracks = repo_instance.sort_by_track_title()
+    all_tracks = repository.repo_instance.sort_by_track_title()
     num_tracks = len(all_tracks)
     total_pages = math.ceil(num_tracks / TRACKS_PER_PAGE)
 
@@ -24,9 +24,9 @@ def get_tracks(page: int = 1) -> Tuple[List[Track], int, int]:
     return tracks_on_page, page, total_pages
 
 def get_all_tracks() -> List[Track]:
-    if repo_instance is None:
+    if repository.repo_instance is None:
         raise RuntimeError("Repository not initialised")
-    return repo_instance.sort_by_track_title()
+    return repository.repo_instance.sort_by_track_title()
 
 def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: str = '', search_type: str = '') -> Tuple[List[Track], int, int]:
     if search_term:
@@ -52,11 +52,11 @@ def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: s
     return tracks_on_page, page, total_pages
 
 def get_track_by_id(track_id:int) -> Optional[Track]:
-    if repo_instance is None:
+    if repository.repo_instance is None:
         raise RuntimeError("Repository not initialised")
-    return repo_instance.get_track(track_id)
+    return repository.repo_instance.get_track(track_id)
 
 def get_review_by_rating(track:Track) -> list:
-    if repo_instance is None:
+    if repository.repo_instance is None:
        raise RuntimeError("Repository not initialised")
-    return repo_instance.get_review_by_rating(track)
+    return repository.repo_instance.get_review_by_rating(track)

@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, abort, request
 
-from music.adapters.repository import repo_instance
 from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search
 
 tracks_blueprint = Blueprint('tracks_bp', __name__)
