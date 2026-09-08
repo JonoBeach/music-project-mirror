@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, abort, request, session, redirect, url_for
 
+from music.adapters import repository
 from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search
 from music.favourites.services import add_favourite, remove_favourite
 
@@ -17,10 +18,10 @@ def browse():
     search_type = request.args.get('search_type', '', type=str)
 
     if search:
-        tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(), page, search, search_type)
+        tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(repository.repo_instance), page, search, search_type)
 
     else:
-        tracks, current_page, total_pages = get_tracks(page)
+        tracks, current_page, total_pages = get_tracks(repository.repo_instance, page)
 
 
     if request.method == 'POST':
@@ -32,7 +33,7 @@ def browse():
         track_id = int(request.form.get('track_id'))
 
         if request.form.get('action') ==  "Add to favourites":
-            track = get_track_by_id(track_id)
+            track = get_track_by_id(track_id, repository.repo_instance)
             if track is not None:
                 add_favourite(user, track)
 
@@ -57,10 +58,10 @@ def browse():
 
 @tracks_blueprint.route('/track/<int:track_id>')
 def track_detail(track_id: int):
-    track = get_track_by_id(track_id)
+    track = get_track_by_id(track_id, repository.repo_instance)
     if track is None:
         abort(404)
-    reviews = get_review_by_rating(track)
+    reviews = get_review_by_rating(track, repository.repo_instance)
     return render_template('simple_track.html', track=track, reviews=reviews)
 
 
