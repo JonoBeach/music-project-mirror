@@ -3,7 +3,7 @@ import pytest
 from music.authentication.services import AuthenticationException
 from music.authentication import services as authentication_services
 from music.adapters.memory_repository import MemoryRepository
-
+from music.tracks.services import get_tracks_for_search, get_tracks, get_all_tracks
 
 @pytest.fixture
 def in_memory_repository():

@@ -10,24 +10,23 @@
 <body>
     {% include "navbar.html" %}
 
-    <div class="content">
-	    <ul>
-		{% for track in tracks %}
-		    {% include "track_display.html" with context %}
-		{% endfor %}
-	    </ul>
 
-	    <div class="pagination">
-		{% if current_page > 1 %}
-		    <a href="{{ url_for('tracks_bp.browse', page=current_page-1) }}">Previous</a>
-		{% endif %}
+    <ul>
+        {% for track in tracks %}
+            {% include "track_display.html" with context %}
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="{{ url_for('tracks_bp.browse', page=current_page-1, search=search, search_type=search_type) }}">Previous</a>
+        {% endif %}
 
 		<span>Page {{ current_page }} of {{ total_pages }}</span>
 
-		{% if current_page < total_pages %}
-		    <a href="{{ url_for('tracks_bp.browse', page=current_page+1) }}">Next</a>
-		{% endif %}
-	    </div>
+        {% if current_page < total_pages %}
+            <a href="{{ url_for('tracks_bp.browse', page=current_page+1, search=search, search_type=search_type) }}">Next</a>
+        {% endif %}
     </div>
 
 </body>
