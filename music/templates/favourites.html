@@ -12,7 +12,8 @@
 
     <div class="content">
 	    <ul>
-        {% for track in user.favourites %}
+        {% for favourite in user.favourites %}
+          {% set track = favourite.track %}
           {% include "track_display.html" with context %}
         {% endfor %}
       </ul>
