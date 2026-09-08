@@ -48,6 +48,7 @@ class MemoryRepository(AbstractRepository):
 
     @override
     def get_user(self, user_name: str) -> User | None:
+        user_name = user_name.lower()
         return next((user for user in self.__users if user.user_name == user_name), None)
 
     @override
