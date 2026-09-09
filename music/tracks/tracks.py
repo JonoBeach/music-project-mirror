@@ -1,6 +1,7 @@
+import time
 from flask import Blueprint, render_template, abort, request, session, redirect, url_for
 
-from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search
+from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search, add_review, remove_review
 from music.favourites.services import add_favourite, remove_favourite
 
 import music.adapters.repository as repository
@@ -64,8 +65,6 @@ def track_detail(track_id: int):
         except KeyError:
             return redirect(url_for('authentication_bp.login'))
 
-        track_id = int(request.form.get('track_id'))
-
         # favourites
         if request.form.get('action') ==  "Add to favourites":
             track = get_track_by_id(track_id)
@@ -79,7 +78,12 @@ def track_detail(track_id: int):
                 remove_favourite(user, favourite)
 
         # reviews
-        # TODO reviews
+        if request.form.get('action') ==  "Add review":
+            track = get_track_by_id(track_id)
+            rating = int(request.form.get('rating'))
+            review_text = request.form.get('review')
+            date = int(time.time())
+            add_review(user, track, rating, review_text, date)
 
     # tries getting user, but if it runs into a key error, that means that user is not logged in, so just passes
     favourite_tracks = []

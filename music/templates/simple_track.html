@@ -59,6 +59,26 @@
 
         <div class="track-reviews">
             <h1>Reviews</h1>
+            <form method="POST">
+                <div class="review-rating">
+                    <label class="fa fa-star" for='star-1'></label>
+                    <input type=radio value='1' id='star-1' name='rating'>
+
+                    <label class="fa fa-star" for='star-2'></label>
+                    <input type=radio value='2' id='star-2' name='rating'>
+
+                    <label class="fa fa-star" for='star-3'></label>
+                    <input type=radio value='3' id='star-3' name='rating'>
+
+                    <label class="fa fa-star" for='star-4'></label>
+                    <input type=radio value='4' id='star-4' name='rating'>
+
+                    <label class="fa fa-star" for='star-5'></label>
+                    <input type=radio value='5' id='star-5' name='rating'>
+                </div>
+                <input type="text" name="review">
+                <button type="submit" name="action" value="Add review">create review</button>
+            </form>
             <ul>
                 {% for review in track.reviews %}
                 <li>
