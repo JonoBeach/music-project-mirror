@@ -3,6 +3,9 @@ import pytest
 from music.authentication.services import AuthenticationException
 from music.authentication import services as authentication_services
 from music.adapters.memory_repository import MemoryRepository
+from music.domainmodel.track import Track
+from music.domainmodel.user import User
+from music.tracks import services as tracks_services
 
 @pytest.fixture
 def in_memory_repository():
@@ -66,3 +69,27 @@ def test_authentication_is_case_insensitive(in_memory_repository):
         authentication_services.authenticate_user(diff_case_username, new_password, in_memory_repository)
     except AuthenticationException:
         assert False
+
+def test_add_review():
+    user1 = User(1, "username", "password")
+    track1 = Track(1, "track")
+    rating = 5
+    review_text = "review text"
+    date_submitted = 151392262026
+
+    tracks_services.add_review(user1, track1, rating, review_text, date_submitted)
+    assert len(user1.reviews) == 1
+
+def test_remove_review():
+    user1 = User(1, "username", "password")
+    track1 = Track(1, "track")
+    rating = 5
+    review_text = "review text"
+    date_submitted = 151392262026
+
+    tracks_services.add_review(user1, track1, rating, review_text, date_submitted)
+    assert len(user1.reviews) == 1
+
+    review = user1.reviews[0]
+    tracks_services.remove_review(user1, review)
+    assert len(user1.reviews) == 0

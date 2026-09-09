@@ -1,7 +1,9 @@
 import math
+import uuid
 from typing import List, Optional, Tuple
 from music.adapters import repository
 from music.domainmodel.track import Track
+from music.domainmodel.review import Review
 
 TRACKS_PER_PAGE = 15
 
@@ -60,3 +62,16 @@ def get_review_by_rating(track:Track) -> list:
     if repository.repo_instance is None:
        raise RuntimeError("Repository not initialised")
     return repository.repo_instance.get_review_by_rating(track)
+
+def add_review(user:User, track:Track, rating:int, review_text:str, date_submitted:int):
+    if repository.repo_instance is None:
+       raise RuntimeError("Repository not initialised")
+    if not any(track.track_id == review.track.track_id for review in user.reviews):
+        id = uuid.uuid4().int
+        review = Review(id, user.user_id, track, rating, review_text, date_submitted)
+        repository.repo_instance.add_review(user, review, track)
+
+def remove_review(user:User, review:Review):
+    if repository.repo_instance is None:
+       raise RuntimeError("Repository not initialised")
+    repository.repo_instance.remove_review(user, review, review.track)
