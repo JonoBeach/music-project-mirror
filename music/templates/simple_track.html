@@ -35,18 +35,6 @@
             <p>Track URL: {{ track.track_url }}</p>
             <p>Average rating: <b>{{ track.get_average_rating() }}</b></p>
 
-            <ul>
-                {% for review in reviews %}
-                <li>
-                    <div>
-                        <p>Review Id: <b>{{ review.review_id }} User Id: <b>{{ review.user_id }}</b></p>
-                        <p>Rating: <b>{{ review.rating }}</b> Date submitted: <b>{{ review.date_submitted }}</b></p>
-                        <p>Review text: <b>{{ review.review_text }}</b></p>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-
             <form method="POST">
                 <input type="hidden" name="track_id" value="{{ track.track_id }}">
                 {% if track.track_id in favourite_tracks %}
@@ -83,6 +71,8 @@
                 {% for review in track.reviews %}
                 <li>
                     <div>
+                        <span> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </span>
+                        <span> {{ review.rating }} </span>
                         <span> {{ review.review_text }} </span>
                     </div>
                 </li>
