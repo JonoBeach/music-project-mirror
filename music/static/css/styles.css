@@ -280,12 +280,12 @@ body {
 }
 
 .rating {
-    display: inline-block;
+    display: inline-flex;
     position: relative;
 }
 
 .rating-active {
-    display: inline-block;
+    display: flex;
     position: relative;
     overflow: hidden;
     white-space: nowrap;
@@ -295,9 +295,15 @@ body {
 }
 
 .rating-inactive {
+    display: flex;
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.rating-active,
+.rating-inactive {
+    display:block;
 }
 
 .review-rating {
