@@ -279,6 +279,50 @@ body {
     color: var(--on-surface-container);
 }
 
+.rating {
+    display: inline-block;
+    position: relative;
+}
+
+.rating-active {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 10;
+
+    color: var(--on-surface-container-active);
+}
+
+.rating-inactive {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.review-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.review-rating input {
+    display: none;
+}
+
+.review-rating label {
+    color: #000000;
+    cursor: pointer;
+}
+
+.review-rating input:checked ~ label{
+    color: #FFFF00;
+}
+.review-rating label:hover,
+.review-rating label:hover ~ label {
+    color: #FFFF00;
+}
+
 .track-reviews {
     background-color: var(--surface-container);
     border-radius: 0.67rem;
