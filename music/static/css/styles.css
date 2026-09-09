@@ -6,6 +6,7 @@
     --on-surface-container: hsl(22 67% 21%);
     --on-surface-container-active: hsl(0 67% 48%);
     --max-content-width: 80rem;
+    --fa-solid: 900;
 }
 
 body {
@@ -324,10 +325,12 @@ body {
 
 .review-rating input:checked ~ label{
     color: #FFFF00;
+    font-weight: var(--fa-solid);
 }
 .review-rating label:hover,
 .review-rating label:hover ~ label {
     color: #FFFF00;
+    font-weight: var(--fa-solid);
 }
 
 .track-reviews {
