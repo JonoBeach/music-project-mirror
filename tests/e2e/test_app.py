@@ -204,3 +204,9 @@ def test_remove_favourite_from_track_details(client, authentication):
     client.post('/track/1249', data={'action': 'Remove from favourites', 'track_id': '1249'})
     response = client.get('/favourites')
     assert b'Metal Laquer' not in response.data
+
+def test_add_review_from_track_details(client, authentication):
+    authentication.login()
+    review = 'this track is really good'
+    response = client.post('/track/1249', data={'action': 'Add review', 'rating': '5', 'review': review})
+    assert review.encode() in response.data
