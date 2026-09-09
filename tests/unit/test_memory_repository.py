@@ -1,4 +1,5 @@
 import pytest
+from music.adapters.repository import repo_instance
 from music.domainmodel import user
 from music.domainmodel.album import Album
 from music.domainmodel.artist import Artist
@@ -73,14 +74,26 @@ def test_sort_by_title(repo:MemoryRepository):
 def test_search_method(repo:MemoryRepository):
     track1 = Track(1, "Song Silly")
     repo.add_track(track1)
-    assert track1 == repo.search_by_title("Song Silly")
-    assert repo.search_by_title("dahgdhagd") is None
-    genre = Genre(9999, "wild genre")
+    assert [track1] == repo.search_by_title("Song Silly")
+    #test case-insisitive, partial match
+    assert [track1] == repo.search_by_title("silly")
+    #test not found case
+    assert repo.search_by_title("dahgdhagd") == []
+
+    genre = Genre(9999, "Wild Genre")
     track1.add_genre(genre)
-    assert repo.search_by_genre(genre) == [track1]
+    assert repo.search_by_genre("Wild Genre") == [track1]
+    assert repo.search_by_genre("wild") == [track1]
+    assert repo.search_by_genre("asdafa") == []
+
     artist = Artist(9999, "toe")
     track1.artist = artist
-    assert repo.search_by_artist(artist) == [track1]
+    assert repo.search_by_artist("toe") == [track1]
+    assert repo.search_by_artist("TOE") == [track1]
+    assert repo.search_by_artist("adsdafaga") == []
+
     album = Album(9999, "Hear You")
     track1.album = album
-    assert repo.search_by_album(album) == [track1]
+    assert repo.search_by_album("Hear You") == [track1]
+    assert repo.search_by_album("Hear y") == [track1]
+    assert repo.search_by_album("sdadsaf") == []

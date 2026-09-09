@@ -1,6 +1,7 @@
 import pytest
 
 from flask import session
+from werkzeug.wrappers import response
 from music import create_app
 
 from pathlib import Path
@@ -101,3 +102,105 @@ def test_logout(client, authentication):
         # checking that logging out clears user session
         authentication.logout()
         assert 'username' not in session
+
+def test_browse_tracks(client):
+    response = client.get('/browse_tracks')
+    assert response.status_code == 200
+
+def test_browse_tracks_pagination(client):
+    response = client.get('/browse_tracks?page=1')
+    assert response.status_code == 200
+
+    response = client.get('/browse_tracks?page=3')
+    assert response.status_code == 200
+
+    #test page out of range and invalid value
+    response = client.get('/browse_tracks?page=-1')
+    assert response.status_code == 200
+
+    response = client.get('/browse_tracks?page=999')
+    assert response.status_code == 200
+
+    response = client.get('/browse_tracks?page=abcd')
+    assert response.status_code == 200
+
+def test_search_tracks(client):
+    #test search by title
+    response = client.get('/browse_tracks?search=a&search_type=title')
+    assert response.status_code == 200
+    #test search by artist
+    response = client.get('/browse_tracks?search=a&search_type=artist')
+    assert response.status_code == 200
+    #test search by album
+    response = client.get('/browse_tracks?search=a&search_type=album')
+    assert response.status_code == 200
+    #test notfound case. should return 200
+    response = client.get('/browse_tracks?search=abcdefg&search_type=title')
+    assert response.status_code == 200
+
+def test_track_detail(client):
+    # test valid track
+    response = client.get('/track/5')
+    assert response.status_code == 200
+    #test not exist track
+    response = client.get('/track/9999')
+    assert response.status_code == 404
+    #test invalid value
+    response = client.get('/track/abc')
+    assert response.status_code == 404
+
+def test_add_favourite_from_browse_tracks(client, authentication):
+    authentication.login()
+    client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' in response.data
+
+def test_add_favourite_from_track_details(client, authentication):
+    authentication.login()
+    client.post('/track/1249', data={'action': 'Add to favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' in response.data
+
+def test_logged_out_add_favourite_from_browse_tracks(client, authentication):
+    response = client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+    assert response.headers['Location'] == '/authentication/login'
+
+def test_logged_out_add_favourite_from_track_details(client, authentication):
+    response = client.post('/track/1249', data={'action': 'Add to favourites', 'track_id': '1249'})
+    assert response.headers['Location'] == '/authentication/login'
+
+def test_remove_favourite_from_browse_tracks(client, authentication):
+    # first add favourite
+    authentication.login()
+    client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' in response.data
+
+    # remove
+    client.post('/browse_tracks', data={'action': 'Remove from favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' not in response.data
+
+def test_remove_favourite_from_favourites(client, authentication):
+    # first add favourite
+    authentication.login()
+    client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' in response.data
+
+    # remove
+    client.post('/browse_tracks', data={'action': 'Remove from favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' not in response.data
+
+def test_remove_favourite_from_track_details(client, authentication):
+    # first add favourite
+    authentication.login()
+    client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' in response.data
+
+    # remove
+    client.post('/track/1249', data={'action': 'Remove from favourites', 'track_id': '1249'})
+    response = client.get('/favourites')
+    assert b'Metal Laquer' not in response.data

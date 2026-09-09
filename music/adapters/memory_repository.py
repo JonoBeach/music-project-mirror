@@ -1,6 +1,7 @@
 import os
 from typing import override
 
+from music import tracks
 from music.adapters.csvdatareader import CSVDataReader
 from music.domainmodel import track
 from music.domainmodel.album import Album
@@ -89,20 +90,35 @@ class MemoryRepository(AbstractRepository):
         return sorted(self.__tracks, key=lambda track: track.title)
 
     @override
-    def search_by_title(self, title: str) -> Track | None:
-        return next((track for track in self.__tracks if track.title == title), None)
+    def search_by_title(self, title: str) -> list:
+        term = title.lower()
+        return [track for track in self.__tracks if term in track.title.lower()]
 
     @override
-    def search_by_genre(self, genre: Genre) -> list:
-        return [track for track in self.__tracks if genre in track.genres]
+    def search_by_genre(self, genre: str) -> list:
+        term = genre.lower()
+        tracks = []
+        for track in self.__tracks:
+            if track.genres:
+                for genre in track.genres:
+                    if term in genre.name.lower():
+                        tracks.append(track)
+                        break
+        return tracks
 
     @override
-    def search_by_artist(self, artist: Artist) -> list:
-        return [track for track in self.__tracks if track.artist == artist]
+    def search_by_artist(self, artist: str) -> list:
+        term = artist.lower()
+        return [track for track in self.__tracks
+            if track.artist is not None and term in track.artist.full_name.lower()
+        ]
 
     @override
-    def search_by_album(self, album: Album) -> list:
-        return [track for track in self.__tracks if track.album == album]
+    def search_by_album(self, album: str) -> list:
+        term = album.lower()
+        return [track for track in self.__tracks
+            if track.album is not None and term in track.album.title.lower()
+        ]
 
     @override
     def get_user_list(self) -> list:

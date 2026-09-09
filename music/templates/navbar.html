@@ -4,8 +4,7 @@
             <a class="nav-logo" href="/">235 Music</a>
 
             <ul class="nav-items">
-                <li><a href="/">Albums</a></li>
-                <li><a href="{{ url_for('tracks_bp.browse') }}">Tracks</a></li>
+                <li><a href="{{ url_for('tracks_bp.browse') }}">Browse tracks</a></li>
             </ul>
 
             <form class="nav-search" action="{{ url_for('tracks_bp.browse') }}" method="get">
