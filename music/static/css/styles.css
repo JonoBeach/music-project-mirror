@@ -399,6 +399,7 @@ body {
 }
 .user-review-info p,
 .user-review-contents p {
+    white-space: pre-wrap;
     margin: 0;
 }
 
