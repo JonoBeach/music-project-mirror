@@ -91,7 +91,7 @@
             </form>
 
             <div class="user-review-container">
-                {% for review in track.reviews %}
+                {% for review in (track.reviews | reverse) %}
                     <div class="user-review">
                         <div class="user-review-info">
                             <p><b> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </b></p>
