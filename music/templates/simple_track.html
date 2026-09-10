@@ -31,7 +31,7 @@
                 {% endfor %}
             </ul>
 
-            <p>Track Duration: <b>{{ track.track_duration }}</b></p>
+            <p>Track Duration: <b>{{track.track_duration // 60 }}:{{ "%02d" | format(track.track_duration % 60 ) }}</b></p>
             <p>Track URL: {{ track.track_url }}</p>
 
             <form method="POST">
