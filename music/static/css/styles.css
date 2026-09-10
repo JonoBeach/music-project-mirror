@@ -340,6 +340,31 @@ body {
     color: var(--on-surface-container);
 }
 
+.track-reviews-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.track-reviews-header-left {
+    flex-grow: 0;
+    min-width: 12rem;
+}
+
+.track-reviews-header-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    flex-grow: 1;
+    flex-basis: 30rem;
+}
+
+.track-reviews-header-right p {
+    margin: 0;
+}
+
 .user-review-container {
     display: flex;
     flex-direction: column;
