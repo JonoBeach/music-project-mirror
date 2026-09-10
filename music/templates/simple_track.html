@@ -20,16 +20,18 @@
                 <p>Album: <b>{{ track.album.title }}</b></p>
             {% endif %}
 
-            <p>Genre:</p>
-            <ul>
-                {% for genre in track.genres %}
-                <li>
-                    <div>
-                        <span> {{ genre.name }} </span>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+            <div class="track-info-genres">
+                <p>Genres:</p>
+                <ul>
+                    {% for genre in track.genres %}
+                    <li>
+                        <div>
+                            <span> {{ genre.name }} </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
             <p>Track Duration: <b>{{track.track_duration // 60 }}:{{ "%02d" | format(track.track_duration % 60 ) }}</b></p>
             <p>Track URL: {{ track.track_url }}</p>

@@ -279,6 +279,23 @@ body {
     color: var(--on-surface-container);
 }
 
+.track-info-genres {
+    display: flex;
+    align-items: center;
+    gap: 0.67rem;
+}
+
+.track-info-genres p {
+    margin: 0;
+}
+
+.track-info-genres ul {
+    display: flex;
+    gap: 0.67rem;
+
+    list-style-type: none;
+}
+
 .rating {
     display: inline-flex;
     position: relative;
