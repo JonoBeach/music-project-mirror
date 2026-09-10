@@ -23,6 +23,28 @@ body {
     margin: 0 auto;
 }
 
+input[type=submit] {
+    font-size: 1.5rem;
+    flex-wrap: nowrap;
+    background-color: var(--surface);
+    border: 0.1rem solid var(--on-surface-container);
+    border-radius: 0.67rem;
+}
+
+input[type=submit] {
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.button {
+    border: 0.1rem solid var(--on-surface-container);
+}
+.button:active,
+.button:focus,
+.button:hover {
+    border: 0.1rem solid var(--on-surface-container-active);
+}
+
 /* home page */
 .content#home {
     text-align: center;
@@ -30,49 +52,41 @@ body {
 
 /* authentication page */
 .auth {
-  padding: 2.5rem;
-  max-width: var(--max-content-width);
-  margin: 0 auto;
+    padding: 2.5rem;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
 
-  text-align: center;
-  border-radius: 0.67rem;
-  border: 0.1rem solid var(--on-surface-container);
-
-
-  background-color: var(--surface-container);
-
-  input[type=text],
-  input[type=password],
-  input[type=submit] {
-    font-size: 1.5rem;
-    flex-wrap: nowrap;
-    background-color: var(--surface);
-    border: 0.1rem solid var(--on-surface-container);
+    text-align: center;
     border-radius: 0.67rem;
-  }
+    border: 0.1rem solid var(--on-surface-container);
 
-  input[type=submit] {
-    padding-left: 4%;
-    padding-right: 4%;
-  }
 
-  input[type=text]:focus,
-  input[type=password]:focus {
-    border: 0.1rem solid var(--on-surface-container-active);
-  }
-}
+    background-color: var(--surface-container);
 
-input[type=submit] {
-  font-size: 1.5rem;
-  flex-wrap: nowrap;
-  background-color: var(--surface);
-  border: 0.1rem solid var(--on-surface-container);
-  border-radius: 0.67rem;
-}
+    input[type=text],
+    input[type=password],
+    input[type=submit] {
+        font-size: 1.5rem;
+        flex-wrap: nowrap;
+        background-color: var(--surface);
+        border: 0.1rem solid var(--on-surface-container);
+        border-radius: 0.67rem;
+    }
 
-input[type=submit] {
-  padding-left: 1%;
-  padding-right: 1%;
+    input[type=submit] {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus {
+        border: 0.1rem solid var(--on-surface-container-active);
+    }
+    input[type=submit]:active,
+    input[type=submit]:focus,
+    input[type=submit]:hover {
+        border: 0.1rem solid var(--on-surface-container-active);
+    }
 }
 
 /* navbar */
