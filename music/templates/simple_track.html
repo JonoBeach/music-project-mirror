@@ -13,39 +13,38 @@
             <h3>{{ track.title }}</h3>
 
             {% if track.artist is not none %}
-                <p>Artist: <b>{{ track.artist.full_name }}</b></p>
+                <p>Artist:
+                    <b>
+                    <a href="/browse_tracks?search={{ track.artist.full_name | e }}&search_type=artist">
+                        {{ track.artist.full_name }}
+                    </a>
+                    </b>
+                </p>
             {% endif %}
 
             {% if track.album is not none %}
-                <p>Album: <b>{{ track.album.title }}</b></p>
+                <p>Album:
+                    <b>
+                    <a href="/browse_tracks?search={{ track.album.title | e }}&search_type=album">
+                        {{ track.album.title }}
+                    </a>
+                    </b>
+                </p>
             {% endif %}
 
-            <p>Genre:</p>
-            <ul>
-                {% for genre in track.genres %}
-                <li>
-                    <div>
-                        <span> {{ genre.name }} </span>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+            <div class="track-info-genres">
+                <p>Genres:</p>
+                <ul>
+                    {% for genre in track.genres %}
+                    <li>
+                        <b>{{ genre.name }}</b>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-            <p>Track Duration: <b>{{ track.track_duration }}</b></p>
-            <p>Track URL: {{ track.track_url }}</p>
-            <p>Average rating: <b>{{ track.get_average_rating() }}</b></p>
-
-            <ul>
-                {% for review in reviews %}
-                <li>
-                    <div>
-                        <p>Review Id: <b>{{ review.review_id }} User Id: <b>{{ review.user_id }}</b></p>
-                        <p>Rating: <b>{{ review.rating }}</b> Date submitted: <b>{{ review.date_submitted }}</b></p>
-                        <p>Review text: <b>{{ review.review_text }}</b></p>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+            <p>Track Duration: <b>{{track.track_duration // 60 }}:{{ "%02d" | format(track.track_duration % 60 ) }}</b></p>
+            <p>Track URL: <b><a href="{{ track.track_url }}">{{ track.track_url }}</a></b></p>
 
             <form method="POST">
                 <input type="hidden" name="track_id" value="{{ track.track_id }}">
@@ -58,36 +57,75 @@
         </div>
 
         <div class="track-reviews">
-            <h1>Reviews</h1>
-            <form method="POST">
-                <div class="review-rating">
-                    <label class="fa fa-star" for='star-1'></label>
-                    <input type=radio value='1' id='star-1' name='rating'>
+            <div class="track-reviews-header">
+                <div class="track-reviews-header-left">
+                    <h1>Reviews</h1>
 
-                    <label class="fa fa-star" for='star-2'></label>
-                    <input type=radio value='2' id='star-2' name='rating'>
-
-                    <label class="fa fa-star" for='star-3'></label>
-                    <input type=radio value='3' id='star-3' name='rating'>
-
-                    <label class="fa fa-star" for='star-4'></label>
-                    <input type=radio value='4' id='star-4' name='rating'>
-
-                    <label class="fa fa-star" for='star-5'></label>
-                    <input type=radio value='5' id='star-5' name='rating'>
-                </div>
-                <input type="text" name="review">
-                <button type="submit" name="action" value="Add review">create review</button>
-            </form>
-            <ul>
-                {% for review in track.reviews %}
-                <li>
-                    <div>
-                        <span> {{ review.review_text }} </span>
+                    <div class="rating">
+                        <span class="rating-active" style="width: {{ (track.get_average_rating()/5*100) | int }}%">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </span>
+                        <span class="rating-inactive">
+                            <i class="far fa-star" aria-hidden="true"></i>
+                            <i class="far fa-star" aria-hidden="true"></i>
+                            <i class="far fa-star" aria-hidden="true"></i>
+                            <i class="far fa-star" aria-hidden="true"></i>
+                            <i class="far fa-star" aria-hidden="true"></i>
+                        </span>
                     </div>
-                </li>
+                    <p>{{ track.get_average_rating() | round(2) }} average - {{ track.reviews | length }} reviews</p>
+                </div>
+
+                <div class="track-reviews-header-right">
+                    <form class="review-form" method="POST">
+                        <strong>Review this track</strong>
+                        <div class="review-rating">
+                            <input type=radio value='5' id='star-5' name='rating' required>
+                            <label class="far fa-star" for='star-5'></label>
+
+                            <input type=radio value='4' id='star-4' name='rating' required>
+                            <label class="far fa-star" for='star-4'></label>
+
+                            <input type=radio value='3' id='star-3' name='rating' required>
+                            <label class="far fa-star" for='star-3'></label>
+
+                            <input type=radio value='2' id='star-2' name='rating' required>
+                            <label class="far fa-star" for='star-2'></label>
+
+                            <input type=radio value='1' id='star-1' name='rating' required>
+                            <label class="far fa-star" for='star-1'></label>
+                        </div>
+                        <textarea name="review" rows="5"></textarea>
+                        <button type="submit" name="action" value="Add review">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="user-review-container">
+                {% for review in (track.reviews | reverse) %}
+                    <div class="user-review">
+                        <div class="user-review-info">
+                            <p><b> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </b></p>
+                            <div class="user-review-info-stars" >
+                                {% for _ in range(review.rating) %}
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                {% endfor %}
+                                {% for _ in range(5 - review.rating) %}
+                                    <i class="far fa-star" aria-hidden="true"></i>
+                                {% endfor %}
+                            </div>
+                            <p> {{ review.date_submitted | datetime}} </p>
+                        </div>
+                        <div class="user-review-contents">
+                            <p> {{ review.review_text }} </p>
+                        </div>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
 </body>
