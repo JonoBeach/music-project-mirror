@@ -99,7 +99,7 @@
                                     <i class="far fa-star" aria-hidden="true"></i>
                                 {% endfor %}
                             </div>
-                            <p> {{ review.date_submitted }} </p>
+                            <p> {{ review.date_submitted | datetime}} </p>
                         </div>
                         <div class="user-review-contents">
                             <p> {{ review.review_text }} </p>

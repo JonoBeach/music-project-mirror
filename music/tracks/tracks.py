@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from flask import Blueprint, render_template, abort, request, session, redirect, url_for
 
 from music.adapters import repository
@@ -111,3 +112,7 @@ class RemoveFavouriteForm(FlaskForm):
 
 class AddFavouriteForm(FlaskForm):
     submit = SubmitField('Add to favourites')
+
+@tracks_blueprint.app_template_filter('datetime')
+def format_datetime(timestamp):
+    return datetime.fromtimestamp(timestamp).strftime('%d/%m/%Y %H:%M')
