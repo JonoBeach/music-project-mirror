@@ -307,6 +307,15 @@ body {
     display:block;
 }
 
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 .review-rating {
     display: flex;
     flex-direction: row-reverse;
@@ -319,17 +328,16 @@ body {
 }
 
 .review-rating label {
-    color: #000000;
     cursor: pointer;
 }
 
 .review-rating input:checked ~ label{
-    color: #FFFF00;
+    color: var(--on-surface-container-active);
     font-weight: var(--fa-solid);
 }
 .review-rating label:hover,
 .review-rating label:hover ~ label {
-    color: #FFFF00;
+    color: var(--on-surface-container-active);
     font-weight: var(--fa-solid);
 }
 
