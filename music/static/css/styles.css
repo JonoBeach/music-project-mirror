@@ -61,6 +61,23 @@ body {
   }
 }
 
+input[type=submit] {
+  font-size: 1.5rem;
+  flex-wrap: nowrap;
+  background-color: var(--surface);
+  border: 0.1rem solid var(--on-surface-container);
+  border-radius: 0.67rem;
+}
+
+input[type=submit] {
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+input[type=text]:focus,
+input[type=password]:focus {
+  border: 0.1rem solid var(--on-surface-container-active);
+}
 
 
 /* navbar */
@@ -385,6 +402,15 @@ body {
     border-radius: 0.67rem;
     padding: 1.5rem;
     color: var(--on-surface-container);
+
+    button {
+      font-size: 1.0rem;
+      flex-wrap: nowrap;
+      background-color: var(--surface);
+      border: 0.1rem solid var(--on-surface-container);
+      border-radius: 0.67rem;
+
+    }
 }
 
 .track-reviews-header {
