@@ -13,11 +13,23 @@
             <h3>{{ track.title }}</h3>
 
             {% if track.artist is not none %}
-                <p>Artist: <b>{{ track.artist.full_name }}</b></p>
+                <p>Artist:
+                    <b>
+                    <a href="/browse_tracks?search={{ track.artist.full_name | e }}&search_type=artist">
+                        {{ track.artist.full_name }}
+                    </a>
+                    </b>
+                </p>
             {% endif %}
 
             {% if track.album is not none %}
-                <p>Album: <b>{{ track.album.title }}</b></p>
+                <p>Album:
+                    <b>
+                    <a href="/browse_tracks?search={{ track.album.title | e }}&search_type=album">
+                        {{ track.album.title }}
+                    </a>
+                    </b>
+                </p>
             {% endif %}
 
             <div class="track-info-genres">
@@ -25,16 +37,14 @@
                 <ul>
                     {% for genre in track.genres %}
                     <li>
-                        <div>
-                            <span> {{ genre.name }} </span>
-                        </div>
+                        <b>{{ genre.name }}</b>
                     </li>
                     {% endfor %}
                 </ul>
             </div>
 
             <p>Track Duration: <b>{{track.track_duration // 60 }}:{{ "%02d" | format(track.track_duration % 60 ) }}</b></p>
-            <p>Track URL: {{ track.track_url }}</p>
+            <p>Track URL: <b><a href="{{ track.track_url }}">{{ track.track_url }}</a></b></p>
 
             <form method="POST">
                 <input type="hidden" name="track_id" value="{{ track.track_id }}">
