@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from flask import Blueprint, render_template, abort, request, session, redirect, url_for
 
 from music.adapters import repository
@@ -88,8 +89,9 @@ def track_detail(track_id: int):
             add_review(user, track, rating, review_text, date, repository.repo_instance)
 
     favourite_tracks = get_favourite_tracks()
+    users = repository.repo_instance.get_user_list()
 
-    return render_template('simple_track.html', track=track, reviews=reviews, favourite_tracks=favourite_tracks)
+    return render_template('simple_track.html', track=track, favourite_tracks=favourite_tracks, users=users)
 
 
 def get_favourite_tracks() -> List:
@@ -110,3 +112,7 @@ class RemoveFavouriteForm(FlaskForm):
 
 class AddFavouriteForm(FlaskForm):
     submit = SubmitField('Add to favourites')
+
+@tracks_blueprint.app_template_filter('datetime')
+def format_datetime(timestamp):
+    return datetime.fromtimestamp(timestamp).strftime('%d/%m/%Y %H:%M')
