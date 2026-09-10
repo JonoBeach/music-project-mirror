@@ -85,12 +85,20 @@
                 <input type="text" name="review">
                 <button type="submit" name="action" value="Add review">Rate this track</button>
             </form>
+
             <div class="user-review-container">
                 {% for review in track.reviews %}
                     <div class="user-review">
                         <div class="user-review-info">
                             <p><b> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </b></p>
-                            <p> {{ review.rating }} </p>
+                            <div class="user-review-info-stars" >
+                                {% for _ in range(review.rating) %}
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                {% endfor %}
+                                {% for _ in range(5 - review.rating) %}
+                                    <i class="far fa-star" aria-hidden="true"></i>
+                                {% endfor %}
+                            </div>
                             <p> {{ review.date_submitted }} </p>
                         </div>
                         <div class="user-review-contents">
