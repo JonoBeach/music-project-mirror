@@ -75,12 +75,6 @@ input[type=submit] {
   padding-right: 1%;
 }
 
-input[type=text]:focus,
-input[type=password]:focus {
-  border: 0.1rem solid var(--on-surface-container-active);
-}
-
-
 /* navbar */
 .nav {
     display: flex;
