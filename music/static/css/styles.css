@@ -339,3 +339,29 @@ body {
     padding: 1.5rem;
     color: var(--on-surface-container);
 }
+
+.user-review-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.user-review {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.user-review-info {
+    min-width: 12rem;
+    flex-grow: 0;
+}
+.user-review-info p,
+.user-review-contents p {
+    margin: 0;
+}
+
+.user-review-contents {
+    flex-basis: 30rem;
+    flex-grow: 1;
+}

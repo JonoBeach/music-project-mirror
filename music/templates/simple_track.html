@@ -85,17 +85,20 @@
                 <input type="text" name="review">
                 <button type="submit" name="action" value="Add review">Rate this track</button>
             </form>
-            <ul>
+            <div class="user-review-container">
                 {% for review in track.reviews %}
-                <li>
-                    <div>
-                        <span> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </span>
-                        <span> {{ review.rating }} </span>
-                        <span> {{ review.review_text }} </span>
+                    <div class="user-review">
+                        <div class="user-review-info">
+                            <p><b> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </b></p>
+                            <p> {{ review.rating }} </p>
+                            <p> {{ review.date_submitted }} </p>
+                        </div>
+                        <div class="user-review-contents">
+                            <p> {{ review.review_text }} </p>
+                        </div>
                     </div>
-                </li>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
 </body>
