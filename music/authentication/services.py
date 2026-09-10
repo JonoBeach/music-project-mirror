@@ -1,3 +1,4 @@
+import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.user import User
@@ -24,7 +25,7 @@ def add_user(username: str, password: str, repository: AbstractRepository):
     # encrypt password into hash
     password_hash = generate_password_hash(password)
 
-    id = len(repository.get_user_list())
+    id = uuid.uuid4().int
     user = User(id, username, password_hash)
     repository.add_user(user)
 
