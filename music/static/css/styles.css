@@ -386,6 +386,10 @@ body {
     margin: 0;
 }
 
+.user-review-info-stars .fa {
+    color: var(--on-surface-container-active);
+}
+
 .user-review-contents {
     flex-basis: 30rem;
     flex-grow: 1;
