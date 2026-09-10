@@ -82,13 +82,11 @@ def track_detail(track_id: int):
 
         # reviews
         if request.form.get('action') ==  "Add review":
-            rating = request.form.get('rating')
-            if rating:
-                track = get_track_by_id(track_id, repository.repo_instance)
-                rating = int(rating)
-                review_text = request.form.get('review')
-                date = int(time.time())
-                add_review(user, track, rating, review_text, date, repository.repo_instance)
+            track = get_track_by_id(track_id, repository.repo_instance)
+            rating = int(request.form.get('rating'))
+            review_text = request.form.get('review')
+            date = int(time.time())
+            add_review(user, track, rating, review_text, date, repository.repo_instance)
 
     favourite_tracks = get_favourite_tracks()
     users = repository.repo_instance.get_user_list()
