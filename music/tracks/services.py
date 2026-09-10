@@ -4,6 +4,7 @@ from typing import List, Optional, Tuple
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 from music.domainmodel.review import Review
+from music.domainmodel.user import User
 
 TRACKS_PER_PAGE = 15
 
