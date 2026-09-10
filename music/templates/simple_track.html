@@ -46,9 +46,9 @@
 
         <div class="track-reviews">
             <div class="track-reviews-header">
-                <h1 class="track-reviews-header-left">Reviews</h1>
+                <div class="track-reviews-header-left">
+                    <h1>Reviews</h1>
 
-                <div class="track-reviews-header-right">
                     <div class="rating">
                         <span class="rating-active" style="width: {{ (track.get_average_rating()/5*100) | int }}%">
                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -67,28 +67,31 @@
                     </div>
                     <p>{{ track.get_average_rating() | round(2) }} average - {{ track.reviews | length }} reviews</p>
                 </div>
-            </div>
 
-            <form class="review-form" method="POST">
-                <div class="review-rating">
-                    <input type=radio value='5' id='star-5' name='rating' required>
-                    <label class="far fa-star" for='star-5'></label>
+                <div class="track-reviews-header-right">
+                    <form class="review-form" method="POST">
+                        <strong>Review this track</strong>
+                        <div class="review-rating">
+                            <input type=radio value='5' id='star-5' name='rating' required>
+                            <label class="far fa-star" for='star-5'></label>
 
-                    <input type=radio value='4' id='star-4' name='rating' required>
-                    <label class="far fa-star" for='star-4'></label>
+                            <input type=radio value='4' id='star-4' name='rating' required>
+                            <label class="far fa-star" for='star-4'></label>
 
-                    <input type=radio value='3' id='star-3' name='rating' required>
-                    <label class="far fa-star" for='star-3'></label>
+                            <input type=radio value='3' id='star-3' name='rating' required>
+                            <label class="far fa-star" for='star-3'></label>
 
-                    <input type=radio value='2' id='star-2' name='rating' required>
-                    <label class="far fa-star" for='star-2'></label>
+                            <input type=radio value='2' id='star-2' name='rating' required>
+                            <label class="far fa-star" for='star-2'></label>
 
-                    <input type=radio value='1' id='star-1' name='rating' required>
-                    <label class="far fa-star" for='star-1'></label>
+                            <input type=radio value='1' id='star-1' name='rating' required>
+                            <label class="far fa-star" for='star-1'></label>
+                        </div>
+                        <textarea name="review" rows="5"></textarea>
+                        <button type="submit" name="action" value="Add review">Submit</button>
+                    </form>
                 </div>
-                <textarea name="review" rows="5"></textarea>
-                <button type="submit" name="action" value="Add review">Rate this track</button>
-            </form>
+            </div>
 
             <div class="user-review-container">
                 {% for review in (track.reviews | reverse) %}

@@ -269,7 +269,6 @@ body {
 .track-details {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     gap: 1.5rem
 }
 
@@ -314,6 +313,12 @@ body {
 
     margin-top: 1rem;
     margin-bottom: 1rem;
+    max-width: 40rem;
+    width: 100%;
+}
+
+.review-form button {
+    align-self: flex-start;
 }
 
 .review-rating {
@@ -345,6 +350,10 @@ body {
 }
 
 .track-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
     background-color: var(--surface-container);
     border-radius: 0.67rem;
     padding: 1.5rem;
@@ -370,10 +379,6 @@ body {
 
     flex-grow: 1;
     flex-basis: 30rem;
-}
-
-.track-reviews-header-right p {
-    margin: 0;
 }
 
 .user-review-container {
