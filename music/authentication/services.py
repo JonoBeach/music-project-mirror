@@ -51,6 +51,7 @@ def authenticate_user(username: str, password: str, repository: AbstractReposito
 def get_user_as_dictionary(user: User):
     user_dict = {
         'username': user.user_name,
+        #TODO: don't need password here, don't need to pass pw
         'password': user.password
     }
     return user_dict
