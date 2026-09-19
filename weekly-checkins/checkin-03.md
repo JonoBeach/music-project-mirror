@@ -1,4 +1,4 @@
-# Weekly Checkin 03
+ # Weekly Checkin 03
 
 **Team Name:** (fhos131-jbea602-jlo401-znin774)
 
