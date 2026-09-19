@@ -106,13 +106,6 @@ def get_favourite_tracks() -> List:
     return favourite_tracks
 
 
-class RemoveFavouriteForm(FlaskForm):
-    submit = SubmitField('Remove from favourites')
-
-
-class AddFavouriteForm(FlaskForm):
-    submit = SubmitField('Add to favourites')
-
 @tracks_blueprint.app_template_filter('datetime')
 def format_datetime(timestamp):
     return datetime.fromtimestamp(timestamp).strftime('%d/%m/%Y %H:%M')

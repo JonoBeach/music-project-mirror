@@ -18,7 +18,6 @@ class CSVDataReader:
         self.__genres = None
 
     def read_csv_files(self):
-        # TODO: use dict with id as key
         self.__tracks = dict()
         self.__artists = dict()
         self.__albums = dict()

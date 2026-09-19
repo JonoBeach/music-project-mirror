@@ -50,9 +50,9 @@
             <form method="POST">
                 <input type="hidden" name="track_id" value="{{ track.track_id }}">
                 {% if track.track_id in favourite_tracks %}
-                    <input type="submit" name="action" value="Remove from favourites">
+                    <input class="button" type="submit" name="action" value="Remove from favourites">
                 {% else %}
-                    <input type="submit" name="action" value="Add to favourites">
+                    <input class="button" type="submit" name="action" value="Add to favourites">
                 {% endif %}
             </form>
         </div>
@@ -101,7 +101,7 @@
                             <label class="far fa-star" for='star-1'></label>
                         </div>
                         <textarea name="review" rows="5"></textarea>
-                        <button type="submit" name="action" value="Add review">Submit</button>
+                        <button class="button" type="submit" name="action" value="Add review">Submit</button>
                     </form>
                 </div>
             </div>

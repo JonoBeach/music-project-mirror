@@ -9,7 +9,6 @@ import time
 
 def add_favourite(user: User, track: Track):
     if not any(favourite.track.track_id == track.track_id for favourite in user.favourites):
-        # set id to time to avoid id collision errors
         id = uuid.uuid4().int
         favourite = Favourite(id, user.user_id, track)
         repository.repo_instance.add_favourite(user, favourite)
