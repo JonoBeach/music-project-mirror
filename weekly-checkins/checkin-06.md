@@ -1,4 +1,4 @@
-# Weekly Checkin [NN]
+# Weekly Checkin [06]
 
 **Team Name:** (fhos131-jbea602-jlo401-znin774)
 
@@ -36,6 +36,6 @@
 ## Board Snapshot
 > Screenshot of your GitHub Project board as of today. Save into `/weekly-checkins/screenshots/checkin-board-NN.png` (don't overwrite previous weeks).
 
-![Board snapshot](./weekly-checkins/screenshots/checkin-board-05.png)
+![Board snapshot](./weekly-checkins/screenshots/checkin-board-06.png)
 ---
 **Submission rule:** Commit this file by Saturday (any day that week works, but must be in by Saturday). Once committed, do not edit or amend it — the commit timestamp is your submission record. Any change made after Saturday's deadline will not be counted for that week.
