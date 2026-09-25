@@ -16,7 +16,10 @@ def create_app(test_config=None):
         data_path = app.config['TEST_DATA_PATH']
         app.debug = True
 
-    repo.repo_instance = MemoryRepository()
+    if app.config['REPOSITORY'] == 'memory':
+        repo.repo_instance = MemoryRepository()
+    elif app.config['REPOSITORY'] == 'database':
+        raise NotImplementedError("database repo not implemented")
 
     # register blueprints
     with app.app_context():
