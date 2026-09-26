@@ -23,7 +23,7 @@ def test_add_get_track(repo: MemoryRepository):
     assert track in repo._MemoryRepository__tracks
 
     track = repo.get_track(5)
-    assert track.track_id == 5
+    assert track.id == 5
 
     #no track found, should return None
     track = repo.get_track(999999)
@@ -37,7 +37,7 @@ def test_add_get_user(repo):
     assert repo._MemoryRepository__users == [user1, user2]
 
     user3 = repo.get_user("ash")
-    assert user3.user_id == 1
+    assert user3.id == 1
 
     #no user found, should return None
     user4 = repo.get_user("ashas")

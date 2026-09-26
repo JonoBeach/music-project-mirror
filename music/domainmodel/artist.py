@@ -1,17 +1,17 @@
 class Artist:
 
-    def __init__(self, artist_id: int, full_name: str):
-        if type(artist_id) is not int or artist_id < 0:
+    def __init__(self, id: int, full_name: str):
+        if type(id) is not int or id < 0:
             raise ValueError("Artist ID should be a non negative integer!")
-        self.__artist_id: int = artist_id
+        self.__id: int = id
 
         if type(full_name) is not str or full_name.strip() == '':
             raise ValueError("Artist name should be a non-empty string.")
         self.__full_name: str = full_name.strip()
 
     @property
-    def artist_id(self) -> int:
-        return self.__artist_id
+    def id(self) -> int:
+        return self.__id
 
     @property
     def full_name(self) -> str:
@@ -25,17 +25,17 @@ class Artist:
 
 
     def __repr__(self):
-        return f"<Artist {self.full_name}, artist id = {self.artist_id}>"
+        return f"<Artist {self.full_name}, artist id = {self.id}>"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, self.__class__):
             return False
-        return self.artist_id == other.artist_id
+        return self.id == other.id
 
     def __lt__(self, other):
         if not isinstance(other, self.__class__):
             return True
-        return self.artist_id < other.artist_id
+        return self.id < other.id
 
     def __hash__(self):
-        return hash(self.artist_id)
+        return hash(self.id)

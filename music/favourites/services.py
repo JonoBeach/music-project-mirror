@@ -8,9 +8,9 @@ from music.adapters import repository
 import time
 
 def add_favourite(user: User, track: Track):
-    if not any(favourite.track.track_id == track.track_id for favourite in user.favourites):
+    if not any(favourite.track.id == track.id for favourite in user.favourites):
         id = uuid.uuid4().int
-        favourite = Favourite(id, user.user_id, track)
+        favourite = Favourite(id, user.id, track)
         repository.repo_instance.add_favourite(user, favourite)
 
 def remove_favourite(user: User, favourite: Favourite):
