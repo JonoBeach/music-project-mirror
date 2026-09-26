@@ -48,8 +48,8 @@
             <p>Track URL: <b><a href="{{ track.track_url }}">{{ track.track_url }}</a></b></p>
 
             <form method="POST">
-                <input type="hidden" name="track_id" value="{{ track.track_id }}">
-                {% if track.track_id in favourite_tracks %}
+                <input type="hidden" name="track_id" value="{{ track.id }}">
+                {% if track.id in favourite_tracks %}
                     <input class="button" type="submit" name="action" value="Remove from favourites">
                 {% else %}
                     <input class="button" type="submit" name="action" value="Add to favourites">
@@ -110,7 +110,7 @@
                 {% for review in (track.reviews | reverse) %}
                     <div class="user-review">
                         <div class="user-review-info">
-                            <p><b> {{ users | selectattr("user_id", "equalto", review.user_id) | map(attribute="user_name") | first }} </b></p>
+                            <p><b> {{ users | selectattr("id", "equalto", review.user_id) | map(attribute="user_name") | first }} </b></p>
                             <div class="user-review-info-stars" >
                                 {% for _ in range(review.rating) %}
                                     <i class="fa fa-star" aria-hidden="true"></i>

@@ -1,11 +1,11 @@
 from music.domainmodel.artist import Artist
 
 class Album:
-    def __init__(self, album_id: int, album_title: str):
+    def __init__(self, id: int, album_title: str):
         from music.domainmodel.track import Track
-        if type(album_id) is not int or album_id < 0:
+        if type(id) is not int or id < 0:
             raise ValueError("Album ID should be a non negative integer.")
-        self.__album_id = album_id
+        self.__id = id
 
         if type(album_title) is not str or album_title.strip() == '':
             raise ValueError("Album title should be a non-empty string.")
@@ -18,8 +18,8 @@ class Album:
         self.__album_info: str | None = None
 
     @property
-    def album_id(self) -> int:
-        return self.__album_id
+    def id(self) -> int:
+        return self.__id
 
     @property
     def title(self) -> str:
@@ -98,17 +98,17 @@ class Album:
         return len(self.tracks)
 
     def __repr__(self):
-        return f"<Album {self.title}, album id = {self.album_id}>"
+        return f"<Album {self.title}, album id = {self.id}>"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, self.__class__):
             return False
-        return self.album_id == other.album_id
+        return self.id == other.id
 
     def __lt__(self, other):
         if not isinstance(other, self.__class__):
             return True
-        return self.album_id < other.album_id
+        return self.id < other.id
 
     def __hash__(self):
-        return hash(self.__album_id)
+        return hash(self.__id)

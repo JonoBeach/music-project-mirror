@@ -186,7 +186,7 @@ class TestTrackServices:
     def test_get_track_by_id(self, in_memory_repository):
         track1 = tracks_services.get_track_by_id(5, in_memory_repository)
         assert track1 is not None
-        assert track1.track_id == 5
+        assert track1.id == 5
 
     def test_get_track_by_id_not_found(self, in_memory_repository):
         track1 = tracks_services.get_track_by_id(1, in_memory_repository)

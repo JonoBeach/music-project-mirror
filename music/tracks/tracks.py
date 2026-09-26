@@ -40,7 +40,7 @@ def browse():
                 add_favourite(user, track)
 
         elif request.form.get('action') ==  "Remove from favourites":
-            favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
+            favourite = next((favourite for favourite in user.favourites if favourite.track.id == track_id), None)
 
             if favourite:
                 remove_favourite(user, favourite)
@@ -75,7 +75,7 @@ def track_detail(track_id: int):
                 add_favourite(user, track)
 
         elif request.form.get('action') ==  "Remove from favourites":
-            favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
+            favourite = next((favourite for favourite in user.favourites if favourite.track.id == track_id), None)
 
             if favourite:
                 remove_favourite(user, favourite)
@@ -99,7 +99,7 @@ def get_favourite_tracks() -> List:
     try:
         user = repository.repo_instance.get_user(session['username'])
         if user is not None:
-            favourite_tracks = [favourite.track.track_id for favourite in user.favourites]
+            favourite_tracks = [favourite.track.id for favourite in user.favourites]
     except KeyError:
         favourite_tracks = []
 
