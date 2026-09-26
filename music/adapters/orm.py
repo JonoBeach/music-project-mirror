@@ -1,6 +1,6 @@
-from sqlalchemy import Table, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import registry
-import music.domainmodel as model
+from sqlalchemy import Table, Column, Integer, Text, ForeignKey
+from sqlalchemy.orm import registry, relationship
+from music.domainmodel import Album, Artist, Favourite, Genre, Review, Track, User
 
 mapper_registry = registry()
 
@@ -25,21 +25,21 @@ favourite_table = Table(
     "favourite",
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), nullable = false, unique = True),
+    Column("user_id", Integer, ForeignKey("users.id"), nullable = False, unique = True),
 )
 
 genre_table = Table(
     "genre",
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
-    Column("name", Text, nullable = false)
+    Column("name", Text, nullable = False)
 )
 
 review_table = Table(
     "review",
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), nullable = false, unique = True),
+    Column("user_id", Integer, ForeignKey("users.id"), nullable = False, unique = True),
     Column("rating", Integer),
     Column("review_text", Text),
     Column("date_submitted", Integer)
@@ -64,43 +64,43 @@ user_table = Table(
 
 
 mapper_registry.map_imperatively(
-    model.Album,
+    Album,
     album_table,
     properties = {
         "artist": relationship(
-            model.Artist,
+            Artist,
             back_populates = "artist",
             uselist = False
         ),
         "tracks": relationship(
-            model.Track,
+            Track,
             back_populates="track"
         )
     }
 )
 
-mapper_registry.map_imperatively(model.Artist, artist_table)
+mapper_registry.map_imperatively(Artist, artist_table)
 
 mapper_registry.map_imperatively(
-    model.Favourite,
+    Favourite,
     favourite_table,
     properties = {
         "track": relationship(
-            model.Track,
+            Track,
             back_populates="track",
             uselist = False
         )
     }
 )
 
-mapper_registry.map_imperatively(model.Genre, genre_table)
+mapper_registry.map_imperatively(Genre, genre_table)
 
 mapper_registry.map_imperatively(
-    model.Review,
+    Review,
     review_table,
     properties = {
         "track": relationship(
-            model.Track,
+            Track,
             back_populates="track",
             uselist = False
         )
@@ -108,40 +108,40 @@ mapper_registry.map_imperatively(
 )
 
 mapper_registry.map_imperatively(
-    model.Track,
+    Track,
     track_table,
     properties = {
         "artist": relationship(
-            model.Artist,
+            Artist,
             back_populates="artist",
             uselist = False
         ),
         "album": relationship(
-            model.Album,
+            Album,
             back_populates="album",
             uselist = False
         ),
         "genres": relationship(
-            model.Genre,
+            Genre,
             back_populates="genre"
         ),
         "reviews": relationship(
-            model.Review,
+            Review,
             back_populates="review"
         )
     }
 )
 
 mapper_registry.map_imperatively(
-    model.User,
+    User,
     user_table,
     properties = {
         "reviews": relationship(
-            model.Review,
+            Review,
             back_populates="review"
         ),
         "favourites": relationship(
-            model.Favourite,
+            Favourite,
             back_populates="favourite"
         )
     }
