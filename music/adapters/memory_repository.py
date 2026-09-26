@@ -36,7 +36,7 @@ class MemoryRepository(AbstractRepository):
 
     @override
     def get_track(self, id:int) -> Track | None:
-        return next((track for track in self.__tracks if track.track_id == id), None)
+        return next((track for track in self.__tracks if track.id == id), None)
 
     @override
     def add_user(self, user: User) -> None:

@@ -18,7 +18,7 @@ def favourites():
 
     if request.method == 'POST':
         track_id = int(request.form.get('track_id'))
-        favourite = next((favourite for favourite in user.favourites if favourite.track.track_id == track_id), None)
+        favourite = next((favourite for favourite in user.favourites if favourite.track.id == track_id), None)
 
         if favourite:
             remove_favourite(user, favourite)
@@ -27,5 +27,5 @@ def favourites():
     return render_template(
         'favourites.html',
         user=user,
-        favourite_tracks = [favourite.track.track_id for favourite in user.favourites]
+        favourite_tracks = [favourite.track.id for favourite in user.favourites]
     )

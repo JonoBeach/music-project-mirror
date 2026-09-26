@@ -2,10 +2,10 @@ from music.domainmodel.track import Track
 
 class Review:
 
-    def __init__(self, review_id: int, user_id: int, track: Track, rating: int, review_text: str, date_submitted: int):
-        if type(review_id) is not int or review_id < 0:
+    def __init__(self, id: int, user_id: int, track: Track, rating: int, review_text: str, date_submitted: int):
+        if type(id) is not int or id < 0:
             raise ValueError('Review ID should be an integer!')
-        self.__review_id = review_id
+        self.__id = id
 
         if type(user_id) is not int or user_id < 0:
             raise ValueError('User ID should be an integer above 0.')
@@ -28,8 +28,8 @@ class Review:
         self.__date_submitted = date_submitted
 
     @property
-    def review_id(self) -> int:
-        return self.__review_id
+    def id(self) -> int:
+        return self.__id
 
     @property
     def rating(self) -> int:
@@ -52,17 +52,17 @@ class Review:
         return self.__date_submitted
 
     def __repr__(self) -> str:
-        return f'<By: {self.user_id}, Review {self.track.title}, review id = {self.review_id}>'
+        return f'<By: {self.user_id}, Review {self.track.title}, review id = {self.id}>'
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, self.__class__):
             return False
-        return self.review_id == other.review_id
+        return self.id == other.id
 
     def __lt__(self, other):
         if not isinstance(other, self.__class__):
             return True
-        return self.review_id < other.review_id
+        return self.id < other.id
 
     def __hash__(self):
-        return hash(self.review_id)
+        return hash(self.id)

@@ -57,9 +57,9 @@ def get_review_by_rating(track:Track, repo:AbstractRepository) -> list:
     return repo.get_review_by_rating(track)
 
 def add_review(user:User, track:Track, rating:int, review_text:str, date_submitted:int, repo:AbstractRepository):
-    if not any(track.track_id == review.track.track_id for review in user.reviews):
+    if not any(track.id == review.track.id for review in user.reviews):
         id = uuid.uuid4().int
-        review = Review(id, user.user_id, track, rating, review_text, date_submitted)
+        review = Review(id, user.id, track, rating, review_text, date_submitted)
         repo.add_review(user, review, track)
 
 def remove_review(user:User, review:Review, repo:AbstractRepository):
