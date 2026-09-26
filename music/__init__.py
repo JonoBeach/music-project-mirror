@@ -7,7 +7,7 @@ from music.adapters.database_repository import DatabaseRepository
 import music.adapters.repository as repo
 from music.adapters.orm import mapper_registry
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
@@ -36,11 +36,14 @@ def create_app(test_config=None):
             echo=database_echo
         )
 
+        # populate database if tables are empty
+        should_populate = len(inspect(database_engine).get_table_names()) == 0
+
         # Create empty tables if they don't exist
         mapper_registry.metadata.create_all(database_engine)
 
         session_factory = sessionmaker(bind=database_engine)
-        repo.repo_instance = DatabaseRepository(session_factory)
+        repo.repo_instance = DatabaseRepository(session_factory, should_populate)
 
     # register blueprints
     with app.app_context():

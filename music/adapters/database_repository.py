@@ -9,9 +9,10 @@ from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 
 class DatabaseRepository(AbstractRepository):
-    def __init__(self, session_factory) -> None:
+    def __init__(self, session_factory, should_populate) -> None:
         self.__session_factory = session_factory
-        self.load_from_csv()
+        if should_populate:
+            self.load_from_csv()
 
     def load_from_csv(self):
         data = os.path.join(os.path.dirname(__file__),'data')
