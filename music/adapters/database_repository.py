@@ -9,11 +9,23 @@ from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 
 class DatabaseRepository(AbstractRepository):
-    def __init__(self) -> None:
-        load_from_csv()
+    def __init__(self, session_factory) -> None:
+        self.__session_factory = session_factory
+        self.load_from_csv()
 
     def load_from_csv(self):
-        raise NotImplementedError
+        data = os.path.join(os.path.dirname(__file__),'data')
+        album_file = os.path.join(data, "raw_albums_excerpt.csv")
+        track_file = os.path.join(data, "raw_tracks_excerpt.csv")
+        reader = CSVDataReader(album_file, track_file)
+        reader.read_csv_files()
+
+        with self.__session_factory() as session:
+            session.add_all(reader.dataset_of_tracks)
+            session.add_all(reader.dataset_of_albums)
+            session.add_all(reader.dataset_of_artists)
+            session.add_all(reader.dataset_of_genres)
+            session.commit()
 
     @override
     def add_track(self, track: Track) -> None:
