@@ -70,8 +70,8 @@ user_table = Table(
 track_genre_table = Table(
     "track_genre",
     mapper_registry.metadata,
-    Column("track_id", Integer, ForeignKey("track.id")),
-    Column("genre_id", Integer, ForeignKey("genre.id")),
+    Column("track_id", Integer, ForeignKey("track.id"), primary_key=True),
+    Column("genre_id", Integer, ForeignKey("genre.id"), primary_key=True),
 )
 
 
@@ -124,6 +124,7 @@ mapper_registry.map_imperatively(Review, review_table,
         "_Review__user_id": review_table.c.user_id,
         "_Review__track": relationship(
             Track,
+            back_populates="_Track__reviews",
             uselist = False
         ),
         "_Review__rating": review_table.c.rating,
@@ -152,7 +153,8 @@ mapper_registry.map_imperatively(Track, track_table,
             secondary=track_genre_table
         ),
         "_Track__reviews": relationship(
-            Review
+            Review,
+            back_populates="_Review__track"
         )
     }
 )
