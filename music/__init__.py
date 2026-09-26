@@ -3,7 +3,13 @@
 from flask import Flask, render_template
 
 from music.adapters.memory_repository import MemoryRepository
+from music.adapters.database_repository import DatabaseRepository
 import music.adapters.repository as repo
+from music.adapters.orm import mapper_registry
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 
 def create_app(test_config=None):
@@ -16,7 +22,25 @@ def create_app(test_config=None):
         data_path = app.config['TEST_DATA_PATH']
         app.debug = True
 
-    repo.repo_instance = MemoryRepository()
+    # setup repository
+    if app.config['REPOSITORY'] == 'memory':
+        repo.repo_instance = MemoryRepository()
+    elif app.config['REPOSITORY'] == 'database':
+        database_uri = app.config['SQLALCHEMY_DATABASE_URI']
+        database_echo = app.config['SQLALCHEMY_ECHO']
+
+        database_engine = create_engine(
+            database_uri,
+            connect_args={"check_same_thread": False},
+            poolclass=NullPool,
+            echo=database_echo
+        )
+
+        # Create empty tables if they don't exist
+        mapper_registry.metadata.create_all(database_engine)
+
+        session_factory = sessionmaker(bind=database_engine)
+        repo.repo_instance = DatabaseRepository(session_factory)
 
     # register blueprints
     with app.app_context():
