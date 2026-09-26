@@ -9,6 +9,7 @@ album_table = Table(
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
     Column("title", Text),
+    Column("artist_id", Integer, ForeignKey("artist.id")),
     Column("release_year", Integer),
     Column("album_url", Text),
     Column("album_info", Text)
@@ -25,7 +26,8 @@ favourite_table = Table(
     "favourite",
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), nullable = False, unique = True),
+    Column("user_id", Integer, ForeignKey("user.id")),
+    Column("track_id", Integer, ForeignKey("track.id"))
 )
 
 genre_table = Table(
@@ -39,7 +41,8 @@ review_table = Table(
     "review",
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), nullable = False, unique = True),
+    Column("user_id", Integer, ForeignKey("user.id")),
+    Column("track_id", Integer, ForeignKey("track.id")),
     Column("rating", Integer),
     Column("review_text", Text),
     Column("date_submitted", Integer)
@@ -50,6 +53,8 @@ track_table = Table(
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
     Column("title", Text),
+    Column("artist_id", Integer, ForeignKey("artist.id")),
+    Column("album_id", Integer, ForeignKey("album.id")),
     Column("track_url", Text),
     Column("track_duration", Integer),
 )
@@ -62,87 +67,106 @@ user_table = Table(
     Column("password", Text),
 )
 
+track_genre_table = Table(
+    "track_genre",
+    mapper_registry.metadata,
+    Column("track_id", Integer, ForeignKey("track.id")),
+    Column("genre_id", Integer, ForeignKey("genre.id")),
+)
 
-mapper_registry.map_imperatively(
-    Album,
-    album_table,
+
+mapper_registry.map_imperatively(Album, album_table,
     properties = {
-        "artist": relationship(
+        "_Album__id": album_table.c.id,
+        "_Album__title": album_table.c.title,
+        "_Album__release_year": album_table.c.release_year,
+        "_Album__artist": relationship(
             Artist,
-            back_populates = "artist",
             uselist = False
         ),
-        "tracks": relationship(
+        "_Album__tracks": relationship(
             Track,
-            back_populates="track"
-        )
+            back_populates="_Track__album"
+        ),
+        "_Album__album_url": album_table.c.album_url,
+        "_Album__album_info": album_table.c.album_info
     }
 )
 
-mapper_registry.map_imperatively(Artist, artist_table)
-
-mapper_registry.map_imperatively(
-    Favourite,
-    favourite_table,
+mapper_registry.map_imperatively(Artist, artist_table,
     properties = {
-        "track": relationship(
+        "_Artist__id": artist_table.c.id,
+        "_Artist__full_name": artist_table.c.full_name
+    }
+)
+
+mapper_registry.map_imperatively(Favourite, favourite_table,
+    properties = {
+        "_Favourite__id": favourite_table.c.id,
+        "_Favourite__user_id": favourite_table.c.user_id,
+        "_Favourite__track": relationship(
             Track,
-            back_populates="track",
             uselist = False
         )
     }
 )
 
-mapper_registry.map_imperatively(Genre, genre_table)
-
-mapper_registry.map_imperatively(
-    Review,
-    review_table,
+mapper_registry.map_imperatively(Genre, genre_table,
     properties = {
-        "track": relationship(
-            Track,
-            back_populates="track",
-            uselist = False
-        )
+        "_Genre__id": genre_table.c.id,
+        "_Genre__name": genre_table.c.name
     }
 )
 
-mapper_registry.map_imperatively(
-    Track,
-    track_table,
+mapper_registry.map_imperatively(Review, review_table,
     properties = {
-        "artist": relationship(
-            Artist,
-            back_populates="artist",
+        "_Review__id": review_table.c.id,
+        "_Review__user_id": review_table.c.user_id,
+        "_Review__track": relationship(
+            Track,
             uselist = False
         ),
-        "album": relationship(
+        "_Review__rating": review_table.c.rating,
+        "_Review__review_text": review_table.c.review_text,
+        "_Review__date_submitted": review_table.c.date_submitted
+    }
+)
+
+mapper_registry.map_imperatively(Track, track_table,
+    properties = {
+        "_Track__id": track_table.c.id,
+        "_Track__title": track_table.c.title,
+        "_Track__artist": relationship(
+            Artist,
+            uselist = False
+        ),
+        "_Track__album": relationship(
             Album,
-            back_populates="album",
+            back_populates="_Album__tracks",
             uselist = False
         ),
-        "genres": relationship(
+        "_Track__track_url": track_table.c.track_url,
+        "_Track__track_duration": track_table.c.track_duration,
+        "_Track__genres": relationship(
             Genre,
-            back_populates="genre"
+            secondary=track_genre_table
         ),
-        "reviews": relationship(
-            Review,
-            back_populates="review"
+        "_Track__reviews": relationship(
+            Review
         )
     }
 )
 
-mapper_registry.map_imperatively(
-    User,
-    user_table,
+mapper_registry.map_imperatively(User, user_table,
     properties = {
-        "reviews": relationship(
-            Review,
-            back_populates="review"
+        "_User__id": user_table.c.id,
+        "_User__user_name": user_table.c.user_name,
+        "_User__password": user_table.c.password,
+        "_User__reviews": relationship(
+            Review
         ),
-        "favourites": relationship(
-            Favourite,
-            back_populates="favourite"
+        "_User__favourites": relationship(
+            Favourite
         )
     }
 )
