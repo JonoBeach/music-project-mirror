@@ -13,9 +13,52 @@ from music.domainmodel.genre import Genre
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 
+class SessionContextManager:
+    def __init__(self, session_factory):
+        self.__session_factory = session_factory
+        self.__session = None
+
+    def __enter__(self):
+        self.__session = self.__session_factory()
+        return self.__session
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            if exc_type is not None and self.__session is not None:
+                self.__session.rollback()
+        finally:
+            if self.__session is not None:
+                self.__session.close()
+            self.__session = None
+
+    @property
+    def session(self):
+        if self.__session is None:
+            self.__session = self.__session_factory()
+        return self.__session
+
+    def commit(self):
+        if self.__session is not None:
+            self.__session.commit()
+
+    def rollback(self):
+        if self.__session is not None:
+            self.__session.rollback()
+
+    def reset_session(self):
+        # this method can be used e.g. to allow Flask to start a new session for each http request,
+        # via the 'before_request' callback
+        self.close_current_session()
+        self.__session = None
+
+    def close_current_session(self):
+        if self.__session is not None:
+            self.__session.close()
+            self.__session = None
+
 class DatabaseRepository(AbstractRepository):
     def __init__(self, session_factory, should_populate) -> None:
-        self.__session_factory = session_factory
+        self.__session_factory = SessionContextManager(session_factory)
         if should_populate:
             self.load_from_csv()
 
@@ -26,7 +69,7 @@ class DatabaseRepository(AbstractRepository):
         reader = CSVDataReader(album_file, track_file)
         reader.read_csv_files()
 
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             session.add_all(reader.dataset_of_tracks)
             session.add_all(reader.dataset_of_albums)
             session.add_all(reader.dataset_of_artists)
@@ -35,24 +78,18 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def add_track(self, track: Track) -> None:
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             session.merge(track)
             session.commit()
 
     @override
-    def get_track(self, id:int) -> Track | None:
-        if id is None:
-            return None
-        try:
-            with self.__session_factory() as session:
-                return session.query(Track).filter(Track.id == id).one_or_none()
-        except NoResultFound:
-            print(f"No track found with id: {id}")
-        return None
+    def get_track(self, id: int):
+        with self.__session_factory as session:
+            return session.query(Track).filter(Track.id == id).one_or_none()
 
     @override
     def add_user(self, user: User) -> None:
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             session.merge(user)
             session.commit()
 
@@ -61,7 +98,7 @@ class DatabaseRepository(AbstractRepository):
         if user_name is None:
             return None
         try:
-            with self.__session_factory() as session:
+            with self.__session_factory as session:
                 return session.query(User).filter(User.user_name == user_name).one_or_none()
         except NoResultFound:
             print(f"No user found with name: {user_name}")
@@ -71,7 +108,7 @@ class DatabaseRepository(AbstractRepository):
     def add_favourite(self, user: User, favourite: Favourite) -> None:
         if user is None or favourite is None:
             return
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             user.add_favourite(favourite)
             session.merge(user)
             session.commit()
@@ -80,7 +117,7 @@ class DatabaseRepository(AbstractRepository):
     def remove_favourite(self, user: User, favourite: Favourite) -> None:
         if user is None or favourite is None:
             return
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             user.remove_favourite(favourite)
             session.merge(user)
             session.commit()
@@ -101,7 +138,7 @@ class DatabaseRepository(AbstractRepository):
     def add_review(self, user: User, review: Review, track: Track) -> None:
         if user is None or review is None or track is None:
             return
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             user.add_review(review)
             track.add_review(review)
             session.merge(user)
@@ -112,7 +149,7 @@ class DatabaseRepository(AbstractRepository):
     def remove_review(self, user: User, review: Review, track: Track) -> None:
         if user is None or review is None or track is None:
             return
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             user.remove_review(review)
             track.remove_review(review)
             session.merge(user)
@@ -123,7 +160,7 @@ class DatabaseRepository(AbstractRepository):
     def get_review_by_date(self, track: Track) -> list:
         if track is None:
             return []
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             track_in_db = session.query(Track).filter(Track.id == track.id).one_or_none()
             if track_in_db:
                 return sorted(track_in_db.reviews, key=lambda review: review.date_submitted)
@@ -135,7 +172,7 @@ class DatabaseRepository(AbstractRepository):
     def get_review_by_rating(self, track: Track) -> list:
         if track is None:
             return []
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             track_in_db = session.query(Track).filter(Track.id == track.id).one_or_none()
             if track_in_db:
                 return sorted(track_in_db.reviews, key=lambda review: review.rating, reverse=True)
@@ -145,7 +182,7 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def sort_by_track_title(self) -> list:
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             tracks = session.query(Track).all()
             return sorted(tracks, key=lambda track: track.title)
 
@@ -157,7 +194,7 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def search_by_genre(self, genre: str) -> list:
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             tracks = session.query(Track).join(Track.genres).filter(Genre.name == genre).all()
             return tracks
 
@@ -173,7 +210,7 @@ class DatabaseRepository(AbstractRepository):
     def search_by_album(self, album: str) -> list:
         if album is None:
             return []
-        with self.__session_factory() as session:
+        with self.__session_factory as session:
             tracks = session.query(Track).join(Track.album).filter(album.title.contains(album)).all()
             return tracks
 
