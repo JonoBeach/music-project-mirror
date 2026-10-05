@@ -1,10 +1,15 @@
 import os
 from typing import override
 
+from sqlalchemy.exc import NoResultFound
+
 from music.adapters.csvdatareader import CSVDataReader
 from music.domainmodel.favourite import Favourite
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
+from music.domainmodel.artist import Artist
+from music.domainmodel.album import Album
+from music.domainmodel.genre import Genre
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
 
@@ -30,67 +35,147 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def add_track(self, track: Track) -> None:
-        raise NotImplementedError
+        with self.__session_factory() as session:
+            session.merge(track)
+            session.commit()
 
     @override
     def get_track(self, id:int) -> Track | None:
-        raise NotImplementedError
+        if id is None:
+            return None
+        try:
+            with self.__session_factory() as session:
+                return session.query(Track).filter(Track.id == id).one_or_none()
+        except NoResultFound:
+            print(f"No track found with id: {id}")
+        return None
 
     @override
     def add_user(self, user: User) -> None:
-        raise NotImplementedError
+        with self.__session_factory() as session:
+            session.merge(user)
+            session.commit()
 
     @override
     def get_user(self, user_name: str) -> User | None:
-        raise NotImplementedError
+        if user_name is None:
+            return None
+        try:
+            with self.__session_factory() as session:
+                return session.query(User).filter(User.user_name == user_name).one_or_none()
+        except NoResultFound:
+            print(f"No user found with name: {user_name}")
+        return None
 
     @override
     def add_favourite(self, user: User, favourite: Favourite) -> None:
-        raise NotImplementedError
+        if user is None or favourite is None:
+            return
+        with self.__session_factory() as session:
+            user.add_favourite(favourite)
+            session.merge(user)
+            session.commit()
 
     @override
     def remove_favourite(self, user: User, favourite: Favourite) -> None:
-        raise NotImplementedError
+        if user is None or favourite is None:
+            return
+        with self.__session_factory() as session:
+            user.remove_favourite(favourite)
+            session.merge(user)
+            session.commit()
 
     @override
     def get_user_favourite(self, user: User) -> list:
-        raise NotImplementedError
+        if user is None:
+            return []
+        with self.__session_factory() as session:
+            user_in_db = session.query(User).filter(User.user_name == user.user_name).one_or_none()
+            if user_in_db:
+                return user_in_db.favourites
+            else:
+                print(f"No user found with name: {user.user_name}")
+                return []
 
     @override
     def add_review(self, user: User, review: Review, track: Track) -> None:
-        raise NotImplementedError
+        if user is None or review is None or track is None:
+            return
+        with self.__session_factory() as session:
+            user.add_review(review)
+            track.add_review(review)
+            session.merge(user)
+            session.merge(track)
+            session.commit()
 
     @override
     def remove_review(self, user: User, review: Review, track: Track) -> None:
-        raise NotImplementedError
+        if user is None or review is None or track is None:
+            return
+        with self.__session_factory() as session:
+            user.remove_review(review)
+            track.remove_review(review)
+            session.merge(user)
+            session.merge(track)
+            session.commit()
 
     @override
     def get_review_by_date(self, track: Track) -> list:
-        raise NotImplementedError
+        if track is None:
+            return []
+        with self.__session_factory() as session:
+            track_in_db = session.query(Track).filter(Track.id == track.id).one_or_none()
+            if track_in_db:
+                return sorted(track_in_db.reviews, key=lambda review: review.date_submitted)
+            else:
+                print(f"No track found with id: {track.id}")
+                return []
 
     @override
     def get_review_by_rating(self, track: Track) -> list:
-        raise NotImplementedError
+        if track is None:
+            return []
+        with self.__session_factory() as session:
+            track_in_db = session.query(Track).filter(Track.id == track.id).one_or_none()
+            if track_in_db:
+                return sorted(track_in_db.reviews, key=lambda review: review.rating, reverse=True)
+            else:
+                print(f"No track found with id: {track.id}")
+                return []
 
     @override
     def sort_by_track_title(self) -> list:
-        raise NotImplementedError
+        with self.__session_factory() as session:
+            tracks = session.query(Track).all()
+            return sorted(tracks, key=lambda track: track.title)
 
     @override
     def search_by_title(self, title: str) -> list:
-        raise NotImplementedError
+        with self.__session_factory() as session:
+            tracks = session.query(Track).filter(Track.title.contains(title)).all()
+            return tracks
 
     @override
     def search_by_genre(self, genre: str) -> list:
-        raise NotImplementedError
+        with self.__session_factory() as session:
+            tracks = session.query(Track).join(Track.genres).filter(Genre.name == genre).all()
+            return tracks
 
     @override
     def search_by_artist(self, artist: str) -> list:
-        raise NotImplementedError
+        if artist is None:
+            return []
+        with self.__session_factory() as session:
+            tracks = session.query(Track).join(Track.artist).filter(Artist.full_name.contains(artist)).all()
+            return tracks
 
     @override
     def search_by_album(self, album: str) -> list:
-        raise NotImplementedError
+        if album is None:
+            return []
+        with self.__session_factory() as session:
+            tracks = session.query(Track).join(Track.album).filter(album.title.contains(album)).all()
+            return tracks
 
     @override
     def get_user_list(self) -> list:
