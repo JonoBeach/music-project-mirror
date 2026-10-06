@@ -90,3 +90,8 @@ class AbstractRepository(abc.ABC):
     def get_user_list(self) -> list:
         # returns the full list of user objects, for registering new users to get an ID
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_artist(self, track_id: int):
+        #return the artist of the track
+        raise NotImplementedError

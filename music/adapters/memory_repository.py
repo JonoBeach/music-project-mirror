@@ -118,3 +118,10 @@ class MemoryRepository(AbstractRepository):
     @override
     def get_user_list(self) -> list:
         return self.__users
+
+    @override
+    def get_artist(self, track_id: int) -> str | None:
+        track = self.get_track(track_id)
+        if track is None:
+            return None
+        return track.artist.full_name if track.artist else None

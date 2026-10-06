@@ -217,3 +217,11 @@ class DatabaseRepository(AbstractRepository):
     @override
     def get_user_list(self) -> list:
         raise NotImplementedError
+
+    @override
+    def get_artist(self, track_id: int):
+        if track_id is None:
+            return None
+        with self.__session_factory as session:
+            track = session.query(Track).filter(Track.id == track_id).one_or_none()
+            return track.artist.full_name if track and track.artist else None
