@@ -12,8 +12,7 @@ from wtforms import SubmitField
 
 tracks_blueprint = Blueprint('tracks_bp', __name__)
 
-@tracks_blueprint.route('/browse_tracks', methods=['GET', 'POST'])
-@login_required
+@tracks_blueprint.route('/browse_tracks')
 def browse():
     page = request.args.get('page', 1, type=int)
     search = request.args.get('search', '', type=str).strip()
@@ -24,28 +23,10 @@ def browse():
     else:
         tracks, current_page, total_pages = get_tracks(repository.repo_instance, page)
 
-
-    if request.method == 'POST':
-        user = repository.repo_instance.get_user(session['username'])
-        track_id = int(request.form.get('track_id'))
-
-        if request.form.get('action') ==  "Add to favourites":
-            track = get_track_by_id(track_id, repository.repo_instance)
-            if user is None:
-                return redirect(url_for('authentication_bp.login'))
-            if track is not None:
-                add_favourite(user, track)
-
-        elif request.form.get('action') ==  "Remove from favourites":
-            favourite = next((favourite for favourite in user.favourites if favourite.track.id == track_id), None)
-
-            if favourite:
-                remove_favourite(user, favourite)
-
     favourite_tracks = get_favourite_tracks()
 
     return render_template('browse_tracks.html', tracks=tracks,
-        current_page=current_page, total_pages=total_pages, search=search, search_type=search_type, favourite_tracks=favourite_tracks)
+        current_page=current_page, total_pages=total_pages, search=search, search_type=search_type)
 
 
 @tracks_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
@@ -83,7 +64,7 @@ def track_detail(track_id: int):
     favourite_tracks = get_favourite_tracks()
     users = repository.repo_instance.get_user_list()
 
-    return render_template('simple_track.html', track=track, favourite_tracks=favourite_tracks, users=users)
+    return render_template('track_details.html', track=track, favourite_tracks=favourite_tracks, users=users)
 
 
 @login_required

@@ -7,17 +7,4 @@
     <p>Duration: {{track.track_duration // 60 }}:{{ "%02d" | format(track.track_duration % 60 ) }}</p>
     <p>Artist: {{ track.artist.full_name}}</p>
     <p>Album: {{ track.album.title }}</p>
-    {% if track.id in favourite_tracks %}
-      <form method="POST">
-          <!-- hidden input to tell service what track_id is -->
-          <input type="hidden" name="track_id" value="{{ track.id }}">
-          <input class="button" type="submit" name="action" value="Remove from favourites">
-      </form>
-    {% else %}
-      <form method="POST">
-          <!-- hidden input to tell service what track_id is -->
-          <input type="hidden" name="track_id" value="{{ track.id }}">
-          <input class="button" type="submit" name="action" value="Add to favourites">
-      </form>
-    {% endif %}
 </div>
