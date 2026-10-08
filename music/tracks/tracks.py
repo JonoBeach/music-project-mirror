@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, abort, request, session, redirect,
 from music.adapters import repository
 from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search, add_review, remove_review
 from music.favourites.services import add_favourite, remove_favourite
+from music.authentication.authentication import login_required
 
 from flask_wtf import FlaskForm
 from wtforms import SubmitField
@@ -12,6 +13,7 @@ from wtforms import SubmitField
 tracks_blueprint = Blueprint('tracks_bp', __name__)
 
 @tracks_blueprint.route('/browse_tracks', methods=['GET', 'POST'])
+@login_required
 def browse():
     page = request.args.get('page', 1, type=int)
     search = request.args.get('search', '', type=str).strip()
@@ -19,17 +21,12 @@ def browse():
 
     if search:
         tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(repository.repo_instance), page, search, search_type)
-
     else:
         tracks, current_page, total_pages = get_tracks(repository.repo_instance, page)
 
 
     if request.method == 'POST':
-        try:
-            user = repository.repo_instance.get_user(session['username'])
-        except KeyError:
-            return redirect(url_for('authentication_bp.login'))
-
+        user = repository.repo_instance.get_user(session['username'])
         track_id = int(request.form.get('track_id'))
 
         if request.form.get('action') ==  "Add to favourites":
@@ -52,6 +49,7 @@ def browse():
 
 
 @tracks_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
+@login_required
 def track_detail(track_id: int):
     track = get_track_by_id(track_id, repository.repo_instance)
     if track is None:
@@ -59,13 +57,7 @@ def track_detail(track_id: int):
     reviews = get_review_by_rating(track, repository.repo_instance)
 
     if request.method == 'POST':
-        # authentication
-        try:
-            user = repository.repo_instance.get_user(session['username'])
-        except KeyError:
-            return redirect(url_for('authentication_bp.login'))
-        if user is None:
-            return redirect(url_for('authentication_bp.login'))
+        user = repository.repo_instance.get_user(session['username'])
 
         # favourites
         if request.form.get('action') ==  "Add to favourites":
@@ -94,14 +86,11 @@ def track_detail(track_id: int):
     return render_template('simple_track.html', track=track, favourite_tracks=favourite_tracks, users=users)
 
 
+@login_required
 def get_favourite_tracks() -> List:
     favourite_tracks = []
-    try:
-        user = repository.repo_instance.get_user(session['username'])
-        if user is not None:
-            favourite_tracks = [favourite.track.id for favourite in user.favourites]
-    except KeyError:
-        favourite_tracks = []
+    user = repository.repo_instance.get_user(session['username'])
+    favourite_tracks = [favourite.track.id for favourite in user.favourites]
 
     return favourite_tracks
 
