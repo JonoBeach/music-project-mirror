@@ -25,7 +25,9 @@ def add_user(username: str, password: str, repository: AbstractRepository):
     # encrypt password into hash
     password_hash = generate_password_hash(password)
 
-    id = uuid.uuid4().int
+    # only take splice of the uuid because sqlite integers
+    # can't store the whole original uuid that is generated
+    id = int(str(uuid.uuid4().int)[:15])
     user = User(id, username, password_hash)
     repository.add_user(user)
 
