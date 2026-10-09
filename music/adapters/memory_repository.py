@@ -49,8 +49,8 @@ class MemoryRepository(AbstractRepository):
 
     @override
     def add_favourite(self, user: User, favourite: Favourite) -> None:
-        for favou in self.get_user_favourite(user):
-            if favou.track == favourite.track:
+        for favourite in self.get_user_favourites(user):
+            if favourite.track == favourite.track:
                 return
         user.add_favourite(favourite)
 
@@ -59,7 +59,7 @@ class MemoryRepository(AbstractRepository):
         user.remove_favourite(favourite)
 
     @override
-    def get_user_favourite(self, user: User) -> list:
+    def get_user_favourites(self, user: User) -> list:
         return user.favourites
 
     @override

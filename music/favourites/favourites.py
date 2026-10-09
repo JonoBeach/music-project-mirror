@@ -23,7 +23,6 @@ def favourites():
         if favourite:
             remove_favourite(user, favourite)
 
-    print(user.favourites)
     return render_template(
         'favourites.html',
         user=user,

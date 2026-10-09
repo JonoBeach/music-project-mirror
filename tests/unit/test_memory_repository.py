@@ -53,17 +53,17 @@ def test_add_remove_favourite(repo:MemoryRepository):
     repo.add_user(user1)
 
     repo.add_favourite(user1, favo1)
-    assert repo.get_user_favourite(user1) == [favo1]
+    assert repo.get_user_favourites(user1) == [favo1]
 
     #favo1 and favou2 have same track, should do nothing
     repo.add_favourite(user1, favo2)
-    assert repo.get_user_favourite(user1) == [favo1]
+    assert repo.get_user_favourites(user1) == [favo1]
 
     repo.add_favourite(user1, favo3)
-    assert repo.get_user_favourite(user1) == [favo1, favo3]
+    assert repo.get_user_favourites(user1) == [favo1, favo3]
 
     repo.remove_favourite(user1, favo3)
-    assert repo.get_user_favourite(user1) == [favo1]
+    assert repo.get_user_favourites(user1) == [favo1]
 
 def test_review_function(repo:MemoryRepository):
     user1 = User(1, "ash", "asdadadad")

@@ -99,7 +99,7 @@ class DatabaseRepository(AbstractRepository):
         raise NotImplementedError
 
     @override
-    def get_user_favourite(self, user: User) -> list:
+    def get_user_favourites(self, user: User) -> list:
         raise NotImplementedError
 
     @override

@@ -37,7 +37,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_user_favourite(self, user: User) -> list:
+    def get_user_favourites(self, user: User) -> list:
         #return a list of favourite that belong to the user
         raise NotImplementedError
 
