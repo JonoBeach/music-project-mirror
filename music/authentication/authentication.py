@@ -42,7 +42,6 @@ def register():
 @authentication_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    username_error_message = None
     password_username_mismatch = None
 
     if form.validate_on_submit():
@@ -59,7 +58,7 @@ def login():
             return redirect(url_for('home_bp.home'))
 
         except services.UnknownUserException:
-            username_error_message = 'There is no account associated with this username'
+            password_username_mismatch = 'Your username or password is incorrect, please try again'
 
         except services.AuthenticationException:
             password_username_mismatch = 'Your username or password is incorrect, please try again'
@@ -70,7 +69,6 @@ def login():
         'authentication/credentials.html',
         form=form,
         title="Login",
-        username_error_message=username_error_message,
         password_username_mismatch=password_username_mismatch,
         handler_url=url_for('authentication_bp.login'),
     )
@@ -126,5 +124,4 @@ class LoginForm(FlaskForm):
         DataRequired(message='Please enter a username')])
     password = PasswordField('password', [
         DataRequired(message='Please enter a password')])
-    confirm = None
     submit = SubmitField('Login')
