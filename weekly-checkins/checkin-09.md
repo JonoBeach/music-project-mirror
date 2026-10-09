@@ -79,4 +79,4 @@
 |Create Review class|Finn|Aug.28| [#2](https://github.com/UoA-CS-Project-CS235-S2-2026/music-webapp-14.-fhos131-jbea602-jlo401-znin774/issues/2) |Done|
 
 ## Board Snapshot
-![Board snapshot](./screenshots/checkin-board-07.png)
+![Board snapshot](./screenshots/checkin-board-09.png)
