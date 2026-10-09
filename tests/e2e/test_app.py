@@ -147,7 +147,9 @@ class TestBrowseFunctionality:
         assert response.status_code == 200
 
 
-    def test_track_detail(self, client):
+    def test_track_detail(self, client, authentication):
+        authentication.login()
+
         # test valid track
         response = client.get('/track/5')
         assert response.status_code == 200
