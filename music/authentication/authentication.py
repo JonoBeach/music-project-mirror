@@ -124,4 +124,5 @@ class LoginForm(FlaskForm):
         DataRequired(message='Please enter a username')])
     password = PasswordField('password', [
         DataRequired(message='Please enter a password')])
+    confirm = None
     submit = SubmitField('Login')
