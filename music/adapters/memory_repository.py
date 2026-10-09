@@ -48,11 +48,11 @@ class MemoryRepository(AbstractRepository):
         return next((user for user in self.__users if user.user_name == user_name), None)
 
     @override
-    def add_favourite(self, user: User, favourite: Favourite) -> None:
+    def add_favourite(self, user: User, new_favourite: Favourite) -> None:
         for favourite in self.get_user_favourites(user):
-            if favourite.track == favourite.track:
+            if favourite.track == new_favourite.track:
                 return
-        user.add_favourite(favourite)
+        user.add_favourite(new_favourite)
 
     @override
     def remove_favourite(self, user: User, favourite: Favourite) -> None:
@@ -73,11 +73,11 @@ class MemoryRepository(AbstractRepository):
         track.remove_review(review)
 
     @override
-    def get_review_by_date(self, track: Track) -> list:
+    def get_reviews_by_date(self, track: Track) -> list:
         return sorted(track.reviews, key=lambda review: review.date_submitted)
 
     @override
-    def get_review_by_rating(self, track: Track) -> list:
+    def get_reviews_by_rating(self, track: Track) -> list:
         return sorted(track.reviews, key=lambda review: review.rating, reverse=True)
 
     @override
@@ -116,5 +116,5 @@ class MemoryRepository(AbstractRepository):
         ]
 
     @override
-    def get_user_list(self) -> list:
+    def get_users_list(self) -> list:
         return self.__users

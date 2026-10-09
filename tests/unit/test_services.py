@@ -193,7 +193,7 @@ class TestTrackServices:
         assert track1 is None
 
 
-    def test_get_review_by_rating(self, in_memory_repository):
+    def test_get_reviews_by_rating(self, in_memory_repository):
         track1 = Track(1, "mellow")
         user = User(1, "sakana", "asdfghjk")
         r1 = Review(1, 1, track1, 2, "not bad", 10)
@@ -207,17 +207,17 @@ class TestTrackServices:
         repo.add_review(user, r2, track1)
         repo.add_review(user, r3, track1)
 
-        reviews = tracks_services.get_review_by_rating(track1, in_memory_repository)
+        reviews = tracks_services.get_reviews_by_rating(track1, in_memory_repository)
         #test if review order is sorted by rating(high to low)
         assert [r.rating for r in reviews] == [5, 3, 2]
 
 
-    def test_get_review_by_rating_empty(self, in_memory_repository):
+    def test_get_reviews_by_rating_empty(self, in_memory_repository):
         track1 = Track(1, "Ame")
         in_memory_repository.add_track(track1)
 
         #should return empty list
-        assert tracks_services.get_review_by_rating(
+        assert tracks_services.get_reviews_by_rating(
             track1, in_memory_repository) == []
 
 

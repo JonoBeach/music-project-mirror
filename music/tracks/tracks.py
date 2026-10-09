@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, abort, request, session, redirect, url_for
 
 from music.adapters import repository
-from music.tracks.services import get_review_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search, add_review, remove_review
+from music.tracks.services import get_reviews_by_rating, get_track_by_id, get_tracks, get_all_tracks, get_tracks_for_search, add_review, remove_review
 from music.favourites.services import add_favourite, remove_favourite
 from music.authentication.authentication import login_required
 
@@ -23,8 +23,6 @@ def browse():
     else:
         tracks, current_page, total_pages = get_tracks(repository.repo_instance, page)
 
-    favourite_tracks = get_favourite_tracks()
-
     return render_template('browse_tracks.html', tracks=tracks,
         current_page=current_page, total_pages=total_pages, search=search, search_type=search_type)
 
@@ -35,7 +33,7 @@ def track_detail(track_id: int):
     track = get_track_by_id(track_id, repository.repo_instance)
     if track is None:
         abort(404)
-    reviews = get_review_by_rating(track, repository.repo_instance)
+    reviews = get_reviews_by_rating(track, repository.repo_instance)
 
     if request.method == 'POST':
         user = repository.repo_instance.get_user(session['username'])
@@ -62,7 +60,7 @@ def track_detail(track_id: int):
             add_review(user, track, rating, review_text, date, repository.repo_instance)
 
     favourite_tracks = get_favourite_tracks()
-    users = repository.repo_instance.get_user_list()
+    users = repository.repo_instance.get_users_list()
 
     return render_template('track_details.html', track=track, favourite_tracks=favourite_tracks, users=users)
 
@@ -71,7 +69,8 @@ def track_detail(track_id: int):
 def get_favourite_tracks() -> List:
     favourite_tracks = []
     user = repository.repo_instance.get_user(session['username'])
-    favourite_tracks = [favourite.track.id for favourite in user.favourites]
+    if user.favourites is not None:
+        favourite_tracks = [favourite.track.id for favourite in user.favourites]
 
     return favourite_tracks
 

@@ -47,9 +47,9 @@ def test_add_remove_favourite(repo:MemoryRepository):
     user1 = User(1, "ash", "asdaaddf")
     track1 = Track(1, "track1")
     track2 = Track(2, "track2")
-    favo1 = Favourite(1, 1, track1)
-    favo2 = Favourite(2, 1, track1)
-    favo3 = Favourite(3, 1, track2)
+    favo1 = Favourite(1, user1.id, track1)
+    favo2 = Favourite(2, user1.id, track1)
+    favo3 = Favourite(3, user1.id, track2)
     repo.add_user(user1)
 
     repo.add_favourite(user1, favo1)
@@ -80,14 +80,14 @@ def test_review_function(repo:MemoryRepository):
     repo.add_review(user3, review3, track)
 
     #test two sort function and add_review function
-    assert repo.get_review_by_date(track) == [review1, review2, review3]
-    assert repo.get_review_by_rating(track) == [review3, review2, review1]
+    assert repo.get_reviews_by_date(track) == [review1, review2, review3]
+    assert repo.get_reviews_by_rating(track) == [review3, review2, review1]
     assert len(user1.reviews) == len(user2.reviews) == len(user3.reviews) == 1
 
     #test remove function
     repo.remove_review(user2, review2, track)
-    assert repo.get_review_by_date(track) == [review1, review3]
-    assert repo.get_review_by_rating(track) == [review3, review1]
+    assert repo.get_reviews_by_date(track) == [review1, review3]
+    assert repo.get_reviews_by_rating(track) == [review3, review1]
     assert len(user2.reviews) == 0
 
 def test_sort_by_title(repo:MemoryRepository):

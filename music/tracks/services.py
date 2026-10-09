@@ -53,8 +53,8 @@ def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: s
 def get_track_by_id(track_id:int, repo:AbstractRepository) -> Optional[Track]:
     return repo.get_track(track_id)
 
-def get_review_by_rating(track:Track, repo:AbstractRepository) -> list:
-    return repo.get_review_by_rating(track)
+def get_reviews_by_rating(track:Track, repo:AbstractRepository) -> list:
+    return repo.get_reviews_by_rating(track)
 
 def add_review(user:User, track:Track, rating:int, review_text:str, date_submitted:int, repo:AbstractRepository):
     if not any(track.id == review.track.id for review in user.reviews):

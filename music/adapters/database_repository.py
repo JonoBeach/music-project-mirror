@@ -111,11 +111,11 @@ class DatabaseRepository(AbstractRepository):
         raise NotImplementedError
 
     @override
-    def get_review_by_date(self, track: Track) -> list:
+    def get_reviews_by_date(self, track: Track) -> list:
         raise NotImplementedError
 
     @override
-    def get_review_by_rating(self, track: Track) -> list:
+    def get_reviews_by_rating(self, track: Track) -> list:
         raise NotImplementedError
 
     @override
@@ -139,5 +139,5 @@ class DatabaseRepository(AbstractRepository):
         raise NotImplementedError
 
     @override
-    def get_user_list(self) -> list:
+    def get_users_list(self) -> list:
         raise NotImplementedError

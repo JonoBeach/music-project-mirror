@@ -162,13 +162,6 @@ class TestBrowseFunctionality:
 
 
 class TestFavouriteFunctionality:
-    def test_add_favourite_from_browse_tracks(self, client, authentication):
-        authentication.login()
-        client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
-        response = client.get('/favourites')
-        assert b'Metal Laquer' in response.data
-
-
     def test_add_favourite_from_track_details(self, client, authentication):
         authentication.login()
         client.post('/track/1249', data={'action': 'Add to favourites', 'track_id': '1249'})
@@ -176,38 +169,20 @@ class TestFavouriteFunctionality:
         assert b'Metal Laquer' in response.data
 
 
-    def test_logged_out_add_favourite_from_browse_tracks(self, client, authentication):
-        response = client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
-        assert response.headers['Location'] == '/authentication/login'
-
-
     def test_logged_out_add_favourite_from_track_details(self, client, authentication):
         response = client.post('/track/1249', data={'action': 'Add to favourites', 'track_id': '1249'})
         assert response.headers['Location'] == '/authentication/login'
 
 
-    def test_remove_favourite_from_browse_tracks(self, client, authentication):
-        # first add favourite
-        authentication.login()
-        client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
-        response = client.get('/favourites')
-        assert b'Metal Laquer' in response.data
-
-        # remove
-        client.post('/browse_tracks', data={'action': 'Remove from favourites', 'track_id': '1249'})
-        response = client.get('/favourites')
-        assert b'Metal Laquer' not in response.data
-
-
     def test_remove_favourite_from_favourites(self, client, authentication):
         # first add favourite
         authentication.login()
-        client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+        client.post('/track/1249', data={'action': 'Add to favourites', 'track_id': '1249'})
         response = client.get('/favourites')
         assert b'Metal Laquer' in response.data
 
         # remove
-        client.post('/browse_tracks', data={'action': 'Remove from favourites', 'track_id': '1249'})
+        client.post('/track/1249', data={'action': 'Remove from favourites', 'track_id': '1249'})
         response = client.get('/favourites')
         assert b'Metal Laquer' not in response.data
 
@@ -215,7 +190,7 @@ class TestFavouriteFunctionality:
     def test_remove_favourite_from_track_details(self, client, authentication):
         # first add favourite
         authentication.login()
-        client.post('/browse_tracks', data={'action': 'Add to favourites', 'track_id': '1249'})
+        client.post('/track/1249', data={'action': 'Add to favourites', 'track_id': '1249'})
         response = client.get('/favourites')
         assert b'Metal Laquer' in response.data
 

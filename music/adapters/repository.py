@@ -52,12 +52,12 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_review_by_date(self, track: Track) -> list:
+    def get_reviews_by_date(self, track: Track) -> list:
         #return reviews list sorted by date.(most recently)
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_review_by_rating(self, track: Track) -> list:
+    def get_reviews_by_rating(self, track: Track) -> list:
         #return reviews list sorted by their rating.(high to low)
         raise NotImplementedError
 
@@ -87,6 +87,6 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_user_list(self) -> list:
+    def get_users_list(self) -> list:
         # returns the full list of user objects, for registering new users to get an ID
         raise NotImplementedError
