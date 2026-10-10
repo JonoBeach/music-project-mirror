@@ -5,6 +5,7 @@ from music.authentication import services as authentication_services
 from music.domainmodel import track
 from music.domainmodel.album import Album
 from music.domainmodel.artist import Artist
+from music.domainmodel.genre import Genre
 from music.domainmodel.review import Review
 from music.domainmodel.track import Track
 from music.domainmodel.user import User
@@ -158,6 +159,24 @@ class TestTrackServices:
         #should return track1 and track2
         assert len(tracks) == 2
         assert tracks[0].title == "Aoi"
+
+
+    def test_search_by_genre(self, in_memory_repository):
+            track1 = Track(1, "Aoi")
+            track2 = Track(4, "M")
+            genre1 = Genre(999, "jrock")
+            track1.add_genre(genre1)
+            track2.add_genre(genre1)
+
+            in_memory_repository.add_track(track1)
+            in_memory_repository.add_track(track2)
+
+            tracks, page, total_pages = tracks_services.get_tracks_for_search(
+                in_memory_repository, [], page=1, search_term="jrock", search_type="genre"
+            )
+            #should return track1 and track2
+            assert len(tracks) == 2
+            assert genre1 in tracks[0].genres
 
 
     def test_search_no_result(self, in_memory_repository):

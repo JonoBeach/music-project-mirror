@@ -35,6 +35,8 @@ def get_tracks_for_search(repo:AbstractRepository, track_list: List[Track], page
             track_list = repo.search_by_artist(search_term)
         elif search_type == 'album':
             track_list = repo.search_by_album(search_term)
+        elif search_type == 'genre':
+            track_list = repo.search_by_genre(search_term)
 
     num_tracks = len(track_list)
     total_pages = math.ceil(num_tracks / TRACKS_PER_PAGE)
