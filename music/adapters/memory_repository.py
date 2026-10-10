@@ -92,14 +92,8 @@ class MemoryRepository(AbstractRepository):
     @override
     def search_by_genre(self, genre: str) -> list:
         term = genre.lower()
-        tracks = []
-        for track in self.__tracks:
-            if track.genres:
-                for genre in track.genres:
-                    if term in genre.name.lower():
-                        tracks.append(track)
-                        break
-        return tracks
+        return [track for track in self.__tracks
+            if track.genres and any(term in g.name.lower() for g in track.genres)]
 
     @override
     def search_by_artist(self, artist: str) -> list:

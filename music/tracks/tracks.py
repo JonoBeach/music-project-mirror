@@ -19,7 +19,7 @@ def browse():
     search_type = request.args.get('search_type', '', type=str)
 
     if search:
-        tracks, current_page, total_pages = get_tracks_for_search(get_all_tracks(repository.repo_instance), page, search, search_type)
+        tracks, current_page, total_pages = get_tracks_for_search(repository.repo_instance, get_all_tracks(repository.repo_instance), page, search, search_type)
     else:
         tracks, current_page, total_pages = get_tracks(repository.repo_instance, page)
 

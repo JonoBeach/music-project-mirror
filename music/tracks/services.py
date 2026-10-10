@@ -27,14 +27,14 @@ def get_tracks(repo:AbstractRepository, page: int = 1) -> Tuple[List[Track], int
 def get_all_tracks(repo:AbstractRepository) -> List[Track]:
     return repo.sort_by_track_title()
 
-def get_tracks_for_search(track_list: List[Track], page: int = 1, search_term: str = '', search_type: str = '') -> Tuple[List[Track], int, int]:
+def get_tracks_for_search(repo:AbstractRepository, track_list: List[Track], page: int = 1, search_term: str = '', search_type: str = '') -> Tuple[List[Track], int, int]:
     if search_term:
         if search_type == 'title':
-            track_list = [track for track in track_list if search_term.lower() in track.title.lower()]
+            track_list = repo.search_by_title(search_term)
         elif search_type == 'artist':
-            track_list = [track for track in track_list if track.artist and search_term.lower() in track.artist.full_name.lower()]
+            track_list = repo.search_by_artist(search_term)
         elif search_type == 'album':
-            track_list = [track for track in track_list if track.album and search_term.lower() in track.album.title.lower()]
+            track_list = repo.search_by_album(search_term)
 
     num_tracks = len(track_list)
     total_pages = math.ceil(num_tracks / TRACKS_PER_PAGE)

@@ -115,12 +115,11 @@ class TestTrackServices:
         track1 = Track(1, "Aoi")
         track2 = Track(4, "Aoi")
 
-        all_tracks = tracks_services.get_all_tracks(in_memory_repository)
-        all_tracks.append(track1)
-        all_tracks.append(track2)
+        in_memory_repository.add_track(track1)
+        in_memory_repository.add_track(track2)
 
         tracks, page, total_pages = tracks_services.get_tracks_for_search(
-            all_tracks, page=1, search_term="Aoi", search_type="title"
+            in_memory_repository, [], page=1, search_term="Aoi", search_type="title"
         )
         #should return track1 and track2
         assert len(tracks) == 2
@@ -133,12 +132,11 @@ class TestTrackServices:
         artist1 = Artist(999, "sakanaction")
         track1.artist, track2.artist = artist1, artist1
 
-        all_tracks = tracks_services.get_all_tracks(in_memory_repository)
-        all_tracks.append(track1)
-        all_tracks.append(track2)
+        in_memory_repository.add_track(track1)
+        in_memory_repository.add_track(track2)
 
         tracks, page, total_pages = tracks_services.get_tracks_for_search(
-            all_tracks, page=1, search_term="sakanaction", search_type="artist"
+            in_memory_repository, [], page=1, search_term="sakanaction", search_type="artist"
         )
         #should return track1 and track2
         assert len(tracks) == 2
@@ -151,12 +149,11 @@ class TestTrackServices:
         album1 = Album(999, "sakanaction")
         track1.album, track2.album = album1, album1
 
-        all_tracks = tracks_services.get_all_tracks(in_memory_repository)
-        all_tracks.append(track1)
-        all_tracks.append(track2)
+        in_memory_repository.add_track(track1)
+        in_memory_repository.add_track(track2)
 
         tracks, page, total_pages = tracks_services.get_tracks_for_search(
-            all_tracks, page=1, search_term="sakanaction", search_type="album"
+            in_memory_repository, [], page=1, search_term="sakanaction", search_type="album"
         )
         #should return track1 and track2
         assert len(tracks) == 2
@@ -166,7 +163,7 @@ class TestTrackServices:
     def test_search_no_result(self, in_memory_repository):
         all_tracks = tracks_services.get_all_tracks(in_memory_repository)
         tracks, page, total_pages = tracks_services.get_tracks_for_search(
-            all_tracks, page=1, search_term="dasdasdada", search_type="title"
+             in_memory_repository, all_tracks, page=1, search_term="dasdasdada", search_type="title"
         )
         #should be empty list
         assert tracks == []
@@ -176,7 +173,7 @@ class TestTrackServices:
     def test_search_empty_term_returns_all(self, in_memory_repository):
         all_tracks = tracks_services.get_all_tracks(in_memory_repository)
         tracks, page, total_pages = tracks_services.get_tracks_for_search(
-            all_tracks, page=1, search_term="", search_type="title"
+            in_memory_repository, all_tracks, page=1, search_term="", search_type="title"
         )
         #should return all tracks
         assert len(tracks) <= tracks_services.TRACKS_PER_PAGE
