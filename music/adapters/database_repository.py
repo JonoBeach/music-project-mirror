@@ -66,11 +66,20 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def add_track(self, track: Track) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.merge(track)
+            scm.commit()
 
     @override
     def get_track(self, id:int) -> Track | None:
-        raise NotImplementedError
+        track = None
+        try:
+            track = self._session_cm.session.query(
+                Track).filter(Track._Track__track_id == id).one()
+        except NoResultFound:
+            print(f'Track {id} was not found')
+
+        return track
 
     @override
     def add_user(self, user: User) -> None:
@@ -120,7 +129,13 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def sort_by_track_title(self) -> list:
-        raise NotImplementedError
+        try:
+            tracks = self._session_cm.session.query(Track).order_by(Track._Track__title).all()
+
+        except NoResultFound:
+            print('No tracks found in the database')
+
+        return tracks
 
     @override
     def search_by_title(self, title: str) -> list:
