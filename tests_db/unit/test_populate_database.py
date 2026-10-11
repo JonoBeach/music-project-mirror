@@ -6,11 +6,11 @@ def test_database_populate_inspect_table_names(database_engine):
     inspector = inspect(database_engine)
     tables = inspector.get_table_names()
 
-    assert 'tracks' in tables
-    assert 'albums' in tables
-    assert 'artists' in tables
+    assert 'track' in tables
+    assert 'album' in tables
+    assert 'artist' in tables
 
-    assert inspector.get_table_names() == ['albums', 'artists', 'genres', 'track_genres', 'tracks']
+    assert inspector.get_table_names() == ['album', 'artist', 'genre', 'track_genre', 'track']
 
 
 def test_database_populate_all_tracks(database_engine):

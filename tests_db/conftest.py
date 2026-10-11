@@ -5,7 +5,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, clear_mappers
 
 from music.adapters import database_repository
-from music.adapters.database_repository import DatabaseRepository
 from music.adapters.orm import mapper_registry, map_model_to_tables
 
 TEST_DATA_PATH_DATABASE_LIMITED = Path(__file__).parent / "data"
@@ -31,9 +30,7 @@ def database_engine():
         autocommit=False, autoflush=True, bind=engine)
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.DatabaseRepository(session_factory, True)
-    database_mode = True
     session_factory = sessionmaker(bind=database_engine)
-    repo_instance = DatabaseRepository(session_factory, True)
 
     yield engine
     mapper_registry.metadata.drop_all(engine)
@@ -54,7 +51,7 @@ def session_factory():
         autocommit=False, autoflush=True, bind=engine)
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.DatabaseRepository(session_factory, True)
-    database_mode = True
+
     yield session_factory
     mapper_registry.metadata.drop_all(engine)
 
