@@ -1,15 +1,19 @@
 import os
+from select import select
 from typing import override
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import scoped_session
 
 from music.adapters.csvdatareader import CSVDataReader
+from music.domainmodel.album import Album
+from music.domainmodel.artist import Artist
 from music.domainmodel.favourite import Favourite
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Track
+from music.domainmodel.genre import Genre
 
 class SessionContextManager:
     def __init__(self, session_factory):
@@ -75,7 +79,7 @@ class DatabaseRepository(AbstractRepository):
         track = None
         try:
             track = self._session_cm.session.query(
-                Track).filter(Track._Track__track_id == id).one()
+                Track).filter(Track._Track__id == id).one()
         except NoResultFound:
             print(f'Track {id} was not found')
 
@@ -139,19 +143,38 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def search_by_title(self, title: str) -> list:
-        raise NotImplementedError
+        return (
+            self._session_cm.session.query(Track)
+            .filter(Track._Track__title.ilike(f"%{title}%"))
+            .all()
+        )
 
     @override
     def search_by_genre(self, genre: str) -> list:
-        raise NotImplementedError
+        return (
+            self._session_cm.session.query(Track)
+            .join(Track._Track__genres)
+            .filter(Genre._Genre__name.ilike(f"%{genre}%"))
+            .all()
+        )
 
     @override
     def search_by_artist(self, artist: str) -> list:
-        raise NotImplementedError
+        return(
+            self._session_cm.session.query(Track)
+            .join(Track._Track__artist)
+            .filter(Artist._Artist__full_name.ilike(f"%{artist}%"))
+            .all()
+        )
 
     @override
     def search_by_album(self, album: str) -> list:
-        raise NotImplementedError
+        return(
+            self._session_cm.session.query(Track)
+            .join(Track._Track__album)
+            .filter(Album._Album__title.ilike(f"%{album}%"))
+            .all()
+        )
 
     @override
     def get_users_list(self) -> list:
