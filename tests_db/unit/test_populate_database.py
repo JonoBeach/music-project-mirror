@@ -1,5 +1,5 @@
 from sqlalchemy import select, inspect
-from music.adapters.orm import mapper_registry
+from sqlalchemy.orm import registry
 
 
 def test_database_populate_inspect_table_names(database_engine):
@@ -21,7 +21,7 @@ def test_database_populate_all_tracks(database_engine):
 
     with database_engine.connect() as connection:
         # query for records in table tracks
-        select_statement = select(mapper_registry.metadata.tables[tracks_table_name])
+        select_statement = select(registry.metadata.tables[tracks_table_name])
         result = connection.execute(select_statement)
 
         tracks = []
@@ -38,7 +38,7 @@ def test_database_populate_all_albums(database_engine):
     albums_table_name = inspector.get_table_names()[0]
 
     with database_engine.connect() as connection:
-        select_statement = select(mapper_registry.metadata.tables[albums_table_name])
+        select_statement = select(registry.metadata.tables[albums_table_name])
         result = connection.execute(select_statement)
 
         albums = []
@@ -54,7 +54,7 @@ def test_database_populate_all_artists(database_engine):
     artists_table_name = inspector.get_table_names()[1]
 
     with database_engine.connect() as connection:
-        select_statement = select(mapper_registry.metadata.tables[artists_table_name])
+        select_statement = select(registry.metadata.tables[artists_table_name])
         result = connection.execute(select_statement)
 
         artists = []
@@ -70,7 +70,7 @@ def test_database_populate_all_genres(database_engine):
     genres_table_name = inspector.get_table_names()[2]
 
     with database_engine.connect() as connection:
-        select_statement = select(mapper_registry.metadata.tables[genres_table_name])
+        select_statement = select(registry.metadata.tables[genres_table_name])
         result = connection.execute(select_statement)
 
         genres = []
@@ -85,7 +85,7 @@ def test_database_populate_all_track_genres(database_engine):
     track_genres_table_name = inspector.get_table_names()[3]
 
     with database_engine.connect() as connection:
-        select_statement = select(mapper_registry.metadata.tables[track_genres_table_name])
+        select_statement = select(registry.metadata.tables[track_genres_table_name])
         result = connection.execute(select_statement)
 
         track_genres = []
