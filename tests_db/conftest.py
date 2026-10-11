@@ -10,7 +10,7 @@ from music.adapters.orm import mapper_registry, map_model_to_tables
 TEST_DATA_PATH_DATABASE_LIMITED = Path(__file__).parent / "data"
 
 TEST_DATABASE_URI_IN_MEMORY = 'sqlite://'
-TEST_DATABASE_URI_FILE = 'sqlite:///music-test.db'
+TEST_DATABASE_URI_FILE = 'sqlite:///music.db'
 
 
 @pytest.fixture
@@ -26,11 +26,10 @@ def database_engine():
     map_model_to_tables()
 
     # Create the database session factory using sessionmaker (this has to be done once, in a global manner)
-    session_factory = sessionmaker(
-        autocommit=False, autoflush=True, bind=engine)
+    session_factory = sessionmaker(bind=engine)
+
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.DatabaseRepository(session_factory, True)
-    session_factory = sessionmaker(bind=database_engine)
 
     yield engine
     mapper_registry.metadata.drop_all(engine)
@@ -47,8 +46,7 @@ def session_factory():
     map_model_to_tables()
 
     # Create the database session factory using sessionmaker (this has to be done once, in a global manner)
-    session_factory = sessionmaker(
-        autocommit=False, autoflush=True, bind=engine)
+    session_factory = sessionmaker(bind=engine)
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.DatabaseRepository(session_factory, True)
 
