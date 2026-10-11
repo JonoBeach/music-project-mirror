@@ -108,7 +108,7 @@ def test_saving_of_artist(empty_session):
 
     # Fetch the artist we just added
     rows = list(empty_session.execute(
-        text('SELECT id, full_name FROM artists')))
+        text('SELECT id, full_name FROM artist')))
 
     # Confirm all the artist attributes were saved successfully
     assert rows == [(artist.id, artist.full_name)]
@@ -185,5 +185,5 @@ def test_saving_of_tracks_with_genres(empty_session):
     empty_session.commit()
 
     rows = list(empty_session.execute(
-        text('SELECT id, genre_id FROM track_genres')))
+        text('SELECT track_id, genre_id FROM track_genre')))
     assert rows == [(track.id, genre.id)]
