@@ -32,10 +32,6 @@ def database_engine():
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.DatabaseRepository(session_factory, True)
     database_mode = True
-
-    # repository_populate.populate(
-    #     TEST_DATA_PATH_DATABASE_LIMITED, repo_instance,  testing=True,  database_mode=database_mode)
-
     session_factory = sessionmaker(bind=database_engine)
     repo_instance = DatabaseRepository(session_factory, True)
 
@@ -59,8 +55,6 @@ def session_factory():
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.DatabaseRepository(session_factory, True)
     database_mode = True
-    repository_populate.populate(
-        TEST_DATA_PATH_DATABASE_LIMITED, repo_instance, testing=True, database_mode=database_mode)
     yield session_factory
     mapper_registry.metadata.drop_all(engine)
 
