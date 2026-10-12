@@ -64,7 +64,7 @@ class DatabaseRepository(AbstractRepository):
         with self.__session_factory() as session:
             session.add_all(reader.dataset_of_tracks)
             session.add_all(reader.dataset_of_albums)
-            # session.add_all(reader.dataset_of_artists)
+            session.add_all(reader.dataset_of_artists)
             session.add_all(reader.dataset_of_genres)
             session.commit()
 

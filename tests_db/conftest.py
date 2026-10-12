@@ -10,7 +10,7 @@ from music.adapters.orm import mapper_registry, map_model_to_tables
 TEST_DATA_PATH_DATABASE_LIMITED = Path(__file__).parent / "data"
 
 TEST_DATABASE_URI_IN_MEMORY = 'sqlite://'
-TEST_DATABASE_URI_FILE = 'sqlite:///music.db'
+TEST_DATABASE_URI_FILE = 'sqlite:///music-test.db'
 
 
 @pytest.fixture

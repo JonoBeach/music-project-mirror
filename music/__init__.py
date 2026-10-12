@@ -5,7 +5,7 @@ from flask import Flask, render_template
 from music.adapters.memory_repository import MemoryRepository
 from music.adapters.database_repository import DatabaseRepository
 import music.adapters.repository as repo
-from music.adapters.orm import mapper_registry
+from music.adapters.orm import mapper_registry, map_model_to_tables
 
 from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker
@@ -43,6 +43,7 @@ def create_app(test_config=None):
         mapper_registry.metadata.create_all(database_engine)
 
         session_factory = sessionmaker(bind=database_engine)
+        map_model_to_tables()
         repo.repo_instance = DatabaseRepository(session_factory, should_populate)
 
     # register blueprints
