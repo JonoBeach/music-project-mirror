@@ -117,19 +117,33 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def add_review(self, user: User, review: Review, track: Track) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.add(review)
+            scm.commit()
 
     @override
     def remove_review(self, user: User, review: Review, track: Track) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.delete(review)
+            scm.commit()
 
     @override
     def get_reviews_by_date(self, track: Track) -> list:
-        raise NotImplementedError
+        return (
+            self._session_cm.session.query(Review)
+            .filter(Review._Review__track == track)
+            .order_by(Review._Review__date_submitted)
+            .all()
+        )
 
     @override
     def get_reviews_by_rating(self, track: Track) -> list:
-        raise NotImplementedError
+        return (
+            self._session_cm.session.query(Review)
+            .filter(Review._Review__track == track)
+            .order_by(Review._Review__rating.desc())
+            .all()
+        )
 
     @override
     def sort_by_track_title(self) -> list:
