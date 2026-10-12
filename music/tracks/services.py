@@ -60,7 +60,7 @@ def get_reviews_by_rating(track:Track, repo:AbstractRepository) -> list:
 
 def add_review(user:User, track:Track, rating:int, review_text:str, date_submitted:int, repo:AbstractRepository):
     if not any(track.id == review.track.id for review in user.reviews):
-        id = uuid.uuid4().int
+        id = int(str(uuid.uuid4().int)[:15])
         review = Review(id, user.id, track, rating, review_text, date_submitted)
         repo.add_review(user, review, track)
 
