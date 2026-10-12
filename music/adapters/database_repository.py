@@ -192,4 +192,4 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def get_users_list(self) -> list:
-        raise NotImplementedError
+        return self._session_cm.session.query(User).all()
