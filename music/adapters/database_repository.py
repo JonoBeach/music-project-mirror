@@ -48,12 +48,10 @@ class SessionContextManager:
 
 class DatabaseRepository(AbstractRepository):
     def __init__(self, session_factory, should_populate) -> None:
-        print("DEBUG: DatabaseRepository initialized", flush=True)
         self.__session_factory = session_factory
         self._session_cm = SessionContextManager(session_factory)
 
         if should_populate:
-            print("populating..")
             self.load_from_csv()
 
     def load_from_csv(self):
@@ -64,10 +62,6 @@ class DatabaseRepository(AbstractRepository):
         reader.read_csv_files()
 
         with self.__session_factory() as session:
-            print("Existing artists:", session.query(Artist).count())
-            print("CSV artists:", len(reader.dataset_of_artists))
-            print("Unique CSV artist IDs:", len({a.id for a in reader.dataset_of_artists}))
-
             session.add_all(reader.dataset_of_tracks)
             session.add_all(reader.dataset_of_albums)
             session.add_all(reader.dataset_of_artists)
