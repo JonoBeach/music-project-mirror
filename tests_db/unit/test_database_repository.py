@@ -41,19 +41,19 @@ def test_repository_can_retrieve_track_count(session_factory):
     repo = DatabaseRepository(session_factory, True)
     number_of_tracks = repo.get_number_of_tracks()
 
-    assert number_of_tracks == 10
+    assert number_of_tracks == 2000
 
 
 def test_repository_can_retrieve_all_tracks(session_factory):
     repo = DatabaseRepository(session_factory, True)
 
     tracks = repo.get_all_tracks()
-    assert len(tracks) == 10
+    assert len(tracks) == 2000
 
 def test_repository_can_get_limited_tracks(session_factory):
     repo = DatabaseRepository(session_factory, True)
 
-    tracks = repo.get_tracks()
+    tracks = repo.get_tracks(10)
     assert len(tracks) == 10
 
 def test_repository_can_add_album(session_factory):

@@ -86,13 +86,16 @@ class DatabaseRepository(AbstractRepository):
         return track
 
     def get_number_of_tracks(self) -> int:
-        pass
+        num_tracks = self._session_cm.session.query(Track).count()
+        return num_tracks
 
     def get_all_tracks(self) -> List:
-        pass
+        tracks = self._session_cm.session.query(Track).all()
+        return tracks
 
-    def get_tracks(self) -> List:
-        pass
+    def get_tracks(self, limit:int) -> List:
+        tracks = sorted(self._session_cm.session.query(Track).all()[:limit])
+        return tracks
 
     @override
     def add_user(self, user: User) -> None:
