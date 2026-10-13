@@ -85,6 +85,15 @@ class DatabaseRepository(AbstractRepository):
 
         return track
 
+    def get_number_of_tracks(self) -> int:
+        pass
+
+    def get_all_tracks(self) -> List:
+        pass
+
+    def get_tracks(self) -> List:
+        pass
+
     @override
     def add_user(self, user: User) -> None:
         print(user.id)
