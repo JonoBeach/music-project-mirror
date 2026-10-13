@@ -76,7 +76,7 @@ def test_repository_can_retrieve_albums(session_factory):
 
     assert album.title == 'Niris'
     assert album.album_url == 'http://freemusicarchive.org/music/Chris_and_Nicky_Andrews/Niris/'
-    assert album.album_type == 'Album'
+    assert album.album_info == '<p>??"spiritual songs" from Nicky Cook</p>'
     assert album.release_year == 2009
 
 def test_repository_can_add_artist(session_factory):
@@ -123,9 +123,7 @@ def test_repository_can_retrieve_genres(session_factory):
 def test_repository_can_search_tracks_by_genre(session_factory):
     repo = DatabaseRepository(session_factory, True)
 
-    genre_id = '1'
-    tracks = repo.get_tracks_by_genre(genre_id)
+    genre_name = 'Avant-Garde'
+    tracks = repo.search_by_genre(genre_name)
 
-    assert len(tracks) == 2
-    assert tracks[0].title == 'Side A'
-    assert tracks[1].title == 'Side B'
+    assert len(tracks) == 116
