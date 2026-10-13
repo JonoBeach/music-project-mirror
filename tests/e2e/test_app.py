@@ -6,43 +6,6 @@ from music import create_app
 
 from pathlib import Path
 
-TEST_DATA_PATH = Path(__file__).parent / "tests" / "data"
-
-@pytest.fixture
-def client():
-    app = create_app({
-        'TESTING': True,
-        'TEST_DATA_PATH': TEST_DATA_PATH,
-        'WTF_CSRF_ENABLED': False # since test client won't send a CSRF token, disable for testing
-    })
-
-    return app.test_client()
-
-
-class AuthenticationManager:
-    def __init__(self, client):
-        self.__client = client
-
-    def login(self, username='test', password='Test1234', confirm='Test1234'):
-        # need to register a user to login properly
-        self.__client.post(
-            '/authentication/register',
-            data={'username': 'test', 'password': 'Test1234', 'confirm': 'Test1234'}
-        )
-
-        return self.__client.post(
-            '/authentication/login',
-            data={'username': username, 'password': password, 'confirm': confirm}
-        )
-
-    def logout(self):
-        return self.__client.get('/authentication/logout')
-
-
-@pytest.fixture
-def authentication(client):
-    return AuthenticationManager(client)
-
 
 class TestAuthentication:
     def test_register(self, client):

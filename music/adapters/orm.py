@@ -74,101 +74,101 @@ track_genre_table = Table(
     Column("genre_id", Integer, ForeignKey("genre.id"), primary_key=True),
 )
 
+def map_model_to_tables():
+    mapper_registry.map_imperatively(Album, album_table,
+        properties = {
+            "_Album__id": album_table.c.id,
+            "_Album__title": album_table.c.title,
+            "_Album__release_year": album_table.c.release_year,
+            "_Album__artist": relationship(
+                Artist,
+                uselist = False
+            ),
+            "_Album__tracks": relationship(
+                Track,
+                back_populates="_Track__album"
+            ),
+            "_Album__album_url": album_table.c.album_url,
+            "_Album__album_info": album_table.c.album_info
+        }
+    )
 
-mapper_registry.map_imperatively(Album, album_table,
-    properties = {
-        "_Album__id": album_table.c.id,
-        "_Album__title": album_table.c.title,
-        "_Album__release_year": album_table.c.release_year,
-        "_Album__artist": relationship(
-            Artist,
-            uselist = False
-        ),
-        "_Album__tracks": relationship(
-            Track,
-            back_populates="_Track__album"
-        ),
-        "_Album__album_url": album_table.c.album_url,
-        "_Album__album_info": album_table.c.album_info
-    }
-)
+    mapper_registry.map_imperatively(Artist, artist_table,
+        properties = {
+            "_Artist__id": artist_table.c.id,
+            "_Artist__full_name": artist_table.c.full_name
+        }
+    )
 
-mapper_registry.map_imperatively(Artist, artist_table,
-    properties = {
-        "_Artist__id": artist_table.c.id,
-        "_Artist__full_name": artist_table.c.full_name
-    }
-)
+    mapper_registry.map_imperatively(Favourite, favourite_table,
+        properties = {
+            "_Favourite__id": favourite_table.c.id,
+            "_Favourite__user_id": favourite_table.c.user_id,
+            "_Favourite__track": relationship(
+                Track,
+                uselist = False
+            )
+        }
+    )
 
-mapper_registry.map_imperatively(Favourite, favourite_table,
-    properties = {
-        "_Favourite__id": favourite_table.c.id,
-        "_Favourite__user_id": favourite_table.c.user_id,
-        "_Favourite__track": relationship(
-            Track,
-            uselist = False
-        )
-    }
-)
+    mapper_registry.map_imperatively(Genre, genre_table,
+        properties = {
+            "_Genre__id": genre_table.c.id,
+            "_Genre__name": genre_table.c.name
+        }
+    )
 
-mapper_registry.map_imperatively(Genre, genre_table,
-    properties = {
-        "_Genre__id": genre_table.c.id,
-        "_Genre__name": genre_table.c.name
-    }
-)
+    mapper_registry.map_imperatively(Review, review_table,
+        properties = {
+            "_Review__id": review_table.c.id,
+            "_Review__user_id": review_table.c.user_id,
+            "_Review__track": relationship(
+                Track,
+                back_populates="_Track__reviews",
+                uselist = False
+            ),
+            "_Review__rating": review_table.c.rating,
+            "_Review__review_text": review_table.c.review_text,
+            "_Review__date_submitted": review_table.c.date_submitted
+        }
+    )
 
-mapper_registry.map_imperatively(Review, review_table,
-    properties = {
-        "_Review__id": review_table.c.id,
-        "_Review__user_id": review_table.c.user_id,
-        "_Review__track": relationship(
-            Track,
-            back_populates="_Track__reviews",
-            uselist = False
-        ),
-        "_Review__rating": review_table.c.rating,
-        "_Review__review_text": review_table.c.review_text,
-        "_Review__date_submitted": review_table.c.date_submitted
-    }
-)
+    mapper_registry.map_imperatively(Track, track_table,
+        properties = {
+            "_Track__id": track_table.c.id,
+            "_Track__title": track_table.c.title,
+            "_Track__artist": relationship(
+                Artist,
+                uselist = False
+            ),
+            "_Track__album": relationship(
+                Album,
+                back_populates="_Album__tracks",
+                uselist = False
+            ),
+            "_Track__track_url": track_table.c.track_url,
+            "_Track__track_duration": track_table.c.track_duration,
+            "_Track__genres": relationship(
+                Genre,
+                secondary=track_genre_table
+            ),
+            "_Track__reviews": relationship(
+                Review,
+                back_populates="_Review__track"
+            )
+        }
+    )
 
-mapper_registry.map_imperatively(Track, track_table,
-    properties = {
-        "_Track__id": track_table.c.id,
-        "_Track__title": track_table.c.title,
-        "_Track__artist": relationship(
-            Artist,
-            uselist = False
-        ),
-        "_Track__album": relationship(
-            Album,
-            back_populates="_Album__tracks",
-            uselist = False
-        ),
-        "_Track__track_url": track_table.c.track_url,
-        "_Track__track_duration": track_table.c.track_duration,
-        "_Track__genres": relationship(
-            Genre,
-            secondary=track_genre_table
-        ),
-        "_Track__reviews": relationship(
-            Review,
-            back_populates="_Review__track"
-        )
-    }
-)
-
-mapper_registry.map_imperatively(User, user_table,
-    properties = {
-        "_User__id": user_table.c.id,
-        "_User__user_name": user_table.c.user_name,
-        "_User__password": user_table.c.password,
-        "_User__reviews": relationship(
-            Review
-        ),
-        "_User__favourites": relationship(
-            Favourite
-        )
-    }
-)
+    mapper_registry.map_imperatively(User, user_table,
+        properties = {
+            "_User__id": user_table.c.id,
+            "_User__user_name": user_table.c.user_name,
+            "_User__password": user_table.c.password,
+            "_User__reviews": relationship(
+                Review
+            ),
+            "_User__favourites": relationship(
+                Favourite
+            )
+        }
+    )

@@ -197,3 +197,95 @@ class DatabaseRepository(AbstractRepository):
     @override
     def get_users_list(self) -> list:
         return self._session_cm.session.query(User).all()
+
+
+    # --------------------   Methods for creating and managing db, used in tests -----------------
+    def get_number_of_tracks(self) -> int:
+        num_tracks = self._session_cm.session.query(Track).count()
+        return num_tracks
+
+    def get_all_tracks(self) -> List:
+        tracks = self._session_cm.session.query(Track).all()
+        return tracks
+
+    def get_tracks(self, limit:int) -> List:
+        tracks = sorted(self._session_cm.session.query(Track).all()[:limit])
+        return tracks
+
+    def get_artist(self, artist_id: int) -> list:
+        artist = None
+        try:
+            artist = self._session_cm.session.query(
+                Artist).filter(Artist._Artist__id == artist_id).one()
+        except NoResultFound:
+            print(f'Artist {artist_id} was not found')
+
+        return artist
+
+    def get_artists(self) -> List[Artist]:
+        artists = self._session_cm.session.query(Artist).all()
+        return artists
+
+    def add_artist(self, artist: Artist):
+        with self._session_cm as scm:
+            scm.session.merge(artist)
+            scm.commit()
+
+    def add_many_artists(self, artists: List[Artist]):
+        with self._session_cm as scm:
+            for artist in artists:
+                scm.session.merge(artist)
+            scm.commit()
+
+    def get_album(self, album_id: int) -> Album:
+        album = None
+        try:
+            album = self._session_cm.session.query(
+                Album).filter(Album._Album__id == album_id).one()
+        except NoResultFound:
+            print(f'Album {album_id} was not found')
+
+        return album
+
+    def get_albums(self, sorting: bool = False) -> List[Album]:
+        albums = self._session_cm.session.query(Album).all()
+        if not sorting:
+            return albums
+        return sort_entities_by_title(albums)
+
+    def add_album(self, album: Album):
+        with self._session_cm as scm:
+            scm.session.merge(album)
+            scm.commit()
+
+    def add_many_albums(self, albums: List[Album]):
+        with self._session_cm as scm:
+            for album in albums:
+                scm.session.merge(album)
+            scm.commit()
+
+    def get_number_of_albums(self) -> int:
+        num_albums = self._session_cm.session.query(Album).count()
+        return num_albums
+
+    def get_genre(self, genre_id: int) -> Genre:
+        genre = None
+        try:
+            genre = self._session_cm.session.query(
+                Genre).filter(Genre._Genre__id == genre_id).one()
+        except NoResultFound:
+            print(f'Genre {genre_id} was not found')
+
+        return genre
+
+    def get_genres(self) -> List[Genre]:
+        return self._session_cm.session.query(Genre).all()
+
+    def add_genre(self, genre: Genre):
+        self._session_cm.session.merge(genre)
+        self._session_cm.session.commit()
+
+    def add_many_genres(self, genres: List[Genre]):
+        for genre in genres:
+            self._session_cm.session.merge(genre)
+        self._session_cm.session.commit()
