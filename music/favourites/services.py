@@ -2,6 +2,7 @@ import uuid
 import random
 from flask import session
 from music.adapters.repository import AbstractRepository
+from music.domainmodel import Track
 from music.domainmodel.user import User
 from music.domainmodel.favourite import Favourite
 from music.adapters import repository

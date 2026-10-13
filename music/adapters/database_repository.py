@@ -105,31 +105,49 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def add_favourite(self, user: User, favourite: Favourite) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.add(favourite)
+            scm.commit()
 
     @override
     def remove_favourite(self, user: User, favourite: Favourite) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.delete(favourite)
+            scm.commit()
 
     @override
     def get_user_favourites(self, user: User) -> list:
-        raise NotImplementedError
+        return self._session_cm.session.query(Favourite).filter(Favourite._Favourite__user == user).all()
 
     @override
     def add_review(self, user: User, review: Review, track: Track) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.add(review)
+            scm.commit()
 
     @override
     def remove_review(self, user: User, review: Review, track: Track) -> None:
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.delete(review)
+            scm.commit()
 
     @override
     def get_reviews_by_date(self, track: Track) -> list:
-        raise NotImplementedError
+        return (
+            self._session_cm.session.query(Review)
+            .filter(Review._Review__track == track)
+            .order_by(Review._Review__date_submitted)
+            .all()
+        )
 
     @override
     def get_reviews_by_rating(self, track: Track) -> list:
-        raise NotImplementedError
+        return (
+            self._session_cm.session.query(Review)
+            .filter(Review._Review__track == track)
+            .order_by(Review._Review__rating.desc())
+            .all()
+        )
 
     @override
     def sort_by_track_title(self) -> list:
@@ -178,4 +196,4 @@ class DatabaseRepository(AbstractRepository):
 
     @override
     def get_users_list(self) -> list:
-        raise NotImplementedError
+        return self._session_cm.session.query(User).all()
